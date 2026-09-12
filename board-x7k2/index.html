@@ -4,21 +4,22 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg viewBox=%220 0 608 608%22 xmlns=%22http://www.w3.org/2000/svg%22 aria-hidden=%22true%22%3E%3Crect x=%2216.0%22 y=%2216.0%22 width=%22112%22 height=%22112%22 rx=%2222%22 fill=%22none%22 stroke=%22%23A6BED6%22 stroke-width=%2214%22/%3E%3Crect x=%22170.7%22 y=%2216.0%22 width=%22112%22 height=%22112%22 rx=%2222%22 fill=%22none%22 stroke=%22%23A6BED6%22 stroke-width=%2214%22/%3E%3Crect x=%22325.3%22 y=%2216.0%22 width=%22112%22 height=%22112%22 rx=%2222%22 fill=%22none%22 stroke=%22%23A6BED6%22 stroke-width=%2214%22/%3E%3Crect x=%22464.0%22 y=%220.0%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%2216.0%22 y=%22170.7%22 width=%22112%22 height=%22112%22 rx=%2222%22 fill=%22none%22 stroke=%22%23A6BED6%22 stroke-width=%2214%22/%3E%3Crect x=%22170.7%22 y=%22170.7%22 width=%22112%22 height=%22112%22 rx=%2222%22 fill=%22none%22 stroke=%22%23A6BED6%22 stroke-width=%2214%22/%3E%3Crect x=%22309.3%22 y=%22154.7%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%22464.0%22 y=%22154.7%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%2216.0%22 y=%22325.3%22 width=%22112%22 height=%22112%22 rx=%2222%22 fill=%22none%22 stroke=%22%23A6BED6%22 stroke-width=%2214%22/%3E%3Crect x=%22154.7%22 y=%22309.3%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%22309.3%22 y=%22309.3%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%22464.0%22 y=%22309.3%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%220.0%22 y=%22464.0%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%22154.7%22 y=%22464.0%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%22309.3%22 y=%22464.0%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3Crect x=%22464.0%22 y=%22464.0%22 width=%22144%22 height=%22144%22 rx=%2230%22 fill=%22%230E2340%22/%3E%3C/svg%3E">
 <title>Core16 Advisor Board — mockup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#16222E;
-  --ink2:#3D4E5C;
-  --ink3:#6C7D8B;
-  --ice:#E7ECF0;
-  --ice2:#F3F6F8;
+  --ink:#0E2340;
+  --ink2:#3C5573;
+  --ink3:#6E829B;
+  --ice:#E6ECF3;
+  --ice2:#F2F6FA;
   --surface:#FFFFFF;
-  --rule:#CDD7DE;
-  --rule2:#9FB0BC;
-  --blue:#00567F;
+  --rule:#CCDAE8;
+  --rule2:#A6BED6;
+  --blue:#0B4C86;
   --alarm:#A8261C;
   --alarmbg:#FAEAE8;
   --warn:#8A5A00;
@@ -50,7 +51,8 @@ body{
   max-width:1280px;margin:0 auto;padding:0 20px;
   display:flex;align-items:center;gap:28px;height:54px;
 }
-.brand{font-weight:700;letter-spacing:-.01em;font-size:15px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.01em;font-size:15px}
+.brand svg{width:24px;height:24px;color:var(--ink);flex:none}
 .brand span{color:var(--ink3);font-weight:400}
 nav{display:flex;gap:2px;margin-left:auto}
 nav button{
@@ -94,19 +96,16 @@ h2{font-size:15px;font-weight:600;margin:0;letter-spacing:-.01em}
 .gate-name{font-weight:600}
 .gate-name em{display:block;font-style:normal;font-weight:400;color:var(--ink3);font-size:12px}
 .slots{display:flex;gap:3px}
-.slot{
-  height:26px;flex:1;border:1px solid var(--rule2);border-radius:2px;
-  background:var(--ice2);
-}
+.slot{height:26px;flex:1;border:3px solid var(--rule2);border-radius:6px;background:transparent}
 .slot.done{background:var(--ink);border-color:var(--ink)}
 .slot.proj{background:repeating-linear-gradient(45deg,var(--rule2) 0 3px,transparent 3px 6px);border-color:var(--rule2)}
-.slot.short{border-color:var(--alarm);border-width:2px;background:var(--alarmbg)}
+.slot.short{border-color:var(--alarm);background:var(--alarmbg)}
 .gate-verdict{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .gate-verdict em{display:block;font-style:normal;font-weight:400;font-size:12px;color:var(--ink3)}
 .gate-verdict.bad{color:var(--alarm)}
 .gate-verdict.good{color:var(--ok)}
 .legend{display:flex;gap:16px;padding:9px 16px;background:var(--ice2);border-top:1px solid var(--rule);font-size:12px;color:var(--ink3)}
-.legend i{display:inline-block;width:11px;height:11px;border:1px solid var(--rule2);border-radius:2px;vertical-align:-1px;margin-right:5px}
+.legend i{display:inline-block;width:12px;height:12px;border:2px solid var(--rule2);border-radius:4px;vertical-align:-2px;margin-right:5px}
 .legend i.done{background:var(--ink);border-color:var(--ink)}
 .legend i.proj{background:repeating-linear-gradient(45deg,var(--rule2) 0 3px,transparent 3px 6px)}
 
@@ -202,7 +201,7 @@ footer{margin-top:30px;color:var(--ink3);font-size:12px;max-width:70ch}
 <body>
 
 <div class="topbar"><div class="topbar-in">
-  <div class="brand">Core16 <span>advisor board</span></div>
+  <div class="brand"><svg viewBox="0 0 608 608" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="16.0" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="325.3" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="464.0" y="0.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="309.3" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="325.3" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="154.7" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="0.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="154.7" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/></svg><div>Core16 <span>advisor board</span></div></div>
   <nav>
     <button id="tab-roster" aria-current="true" onclick="show('roster')">Roster</button>
     <button id="tab-detail" aria-current="false" onclick="show('detail')">Student file</button>
@@ -263,7 +262,7 @@ footer{margin-top:30px;color:var(--ink3);font-size:12px;max-width:70ch}
       <div class="legend">
         <span><i class="done"></i>banked</span>
         <span><i class="proj"></i>in progress, on pace</span>
-        <span><i style="border-color:var(--alarm);border-width:2px;background:var(--alarmbg)"></i>no course filling it</span>
+        <span><i style="border-color:var(--alarm);background:var(--alarmbg)"></i>no course filling it</span>
       </div>
     </div>
   </section>
