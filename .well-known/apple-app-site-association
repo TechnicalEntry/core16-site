@@ -1,0 +1,21 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["M9KTL4D2YD.ca.core16"],
+        "components": [
+          {
+            "/": "/link",
+            "?": { "code": "?*" },
+            "comment": "Link codes from a Core16 advisor, e.g. https://core16.ca/link?code=PNH-UES. Opens the app with the code filled in; the family still taps Link."
+          },
+          {
+            "/": "/link/",
+            "?": { "code": "?*" },
+            "comment": "Same, with the trailing slash GitHub Pages redirects /link to."
+          }
+        ]
+      }
+    ]
+  }
+}
