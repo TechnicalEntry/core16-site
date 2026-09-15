@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /board-x7k2/
+Disallow: /mirror-q4t8/
