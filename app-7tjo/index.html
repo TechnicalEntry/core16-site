@@ -185,18 +185,18 @@
     <h1>Core16 demo build</h1>
     <p class="lede">Runs the iPhone app on a simulated iPhone on your Mac, for showing clients.</p>
     <p class="build" id="build">&nbsp;</p>
-    <a class="download" href="Core16-Update.zip" download>Download the updater</a>
+    <a class="download" href="Core16-Update.pkg" download>Download the updater</a>
     <p class="requires">Apple Silicon Mac &middot; Xcode installed</p>
     <ol>
-      <li>Unzip it and drag <strong>Core16 Update</strong> somewhere you'll find it again — your Desktop is fine.</li>
-      <li><strong>Right-click it and choose Open</strong>, then click Open again. macOS only asks this the first time, because the file came from the internet.</li>
-      <li>It downloads the latest build, starts a simulated iPhone, and opens the app. Give it a minute the first time.</li>
-      <li>Before your next demo, <strong>double-click it again</strong>. If there's a newer build it fetches it; if not it just opens the app.</li>
+      <li>Open the downloaded file and click through the installer. It puts <strong>Core16 Update</strong> in your Applications folder and in the Dock.</li>
+      <li>Click it in the Dock. It downloads the latest build, starts a simulated iPhone, and opens the app. Give it a minute the first time.</li>
+      <li>Before your next demo, <strong>click it again</strong>. If there's a newer build it fetches it; if not it just opens the app.</li>
     </ol>
+    <p class="requires">You only install once — after that it's the Dock icon every time.</p>
 
     <div class="aside">
       <h2>If you'd rather use Terminal</h2>
-      <p>Same thing, without the right-click step. Paste this once:</p>
+      <p>Same thing, without the installer. Paste this once:</p>
       <code>curl -fsSLo ~/core16-update https://core16.ca/app-7tjo/core16-update
 chmod +x ~/core16-update
 ~/core16-update</code>
