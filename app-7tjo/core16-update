@@ -1,0 +1,124 @@
+#!/bin/bash
+set -euo pipefail
+
+# Fetches the latest Core16 simulator build from core16.ca and installs it on
+# a simulated iPhone, then launches it. Written for whoever is demoing the
+# app, not for whoever builds it — it assumes nothing but Xcode, and explains
+# itself as it goes.
+#
+# This is the source of truth. `scripts/share-sim-build.sh` publishes it to
+# the unlisted page below, both as a plain file and inside Core16-Update.zip
+# as a double-clickable "Core16 Update.command".
+#
+# Safe to run any time: it re-downloads only when the published build number
+# differs from the one already installed, and installing over an existing
+# copy keeps the app's data.
+
+BASE_URL="${CORE16_BASE_URL:-https://core16.ca/app-7tjo}"
+BUNDLE_ID="ca.core16"
+# Not ~/.core16: on Graham's own Mac that directory holds the production
+# admin token, and an app bundle has no business sitting beside it.
+STATE_DIR="$HOME/Library/Application Support/Core16"
+APP_DEST="$STATE_DIR/Core16.app"
+STAMP="$STATE_DIR/installed-build"
+
+say()  { printf '%s\n' "$*"; }
+fail() { printf '\n%s\n\n' "$*" >&2; exit 1; }
+
+say ""
+say "Core16 — fetching the latest demo build"
+say ""
+
+# --- Xcode ----------------------------------------------------------------
+# simctl comes with Xcode itself, not with the Command Line Tools, so this
+# catches the "I installed the tools, not the app" case too.
+if ! xcrun --find simctl >/dev/null 2>&1; then
+  fail "Xcode isn't installed, or only its command line tools are.
+Install Xcode from the Mac App Store, open it once to let it finish setting
+up, then run this again."
+fi
+
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+# --- What's published? ----------------------------------------------------
+curl -fsS --retry 2 -o "$TMP/latest.json" "$BASE_URL/latest.json" \
+  || fail "Couldn't reach $BASE_URL — check your internet connection."
+
+# plutil reads JSON and ships with macOS, so there's no dependency on python
+# or jq being present.
+manifest() { /usr/bin/plutil -extract "$1" raw -o - -- "$TMP/latest.json" 2>/dev/null; }
+BUILD="$(manifest build)"
+VERSION="$(manifest version)"
+SHA="$(manifest sha256)"
+ZIPNAME="$(manifest zip)"
+[ -n "$BUILD" ] && [ -n "$SHA" ] && [ -n "$ZIPNAME" ] \
+  || fail "The published build information looks wrong. Tell Graham."
+
+INSTALLED="$(cat "$STAMP" 2>/dev/null || true)"
+
+# --- Download, unless we already have it ----------------------------------
+if [ "$INSTALLED" = "$BUILD" ] && [ -d "$APP_DEST" ]; then
+  say "Already have the latest — version $VERSION, build $BUILD."
+else
+  say "Downloading version $VERSION, build $BUILD..."
+  curl -fS --retry 2 --progress-bar -o "$TMP/app.zip" "$BASE_URL/$ZIPNAME" \
+    || fail "The download failed. Try again in a moment."
+
+  GOT="$(shasum -a 256 "$TMP/app.zip" | cut -d' ' -f1)"
+  [ "$GOT" = "$SHA" ] \
+    || fail "The download was incomplete or corrupted. Run this again."
+
+  mkdir -p "$TMP/unpacked" "$STATE_DIR"
+  ditto -x -k "$TMP/app.zip" "$TMP/unpacked"
+  [ -d "$TMP/unpacked/Core16.app" ] || fail "The download didn't contain the app. Tell Graham."
+
+  rm -rf "$APP_DEST"
+  mv "$TMP/unpacked/Core16.app" "$APP_DEST"
+  # Downloaded files carry a quarantine flag; the simulator doesn't need it.
+  xattr -dr com.apple.quarantine "$APP_DEST" 2>/dev/null || true
+  printf '%s\n' "$BUILD" > "$STAMP"
+fi
+
+# --- Pick a simulated iPhone ----------------------------------------------
+# An already-booted one wins, so this never yanks you off the device you were
+# just using. CORE16_SIM_UDID overrides both, for testing.
+UDID="${CORE16_SIM_UDID:-}"
+if [ -z "$UDID" ]; then
+  UDID="$(xcrun simctl list devices booted \
+          | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' \
+          | head -1 || true)"
+fi
+if [ -z "$UDID" ]; then
+  # Nothing booted: take the first iPhone on the newest iOS runtime, which is
+  # the newest flagship model. simctl lists runtimes oldest first.
+  UDID="$(xcrun simctl list devices available | awk '
+            /^-- / { section++; next }
+            /iPhone/ && /\(/ { if (section > best) { best = section; line = $0 } }
+            END { print line }
+          ' | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' || true)"
+fi
+[ -n "$UDID" ] || fail "No simulated iPhone is set up on this Mac.
+Open Xcode, then its settings, and download an iOS simulator runtime under
+Components. Then run this again."
+
+# --- Boot, install, launch ------------------------------------------------
+say "Starting the simulated iPhone..."
+# bootstatus boots it if it isn't already and waits until it's actually ready;
+# installing into a half-booted device is what fails intermittently.
+xcrun simctl bootstatus "$UDID" -b >/dev/null 2>&1 || true
+
+# The simulator window is called Device Hub from Xcode 27 on, Simulator before.
+for gui in "Device Hub" "Simulator"; do
+  if open -Ra "$gui" 2>/dev/null; then open -a "$gui"; break; fi
+done
+
+say "Installing Core16..."
+xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+xcrun simctl install "$UDID" "$APP_DEST"
+xcrun simctl launch "$UDID" "$BUNDLE_ID" >/dev/null
+
+say ""
+say "Done — Core16 version $VERSION (build $BUILD) is running on the simulated iPhone."
+say "Reset the demo data any time from the app's Profile tab."
+say ""
