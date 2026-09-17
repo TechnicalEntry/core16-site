@@ -42,7 +42,19 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 # --- What's published? ----------------------------------------------------
-curl -fsS --retry 2 -o "$TMP/latest.json" "$BASE_URL/latest.json" \
+# core16.ca is GitHub Pages, which sits behind a CDN, so a plain fetch can
+# return a manifest cached from before the last publish — run this within a
+# minute or two of Graham publishing and it would say you're already up to
+# date when you aren't. Worse for the zip: every build ships under the same
+# filename, so a stale copy of that passes as a download and then fails the
+# checksum below, which reads as a corrupt file rather than a stale one. A
+# unique query string per run makes each fetch its own URL, so neither can be
+# served from cache; the no-cache header asks any proxy in between to
+# revalidate too.
+CB="$(date +%s)-$$"
+
+curl -fsS --retry 2 -H 'Cache-Control: no-cache' \
+  -o "$TMP/latest.json" "$BASE_URL/latest.json?cb=$CB" \
   || fail "Couldn't reach $BASE_URL — check your internet connection."
 
 # plutil reads JSON and ships with macOS, so there's no dependency on python
@@ -62,7 +74,8 @@ if [ "$INSTALLED" = "$BUILD" ] && [ -d "$APP_DEST" ]; then
   say "Already have the latest — version $VERSION, build $BUILD."
 else
   say "Downloading version $VERSION, build $BUILD..."
-  curl -fS --retry 2 --progress-bar -o "$TMP/app.zip" "$BASE_URL/$ZIPNAME" \
+  curl -fS --retry 2 --progress-bar -H 'Cache-Control: no-cache' \
+    -o "$TMP/app.zip" "$BASE_URL/$ZIPNAME?cb=$CB" \
     || fail "The download failed. Try again in a moment."
 
   GOT="$(shasum -a 256 "$TMP/app.zip" | cut -d' ' -f1)"
