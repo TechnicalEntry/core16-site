@@ -2,3 +2,4 @@ User-agent: *
 Disallow: /board-x7k2/
 Disallow: /mirror-q4t8/
 Disallow: /app-7tjo/
+Disallow: /codes-h4vz/
