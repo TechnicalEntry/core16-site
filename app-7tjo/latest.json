@@ -1,7 +1,7 @@
 {
-  "version": "0.1",
-  "build": 269,
+  "version": "0.2",
+  "build": 445,
   "zip": "Core16-simulator.zip",
-  "sha256": "c0fa9eb67a134c257379b86fc6bfdd9921c102798695fa096cf44cb7368a5535",
-  "published": "2026-09-19T19:48:44Z"
+  "sha256": "32d45ffa78a0d287c824a7b118b53d80d22f46c9d9daf2aad1e24d18db3f8d44",
+  "published": "2026-09-23T16:05:42Z"
 }
