@@ -17,5 +17,8 @@
         ]
       }
     ]
+  },
+  "webcredentials": {
+    "apps": ["M9KTL4D2YD.ca.core16.portal"]
   }
 }
