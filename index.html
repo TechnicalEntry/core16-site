@@ -2,191 +2,863 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Core16 — NCAA eligibility tracking for Canadian hockey players</title>
-<meta name="description" content="Core16 tracks NCAA Division I/II academic eligibility for Canadian high school hockey players. Launching in Ontario and BC.">
+<meta name="description" content="Core16 tracks NCAA Division I/II academic eligibility for Canadian high school hockey players: every course checked against NCAA's own list for your province, every mark converted the way your province does it, and the 16 core courses filled in one box at a time. Launching in Ontario and BC.">
 <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
 <link rel="apple-touch-icon" href="assets/icon.png">
 <style>
-  @font-face {
-    font-family: "Oswald";
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url("assets/fonts/oswald-latin.woff2") format("woff2");
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-  @font-face {
-    font-family: "Oswald";
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: url("assets/fonts/oswald-latin.woff2") format("woff2");
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
+/* Layout: a dark rink-coloured page in Core16's site dialect, where the product's two other
+   dialects (the phone App and the web Portal) appear as lit screens set into it, and the 16
+   boxes are the one motif that runs through everything. Single dark look, as core16.ca is. */
 
-  :root {
-    --ink: #0e1a2b;
-    --ink-light: #bfd6f2;
-    --amber: #f0a600;
-    --good: #1f8a5c;
-    --paper: #f7f7f5;
-  }
+@font-face{font-family:"Oswald";font-weight:500 700;font-display:swap;src:url("assets/fonts/oswald-latin.woff2") format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:500 700;font-display:swap;src:url("assets/fonts/bricolage-grotesque.woff2") format("woff2")}
+@font-face{font-family:"Hanken Grotesk";font-weight:400 700;font-display:swap;src:url("assets/fonts/hanken-grotesk.woff2") format("woff2")}
+@font-face{font-family:"Geist Mono";font-weight:400 500;font-display:swap;src:url("assets/fonts/geist-mono.woff2") format("woff2")}
+@font-face{font-family:"Red Hat Display";font-weight:800;font-display:swap;src:url("assets/fonts/RedHatDisplay-ExtraBold.ttf") format("truetype")}
+@font-face{font-family:"Red Hat Mono";font-weight:500;font-display:swap;src:url("assets/fonts/RedHatMono-Medium.ttf") format("truetype")}
 
-  * { box-sizing: border-box; }
+:root{
+  color-scheme:dark;
+  /* Site dialect (core16.ca) */
+  --site-ink:#0e1a2b; --site-ink-light:#bfd6f2; --site-amber:#f0a600; --site-good:#1f8a5c; --site-paper:#f7f7f5;
+  --site-line:rgba(191,214,242,.16); --site-line-2:rgba(191,214,242,.32); --site-wash:rgba(191,214,242,.07); --site-wash-2:rgba(191,214,242,.11);
+  --site-amber-wash:rgba(240,166,0,.14); --site-amber-line:rgba(240,166,0,.38);
+  --site-display:"Oswald",-apple-system,"Segoe UI",sans-serif;
+  --site-body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  /* Logo tile */
+  --mark-top:#123052; --mark-bottom:#08192c; --mark-empty:#3a608a; --mark-filled:#e8f3ff;
+  /* Portal dialect, light values: the parent's and the student's web pages */
+  --ink:#0e2340; --ink2:#3c5573; --ink3:#6e829b; --ice:#e6ecf3; --ice2:#f2f6fa; --surface:#ffffff; --rule:#ccdae8; --rule2:#a6bed6;
+  --blue:#0b4c86; --alarm:#a8261c; --alarmbg:#faeae8; --alarmrule:#e0b3ae; --warn:#8a5a00; --warnbg:#fbf1dc; --warnrule:#e3cb95;
+  --ok:#1b6140; --okbg:#e4efe9; --okrule:#a9cbb9; --warnstripe:#c99a2e; --infobg:#e8f0f5; --inforule:#a9c4d4; --hockey:#a94a0c; --hockeybg:#fdebdd;
+  --hero:#0e2340; --onhero:#ffffff; --onhero2:#c4d4e6; --herorule:#5f7c9c; --student-hero-mid:#1c4c80; --student-hero-end:#2b6ea8; --student-hero-good:#7fd8ac;
+  --display:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  /* App dialect, dark values: the iPhone app */
+  --app-ground:#0a1017; --app-surface:#121b25; --app-raised:#1b2734; --app-hairline:#223041; --app-ink:#7cc4ff; --app-on-ink:#0a1017; --app-accent:#7cc4ff;
+  --app-amber:#ffb020; --app-amber-text:#ffb020; --app-good:#56d19a; --app-bad:#ff6b5e; --app-text:#e3ebf4; --app-text-2:#afc0d3;
+  --urgency-tomorrow:#fa854c; --urgency-three-days-text:#f5c459; --urgency-week:#8cb8f2;
+  --app-display:"Red Hat Display",system-ui,sans-serif; --app-mono:"Red Hat Mono",ui-monospace,monospace; --app-body:system-ui,-apple-system,sans-serif;
+  /* Shape */
+  --radius:16px; --radius-s:10px; --radius-hero:24px; --radius-tile:14px; --radius-box:8px; --radius-flag:7px; --radius-pill:999px;
+  --gutter-l:max(16px,env(safe-area-inset-left,0px)); --gutter-r:max(16px,env(safe-area-inset-right,0px));
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
 
-  html, body {
-    margin: 0;
-    height: 100%;
-  }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--site-ink);color:var(--site-paper);font-family:var(--site-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--site-ink)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(240,166,0,.07) 0%,transparent 48%),
+  repeating-linear-gradient(90deg,rgba(191,214,242,.035) 0,rgba(191,214,242,.035) 1px,transparent 1px,transparent 64px)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--site-display);font-weight:700;letter-spacing:.01em;line-height:1.02;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--site-amber);outline-offset:2px}
+img,svg{max-width:100%}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.eyebrow{font-family:var(--site-display);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--site-amber)}
+.lead{font-size:clamp(17px,1.6vw,20px);line-height:1.5;color:var(--site-ink-light);max-width:34em}
+.quiet{color:var(--site-ink-light)}
+.num{font-variant-numeric:tabular-nums}
 
-  body {
-    background: var(--ink);
-    color: var(--paper);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
+/* Top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(14,26,43,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--site-line)}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:30px;height:30px;border-radius:7px}
+.brand b{font-family:var(--site-display);font-weight:700;font-size:20px;letter-spacing:.03em}
+.brand b span{color:var(--site-amber)}
+.top nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.top nav::-webkit-scrollbar{display:none}
+.top nav a{font-size:14px;color:var(--site-ink-light);text-decoration:none;padding:8px 10px;border-radius:var(--radius-s);white-space:nowrap}
+.top nav a:hover{color:var(--site-paper);background:var(--site-wash)}
+.badge{font-family:var(--site-display);font-weight:500;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--site-amber);background:var(--site-amber-wash);border:1px solid var(--site-amber-line);border-radius:var(--radius-pill);padding:5px 12px;white-space:nowrap}
+@media (max-width:760px){.top nav{display:none}}
 
-  /* faint rink center-line motif */
-  body::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 50% 42%, rgba(240, 166, 0, 0.07) 0%, transparent 45%),
-      repeating-linear-gradient(90deg, rgba(191, 214, 242, 0.035) 0, rgba(191, 214, 242, 0.035) 1px, transparent 1px, transparent 64px);
-    pointer-events: none;
-    z-index: 0;
-  }
+/* Hero */
+.hero{padding-block:clamp(48px,8vw,104px) clamp(40px,6vw,80px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,70px);line-height:1}
+.hero h1 em{font-style:normal;color:var(--site-amber)}
+.hero .copy{display:grid;gap:26px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--radius-s);text-decoration:none;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer;transition:transform .15s var(--ease),background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--site-amber);color:var(--site-ink);border-color:var(--site-amber)}
+.btn.primary:hover{background:#f7b31a}
+.btn.ghost{background:transparent;color:var(--site-paper);border-color:var(--site-line-2)}
+.btn.ghost:hover{background:var(--site-wash)}
+.provinces{display:flex;gap:10px;flex-wrap:wrap}
+.province{font-family:var(--site-display);font-weight:500;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-s);padding:9px 14px}
+.province strong{color:#38b57e;font-weight:500}
 
-  main {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 8vh 24px 6vh;
-  }
+.sixteen{position:relative;display:grid;gap:18px;justify-items:center}
+.sixteen svg{width:min(100%,420px);height:auto;display:block}
+.sixteen .box{transform-box:fill-box;transform-origin:center}
+.sixteen .done{fill:var(--mark-filled)}
+.sixteen .now{fill:var(--site-amber)}
+.sixteen .later{fill:none;stroke:var(--mark-empty);stroke-width:3}
+.sixteen .empty{fill:none;stroke:var(--mark-empty);stroke-width:3;stroke-dasharray:8 7}
+.sixteen .tick{fill:none;stroke:var(--mark-top);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.sixteen .total{display:flex;align-items:baseline;gap:12px;font-family:var(--site-display)}
+.sixteen .total b{font-size:64px;line-height:.9;font-weight:700;letter-spacing:-.01em}
+.sixteen .total span{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--site-ink-light);font-weight:500}
+.key{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:13px;color:var(--site-ink-light)}
+.key li{list-style:none;display:flex;align-items:center;gap:7px}
+.key i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.key .done i{background:var(--mark-filled)}
+.key .now i{background:var(--site-amber)}
+.key .later i{border:2px solid var(--mark-empty)}
+.key .empty i{border:2px dashed var(--mark-empty)}
+.key{margin:0;padding:0}
+@media (prefers-reduced-motion:no-preference){
+  .js .sixteen .box.pop{animation:pop .55s var(--ease) both}
+  @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.sixteen{order:-1}.sixteen svg{width:min(100%,300px)}}
 
-  .mark {
-    width: 96px;
-    height: 96px;
-    border-radius: 22px;
-    margin-bottom: 28px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-  }
+/* Sections */
+section.band{padding-block:clamp(56px,8vw,112px);border-top:1px solid var(--site-line)}
+.head{display:grid;gap:14px;max-width:760px;margin-bottom:clamp(28px,4vw,52px)}
+.head h2{font-size:clamp(32px,4.4vw,56px)}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.grid3{grid-template-columns:1fr}}
+.card{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius);padding:26px 24px;display:grid;gap:12px;align-content:start;min-width:0}
+.card h3{font-size:24px;line-height:1.1}
+.card p{color:var(--site-ink-light);font-size:15.5px}
+.card .fig{font-family:var(--site-display);font-size:48px;line-height:1;color:var(--site-amber);letter-spacing:.01em}
+.card .fig small{font-size:16px;color:var(--site-ink-light);letter-spacing:.06em;text-transform:uppercase;margin-left:6px}
+.codes{display:flex;gap:8px;flex-wrap:wrap}
+.code{font-family:var(--mono);font-size:12.5px;padding:4px 9px;border-radius:var(--radius-box);background:var(--site-wash-2);border:1px solid var(--site-line)}
+.code.x{color:#ffb9a6;border-color:rgba(255,185,166,.3);text-decoration:line-through}
 
-  .badge {
-    font-family: "Oswald", -apple-system, sans-serif;
-    font-weight: 500;
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--amber);
-    background: rgba(240, 166, 0, 0.14);
-    border: 1px solid rgba(240, 166, 0, 0.35);
-    border-radius: 999px;
-    padding: 6px 16px;
-    margin-bottom: 28px;
-  }
+/* Reveal on scroll: visible at rest, nudged in only once the page has loaded with JS */
+.reveal{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .reveal.pre{opacity:0;transform:translateY(22px)}
+.js .reveal.pre.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{transition:none}.js .reveal.pre{opacity:1;transform:none}}
 
-  h1 {
-    font-family: "Oswald", -apple-system, sans-serif;
-    font-weight: 700;
-    font-stretch: condensed;
-    letter-spacing: 0.02em;
-    font-size: clamp(56px, 13vw, 112px);
-    line-height: 0.95;
-    margin: 0 0 18px;
-    color: var(--paper);
-  }
+/* Converter */
+.two{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.tool{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-hero);padding:28px;display:grid;gap:22px}
+.tool label{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--site-ink-light);letter-spacing:.04em;text-transform:uppercase;font-family:var(--site-display);font-weight:500}
+.tool output{font-family:var(--site-display);font-size:56px;line-height:1;color:var(--site-paper);letter-spacing:.01em}
+.tool output small{font-size:22px;color:var(--site-ink-light)}
+input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0;cursor:pointer}
+.bands{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:480px){.bands{grid-template-columns:1fr}}
+.band-card{background:var(--site-ink);border:1px solid var(--site-line-2);border-radius:var(--radius);padding:18px 18px 16px;display:grid;gap:6px;min-width:0}
+.band-card .prov{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;color:var(--site-ink-light)}
+.band-card .pts{font-family:var(--site-display);font-size:60px;line-height:.9;font-weight:700;transition:color .25s}
+.band-card .pts small{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--site-ink-light);margin-left:6px;font-weight:500}
+.band-card .dist{font-size:13.5px;color:var(--site-ink-light);min-height:2.6em}
+.band-card.cliff .pts{color:var(--site-amber)}
+.scale{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:2px;margin-top:4px}
+.scale i{display:block;height:100%;background:var(--site-wash-2)}
+.scale i.on{background:var(--mark-filled)}
+.scale i.hot{background:var(--site-amber)}
+.aside{display:grid;gap:16px}
+.aside p{color:var(--site-ink-light)}
+.callout{border-left:3px solid var(--site-amber);padding:4px 0 4px 18px;color:var(--site-paper);font-size:16px}
 
-  h1 span {
-    color: var(--amber);
-  }
+/* Course check */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.pick{min-height:44px;padding:8px 16px;border-radius:var(--radius-pill);border:1px solid var(--site-line-2);background:transparent;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:background .15s,border-color .15s}
+.pick code{font-family:var(--mono);font-size:13px}
+.pick small{font-size:12.5px;color:var(--site-ink-light)}
+.pick:hover{background:var(--site-wash)}
+.pick[aria-pressed=true]{background:var(--site-paper);color:var(--site-ink);border-color:var(--site-paper)}
+.pick[aria-pressed=true] small{color:var(--ink2)}
+.verdict-stage{margin-top:22px}
+/* The verdict is drawn in the portal's own dialect: a tinted banner, one fill and a word */
+.pv{background:var(--ice);border-radius:var(--radius-hero);padding:22px;color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
+.verdict{display:grid;gap:8px;background:var(--okbg);border:1px solid var(--okrule);border-radius:var(--radius-tile);padding:18px 20px;color:var(--ok);transition:background .25s,border-color .25s,color .25s}
+.verdict b{font-family:var(--display);font-weight:600;font-size:22px;line-height:1.25;letter-spacing:-.01em}
+.verdict .why{color:var(--ink2)}
+.verdict .next{color:var(--ink);font-weight:600}
+.verdict.alarm{background:var(--alarmbg);border-color:var(--alarmrule);color:var(--alarm)}
+.verdict.warn{background:var(--warnbg);border-color:var(--warnrule);color:var(--warn)}
+.verdict .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 9px;border-radius:var(--radius-box);border:1px solid var(--rule);background:var(--surface);color:var(--ink2);font-family:var(--sans)}
+.chip b{font-family:var(--mono);font-weight:500;font-size:12px}
+.chip.alarm{background:var(--alarmbg);border-color:var(--alarmrule);color:var(--alarm)}
+.chip.warn{background:var(--warnbg);border-color:var(--warnrule);color:var(--warn)}
+.chip.ok{background:var(--okbg);border-color:var(--okrule);color:var(--ok)}
+.chip.info{background:var(--infobg);border-color:var(--inforule);color:var(--blue)}
+.chip.mono{font-family:var(--mono)}
 
-  .tagline {
-    max-width: 560px;
-    font-size: clamp(17px, 2.4vw, 20px);
-    line-height: 1.5;
-    color: var(--ink-light);
-    margin: 0 0 36px;
-  }
+/* Student: phone + laptop */
+.persona{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+@media (max-width:900px){.persona{grid-template-columns:1fr}.persona .screen{order:-1}}
+.persona.flip .screen{order:-1}
+@media (max-width:900px){.persona.flip .screen{order:-1}}
+.points{display:grid;gap:18px;margin:0;padding:0;list-style:none}
+.points li{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start}
+.points .n{width:34px;height:34px;border-radius:9px;background:var(--site-wash-2);border:1px solid var(--site-line);display:grid;place-items:center;font-family:var(--site-display);font-weight:500;color:var(--site-amber);font-size:14px;letter-spacing:.04em}
+.points h3{font-size:21px;line-height:1.15;margin-bottom:4px;font-family:var(--site-body);font-weight:650;letter-spacing:0}
+.points p{color:var(--site-ink-light);font-size:15.5px}
 
-  .provinces {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 44px;
-  }
+.phone{width:min(100%,330px);margin:0 auto;background:#0b1118;border-radius:48px;padding:12px;box-shadow:0 30px 70px rgba(0,0,0,.5),inset 0 0 0 1px rgba(191,214,242,.18);position:relative}
+.phone .glass{background:var(--app-ground);border-radius:38px;overflow:hidden;color:var(--app-text);font-family:var(--app-body);font-size:14px;line-height:1.4;padding:14px 16px 84px;min-height:600px;position:relative}
+.phone .notch{width:110px;height:30px;background:#0b1118;border-radius:0 0 18px 18px;margin:-14px auto 10px}
+.app-eyebrow{font-family:var(--app-mono);font-size:11px;font-weight:500;letter-spacing:.9px;text-transform:uppercase;color:var(--app-text-2)}
+.app-title{font-family:var(--app-display);font-weight:800;font-size:32px;line-height:1.05;margin:2px 0 12px}
+.app-top{display:flex;justify-content:space-between;align-items:center}
+.app-initials{width:34px;height:34px;border-radius:50%;background:var(--app-raised);display:grid;place-items:center;font-family:var(--app-mono);font-size:12px;font-weight:500;color:var(--app-accent)}
+.app-panel{background:var(--app-surface);border:1px solid var(--app-hairline);border-radius:16px;padding:14px 16px;display:grid;gap:12px;margin-bottom:10px}
+.app-panel header{display:flex;justify-content:space-between;align-items:center}
+.app-panel header .app-eyebrow{font-weight:600;color:var(--app-text-2)}
+.app-chip{font-family:var(--app-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--radius-pill);background:var(--app-raised);color:var(--app-text-2)}
+.app-chip.good{color:var(--app-good);background:rgba(86,209,154,.14)}
+.app-chip.warn{color:var(--app-amber-text);background:rgba(255,176,32,.14)}
+.app-slot-label{display:flex;justify-content:space-between;font-size:13px;color:var(--app-text-2)}
+.app-slot-label b{font-family:var(--app-mono);font-weight:500;color:var(--app-text)}
+.app-slots{display:flex;gap:5px}
+.app-slot{width:30px;height:30px;border-radius:var(--radius-box);background:var(--app-raised);display:grid;place-items:center;font-size:13px;color:var(--app-on-ink);font-weight:700}
+.app-slot.done{background:var(--app-ink)}
+.app-slot.half{background:linear-gradient(90deg,var(--app-ink) 50%,var(--app-raised) 50%)}
+.app-slot.now{background:var(--app-amber)}
+.app-slot.later{background:transparent;border:1.5px solid var(--app-hairline)}
+.app-slot.empty{background:transparent;border:1.5px dashed var(--app-hairline)}
+.app-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.app-big{font-family:var(--app-display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.app-sub{font-size:12.5px;color:var(--app-text-2)}
+.app-list{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.app-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--app-hairline)}
+.app-list li:first-child{border-top:0;padding-top:0}
+.app-list .what{display:grid;gap:1px;min-width:0}
+.app-list .what em{font-style:normal;font-family:var(--app-mono);font-size:12px;font-weight:500;color:var(--app-text-2)}
+.app-flag{font-family:var(--app-mono);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px;border-radius:var(--radius-flag);white-space:nowrap}
+.app-flag.today{background:var(--app-bad);color:#fff}
+.app-flag.tomorrow{background:var(--urgency-tomorrow);color:#fff}
+.app-flag.three{background:rgba(255,176,32,.18);color:var(--urgency-three-days-text)}
+.app-flag.week{background:rgba(140,184,242,.18);color:var(--urgency-week)}
+.app-tabs{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:10px 6px 22px;background:rgba(10,16,23,.92);border-top:1px solid var(--app-hairline);backdrop-filter:blur(8px)}
+.app-tabs span{font-size:10px;color:var(--app-text-2);display:grid;justify-items:center;gap:4px;position:relative}
+.app-tabs span::before{content:"";width:18px;height:18px;border-radius:5px;border:1.5px solid currentColor;opacity:.8}
+.app-tabs span.on{color:var(--app-accent)}
+.app-tabs span .n{position:absolute;top:-6px;right:-8px;background:var(--app-bad);color:#fff;font-size:9px;font-weight:700;border-radius:999px;padding:0 5px;line-height:14px}
 
-  .province {
-    font-family: "Oswald", -apple-system, sans-serif;
-    font-weight: 500;
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--paper);
-    background: rgba(191, 214, 242, 0.08);
-    border: 1px solid rgba(191, 214, 242, 0.18);
-    border-radius: 10px;
-    padding: 10px 18px;
-  }
+.laptop{width:min(100%,560px);margin:0 auto}
+.laptop .lid{background:#0b1118;border-radius:18px 18px 4px 4px;padding:12px 12px 10px;box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 0 0 1px rgba(191,214,242,.18)}
+.laptop .base{height:14px;background:linear-gradient(#2a3a50,#17243a);border-radius:0 0 14px 14px;margin:0 -4%;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.laptop .glass{background:var(--ice);border-radius:8px;overflow:hidden;color:var(--ink);font-family:var(--sans);font-size:12.5px;line-height:1.45}
+.st-top{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--surface);border-bottom:1px solid var(--rule);font-family:var(--display);font-weight:600;font-size:13px}
+.st-top img{width:18px;height:18px;border-radius:4px}
+.st-top span{color:var(--ink3);font-weight:400;font-family:var(--sans)}
+.st-top nav{margin-left:auto;display:flex;gap:10px;font-family:var(--sans);font-weight:400;color:var(--ink2);font-size:12px}
+.st-top nav b{color:var(--blue);font-weight:600}
+.st-hero{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:16px 18px;background:linear-gradient(110deg,var(--hero),var(--student-hero-mid) 55%,var(--student-hero-end));color:var(--onhero);margin:12px;border-radius:var(--radius-hero)}
+@media (max-width:480px){.st-hero{grid-template-columns:1fr 1fr}.st-hero .st-hello{grid-column:1/-1}}
+.st-hello{display:grid;gap:3px;min-width:0}
+.st-date{font-size:11.5px;color:var(--onhero2)}
+.st-hello h1{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.02em;color:var(--onhero);line-height:1.05}
+.st-hello p{color:var(--onhero2);font-size:12px}
+.st-ring,.st-gauge{width:84px;height:auto;display:block}
+.st-ring .track{fill:none;stroke:rgba(255,255,255,.18);stroke-width:10}
+.st-ring .now{fill:none;stroke:var(--warnstripe);stroke-width:10;stroke-linecap:butt}
+.st-ring .done{fill:none;stroke:var(--onhero);stroke-width:10}
+.st-ring text,.st-gauge text{fill:var(--onhero);text-anchor:middle;font-family:var(--display);font-weight:700}
+.st-ring .big,.st-gauge .big{font-size:26px}
+.st-ring .small,.st-gauge .small{font-size:10px;font-family:var(--sans);font-weight:400;fill:var(--onhero2)}
+.st-gauge{width:120px}
+.st-gauge .track{fill:none;stroke:rgba(255,255,255,.18);stroke-width:12;stroke-linecap:round}
+.st-gauge .fill{fill:none;stroke:var(--student-hero-good);stroke-width:12;stroke-linecap:round}
+.st-gauge .tick{stroke:var(--onhero);stroke-width:2}
+.st-week{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:0 12px 12px;margin:0;list-style:none}
+.st-week li{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius-tile);padding:8px 8px 9px;display:grid;gap:3px;min-width:0}
+.st-week li.today{box-shadow:inset 0 0 0 2px var(--blue)}
+.st-week .dow{font-size:10.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.st-week .date{font-family:var(--display);font-weight:700;font-size:16px}
+.ev{display:grid;gap:0;font-size:10.5px;border-radius:6px;padding:4px 6px;line-height:1.3}
+.ev i{font-style:normal;font-weight:600}
+.ev em{font-style:normal;font-family:var(--mono);font-size:9.5px;opacity:.9}
+.ev.due{background:var(--infobg);color:var(--blue);border:1px solid var(--inforule)}
+.ev.hockey{background:var(--hockeybg);color:var(--hockey)}
+.ev.session{background:var(--warnbg);color:var(--warn);border:1px solid var(--warnrule)}
+.none{font-size:10.5px;color:var(--ink3)}
+.st-list{margin:0 12px 12px;background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden}
+.st-list ul{margin:0;padding:0;list-style:none}
+.st-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--rule)}
+.st-list h2{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:-.01em;padding:8px 14px 6px;color:var(--ink2)}
+.st-list .c{font-family:var(--mono);font-size:11.5px;color:var(--ink3)}
 
-  .province strong {
-    color: var(--good);
-    font-weight: 500;
-  }
+/* Parent portal */
+.portal{width:min(100%,640px);margin:0 auto;background:var(--ice);border-radius:var(--radius-hero);overflow:hidden;color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.45;box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 0 1px rgba(191,214,242,.18)}
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--surface);border-bottom:1px solid var(--rule);font-family:var(--display);font-weight:600;font-size:15px}
+.topbar img{width:22px;height:22px;border-radius:5px}
+.topbar span{color:var(--ink3);font-family:var(--sans);font-weight:400;font-size:13px}
+.topbar .me{margin-left:auto;font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--ink2)}
+.portal .body{padding:18px;display:grid;gap:14px}
+.pagehead{display:grid;gap:2px}
+.pagehead p{font-size:12px;color:var(--ink3)}
+.pagehead h2{font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:-.02em;line-height:1.05;color:var(--ink)}
+.pagehead .sub{color:var(--ink2);font-size:13px}
+.child{background:var(--hero);color:var(--onhero);border-radius:var(--radius-hero);padding:22px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media (max-width:480px){.child{grid-template-columns:1fr}}
+.hero-grid{width:140px;height:140px;display:block}
+.hero-grid .completed{fill:var(--onhero)}
+.hero-grid .in-progress{fill:var(--warnstripe)}
+.hero-grid .planned{fill:none;stroke:var(--herorule);stroke-width:2}
+.hero-grid .empty{fill:none;stroke:var(--herorule);stroke-width:2;stroke-dasharray:4 4}
+.hero-grid .tick{fill:none;stroke:var(--hero);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.req-total{display:grid;gap:8px}
+.req-total b{font-family:var(--display);font-weight:700;font-size:72px;line-height:.9;letter-spacing:-.03em}
+.req-total p{color:var(--onhero2);font-size:13.5px}
+.hero-key{display:flex;gap:12px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:11.5px;color:var(--onhero2)}
+.hero-key li{display:flex;align-items:center;gap:6px}
+.hero-key li::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--onhero)}
+.hero-key .in-progress::before{background:var(--warnstripe)}
+.hero-key .planned::before{background:none;border:1.5px solid var(--herorule)}
+.hero-key .unfilled::before{background:none;border:1.5px dashed var(--herorule)}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:16px 18px;display:grid;gap:10px}
+.panel h3{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel h3 small{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--ink3)}
+.panel .note{color:var(--ink2);font-size:12.5px}
+.week-days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0;padding:0;list-style:none}
+.week-days li{background:var(--ice2);border-radius:var(--radius-tile);padding:8px;display:grid;gap:3px;min-width:0}
+.week-days li.today{box-shadow:inset 0 0 0 2px var(--blue)}
+.week-days .dow{font-size:10.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.week-days .date{font-family:var(--display);font-weight:700;font-size:16px}
+.flags{display:flex;gap:8px;flex-wrap:wrap}
+.pbtn{font-family:var(--sans);font-size:13px;font-weight:600;min-height:36px;padding:0 14px;border-radius:var(--radius-s);border:1px solid var(--rule2);background:var(--surface);color:var(--ink);cursor:default}
+.pbtn.primary{background:var(--ink);color:var(--onhero);border-color:var(--ink)}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.prow em{font-style:normal;color:var(--ink2);font-size:12.5px}
+.cal-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+@media (max-width:480px){.cal-form{grid-template-columns:1fr}}
+.field{display:grid;gap:4px;font-size:11.5px;color:var(--ink2)}
+.field div{border:1px solid var(--rule2);border-radius:var(--radius-s);padding:7px 10px;font-size:13px;color:var(--ink);background:var(--surface);font-family:var(--sans)}
+.field div.mono{font-family:var(--mono)}
 
-  .status {
-    font-size: 14px;
-    color: rgba(191, 214, 242, 0.55);
-  }
+/* How it works */
+.how{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:900px){.how{grid-template-columns:1fr}}
+.stage{position:sticky;top:calc(80px + env(safe-area-inset-top,0px));display:grid;gap:18px}
+@media (max-width:900px){.stage{position:static}}
+.stage-card{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-hero);padding:26px;display:grid;gap:18px;min-height:360px;align-content:center}
+.stage-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.stage-title .eyebrow{color:var(--site-ink-light)}
+.stage-title b{font-family:var(--site-display);font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--site-amber)}
+.courses{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:0;list-style:none}
+.courses li{aspect-ratio:1;border-radius:var(--radius-box);border:2px solid var(--mark-empty);display:grid;place-items:center;font-family:var(--mono);font-size:clamp(10px,1.4vw,12.5px);color:var(--site-ink-light);transition:background .45s var(--ease),border-color .45s,color .45s,transform .45s var(--ease);text-align:center;padding:4px;min-width:0;position:relative}
+.courses li.blank{border-style:dashed;opacity:.55}
+[data-step="1"] .courses li:not(.blank){border-color:var(--site-ink-light)}
+[data-step="2"] .courses li.ok,[data-step="3"] .courses li.ok{background:var(--mark-filled);border-color:var(--mark-filled);color:var(--mark-top)}
+[data-step="2"] .courses li.now,[data-step="3"] .courses li.now{background:var(--site-amber);border-color:var(--site-amber);color:var(--site-ink)}
+[data-step="2"] .courses li.x,[data-step="3"] .courses li.x{border-color:#f0897e;color:#f0897e;text-decoration:line-through}
+.readers{display:flex;gap:10px;flex-wrap:wrap;opacity:.25;transition:opacity .5s var(--ease)}
+[data-step="3"] .readers{opacity:1}
+.reader{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--site-ink-light);background:var(--site-ink);border:1px solid var(--site-line-2);border-radius:var(--radius-pill);padding:7px 12px}
+.reader i{width:9px;height:9px;border-radius:50%;background:var(--site-amber)}
+.steps{display:grid;gap:clamp(40px,6vw,96px);margin:0;padding:0;list-style:none}
+.step{display:grid;gap:12px;scroll-margin-top:100px}
+.step .k{font-family:var(--site-display);font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--site-amber)}
+.step h3{font-size:clamp(26px,3vw,36px)}
+.step p{color:var(--site-ink-light);max-width:34em}
+.step.on h3{color:var(--site-paper)}
+.js .step h3{transition:color .3s}
+.js .step:not(.on) h3{color:rgba(247,247,245,.6)}
 
-  footer {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding: 20px 24px 28px;
-    font-size: 12px;
-    color: rgba(191, 214, 242, 0.4);
-  }
+/* Clock */
+.clock{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+@media (max-width:900px){.clock{grid-template-columns:1fr}}
+.timeline{display:grid;gap:10px}
+.tl{display:grid;grid-template-columns:92px 1fr;gap:14px;align-items:center}
+.tl .yr{font-family:var(--site-display);font-size:22px;color:var(--site-ink-light);letter-spacing:.02em}
+.tl .bar{height:40px;border-radius:var(--radius-s);border:1px solid var(--site-line);display:flex;align-items:center;padding:0 14px;font-size:14px;color:var(--site-ink-light);background:var(--site-wash)}
+.tl .bar.jr{border-style:dashed}
+.tl .bar.clk{background:var(--site-amber-wash);border-color:var(--site-amber-line);color:var(--site-paper)}
+.tl .bar.clk b{color:var(--site-amber);margin-right:8px;font-family:var(--site-display);font-weight:500;letter-spacing:.06em}
 
-  footer a {
-    color: rgba(191, 214, 242, 0.6);
-    text-decoration: none;
-  }
+/* Trust */
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:760px){.rules{grid-template-columns:1fr}}
+.rule-card{border-top:1px solid var(--site-line-2);padding-top:18px;display:grid;gap:8px}
+.rule-card h3{font-size:22px;line-height:1.15}
+.rule-card p{color:var(--site-ink-light);font-size:15.5px}
+.rule-card .ex{font-family:var(--mono);font-size:13px;color:var(--site-paper);background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-box);padding:8px 12px;width:fit-content;max-width:100%}
+.rule-card .ex s{color:#ffb9a6}
 
-  footer a:hover {
-    color: var(--amber);
-  }
+/* CTA + footer */
+.cta{text-align:center;display:grid;gap:22px;justify-items:center;padding-block:clamp(56px,8vw,112px)}
+.cta h2{font-size:clamp(40px,7vw,96px);letter-spacing:.02em}
+.cta h2 span{color:var(--site-amber)}
+footer{position:relative;z-index:1;border-top:1px solid var(--site-line);padding-block:24px 36px;font-size:13px;color:rgba(191,214,242,.55)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+footer a{color:rgba(191,214,242,.75);text-decoration:none}
+footer a:hover{color:var(--site-amber)}
 </style>
 </head>
 <body>
-  <main>
-    <img class="mark" src="assets/mark.svg" alt="Core16 logo" width="96" height="96">
-    <div class="badge">Coming soon</div>
-    <h1>CORE<span>16</span></h1>
-    <p class="tagline">
-      NCAA Division I/II academic eligibility, tracked for Canadian high
-      school hockey players — courses, marks, and core GPA in one place.
-    </p>
-    <div class="provinces">
-      <div class="province">Ontario — <strong>launching</strong></div>
-      <div class="province">British Columbia — <strong>launching</strong></div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Core16, top of page"><img src="assets/mark.svg" alt="" width="30" height="30"><b>CORE<span>16</span></b></a>
+    <nav aria-label="Sections">
+      <a href="#why">Why</a><a href="#check">Try it</a><a href="#student">Student</a><a href="#parent">Parent</a><a href="#how">How it works</a><a href="#trust">What it won't say</a>
+    </nav>
+    <span class="badge">Coming soon</span>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <div class="copy">
+      <p class="eyebrow">NCAA Division I and II eligibility, for Canadian hockey families</p>
+      <h1>Sixteen courses stand between a player and a US college roster. <em>Core16 counts them.</em></h1>
+      <p class="lead">Every course checked against NCAA's own list for your province, every mark converted the way your province does it, and the 16 filled in one box at a time. On the player's phone, on a parent's web page, and on the laptop at school.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#student">See the player's app</a>
+        <a class="btn ghost" href="#parent">See the parent's page</a>
+      </div>
+      <div class="provinces">
+        <div class="province">Ontario <strong>launching</strong></div>
+        <div class="province">British Columbia <strong>launching</strong></div>
+      </div>
     </div>
-    <p class="status">Core16 is in development. This page will update as we get closer to launch.</p>
-  </main>
-  <footer>
-    &copy; 2026 Core16
-  </footer>
+    <div class="sixteen" role="img" aria-label="Thirteen of sixteen core courses counted: eight complete, four in progress, one planned">
+      <svg viewBox="0 0 246 246" role="img" aria-hidden="true" id="hero16"></svg>
+      <div class="total"><b class="num" id="heroCount" data-count="13">13</b><span>of 16 core courses</span></div>
+      <ul class="key"><li class="done"><i></i>Complete</li><li class="now"><i></i>In progress</li><li class="later"><i></i>Planned</li><li class="empty"><i></i>Not filled</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="why">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Why a hockey timetable needs watching</p>
+      <h2>The schedule flexes around ice time. The NCAA's rules don't.</h2>
+      <p class="lead">A player who finds out in Grade 12 has no way back. Core16 is built to catch three things early, while a course can still be swapped.</p>
+    </div>
+    <div class="grid3">
+      <article class="card reveal">
+        <p class="fig">0<small>units</small></p>
+        <h3>Some courses count for nothing</h3>
+        <p>Applied, open-level and workplace courses are what a player gets steered into when the timetable has to flex around practice. NCAA names them, and they add nothing to the 16.</p>
+        <div class="codes"><span class="code x">MBF3C</span><span class="code x">MEL3E</span><span class="code x">Workplace Mathematics 11</span></div>
+      </article>
+      <article class="card reveal">
+        <p class="fig">4<small>a year</small></p>
+        <h3>Sixteen over four years is four a year</h3>
+        <p>NCAA sets no yearly load, but the arithmetic does. A light Grade 9 or 10 fills the 16 slowly and says nothing, until there's no room left in Grade 12. Core16 shows the pace, and says plainly it's arithmetic, not a rule.</p>
+      </article>
+      <article class="card reveal">
+        <p class="fig">85%<small>= 4 or 3</small></p>
+        <h3>The same mark is worth different points</h3>
+        <p>An 85 is a 4 in Ontario and a 3 in British Columbia. BC's top band starts at 86, so an 84 reads as a strong mark and is worth no more than a 73. Every conversion goes through the student's province.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="convert">
+  <div class="wrap two">
+    <div class="aside reveal">
+      <p class="eyebrow">Try it</p>
+      <h2 style="font-size:clamp(32px,4.4vw,56px)">One mark, two provinces</h2>
+      <p>Drag the mark. Core16 converts it to NCAA quality points the way each province's outline does, and shows how close the mark sits to the next band. That nearness is what the app calls a cliff, and it only ever shows it for a course still in progress, where the mark can still move.</p>
+      <p class="callout">The BC 86 is the highest-value number in the app. One more point, one more quality point.</p>
+      <p class="quiet" style="font-size:13.5px">Bands from the NCAA Eligibility Center's September 2026 province outlines. Grade 10 to 12 scale shown; BC Grade 9 uses proficiency words, not percentages.</p>
+    </div>
+    <div class="tool reveal">
+      <label for="mark"><span>Report-card mark</span><output id="markOut" for="mark" class="num">85<small>%</small></output></label>
+      <input type="range" id="mark" min="40" max="100" value="85" step="1" aria-label="Report-card mark, percent">
+      <div class="bands">
+        <div class="band-card" id="onCard">
+          <span class="prov">ONTARIO</span>
+          <p class="pts num"><span id="onPts">4</span><small>points</small></p>
+          <div class="scale" id="onScale" aria-hidden="true"></div>
+          <p class="dist" id="onDist">Top band. 80 and above is a 4.</p>
+        </div>
+        <div class="band-card" id="bcCard">
+          <span class="prov">BRITISH COLUMBIA</span>
+          <p class="pts num"><span id="bcPts">3</span><small>points</small></p>
+          <div class="scale" id="bcScale" aria-hidden="true"></div>
+          <p class="dist" id="bcDist">1 more point reaches a 4.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="check">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Try it</p>
+      <h2>Pick a course. Get the answer a family actually needs.</h2>
+      <p class="lead">Ontario matches by code, BC by title, and the list is NCAA's own. Every course comes back one of three ways: approved, won't count, or needs a look. The third one is the dangerous one, and Core16 never paints it green.</p>
+    </div>
+    <div class="reveal">
+      <div class="chips" id="picks" role="group" aria-label="Courses to check"></div>
+      <div class="verdict-stage">
+        <div class="pv">
+          <div class="verdict" id="verdict" aria-live="polite">
+            <b id="vTitle">Approved: ENG4U</b>
+            <span class="why" id="vWhy">A university-prep code on NCAA's Ontario list. Counts one unit toward the four English the 16 needs.</span>
+            <span class="next" id="vNext">Next: nothing. Keep the mark up.</span>
+            <div class="meta" id="vMeta"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="student">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">For the player</p>
+      <h2>A phone that knows where you stand, written for a 15-year-old.</h2>
+      <p class="lead">The iPhone app is the record. Courses and marks go in off the report card, it works offline against NCAA's list, and it keeps the hockey log in the same place as the due dates.</p>
+    </div>
+    <div class="persona">
+      <ul class="points reveal">
+        <li><span class="n">01</span><div><h3>Overview, with no verdict</h3><p>The core courses counted, core GPA against the 2.3 minimum, the next two due dates and the nearest cliff. The app never says "on track" as one word, because the Eligibility Center is the only one who can.</p></div></li>
+        <li><span class="n">02</span><div><h3>Add a course, get the answer straight away</h3><p>Search the list for your grade and province, or type one the list doesn't have. A course NCAA won't count says so before it's on the timetable, not after the credit is earned.</p></div></li>
+        <li><span class="n">03</span><div><h3>Marks, due dates and reminders</h3><p>Log assignments and the report-card mark. Due dates carry a flag that gets louder as the day comes, and can mirror into a Core16 calendar with an alert the night before.</p></div></li>
+        <li><span class="n">04</span><div><h3>Where to focus</h3><p>A course three points from the next band gets a nudge showing the exact core GPA that reaching it would give. Two core courses in one subject at a C or below gets flagged as a pattern worth getting help with.</p></div></li>
+        <li><span class="n">05</span><div><h3>Hockey hours beside the homework</h3><p>Practices, games, skills and off-ice sessions, with weekly and season hours and a heads-up when a due date lands on a heavy stretch of ice.</p></div></li>
+      </ul>
+      <div class="screen reveal">
+        <div class="phone" role="img" aria-label="The Core16 iPhone app's Overview screen for Maya, Grade 11 in BC: 13 of 16 core courses, core GPA 3.15, two things due this week">
+          <div class="glass">
+            <div class="notch"></div>
+            <div class="app-top"><div><p class="app-eyebrow">Grade 11 · British Columbia</p><p class="app-title">Overview</p></div><span class="app-initials">MC</span></div>
+            <div class="app-panel">
+              <header><span class="app-eyebrow">Core courses</span><span class="app-chip">13 of 16</span></header>
+              <div><div class="app-slot-label">English <b>3.5/4</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot half"></div></div></div>
+              <div><div class="app-slot-label">Math <b>2/3</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot later"></div></div></div>
+              <div><div class="app-slot-label">Science <b>2/2</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot now"></div></div></div>
+              <div><div class="app-slot-label">Additional <b>2/4</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot now"></div><div class="app-slot empty"></div><div class="app-slot empty"></div></div></div>
+            </div>
+            <div class="app-panel">
+              <header><span class="app-eyebrow">Core GPA</span><span class="app-chip good">Above 2.3</span></header>
+              <div class="app-row"><span class="app-big num">3.15</span><span class="app-sub">▲ Life Sciences 11 is 2 points from a 4.<br>Reaching it: 3.23</span></div>
+            </div>
+            <div class="app-panel">
+              <header><span class="app-eyebrow">Next up</span><span class="app-chip">Marks</span></header>
+              <ul class="app-list">
+                <li><div class="what"><span>Essay: Literary Studies 11</span><em>LTST 11 · 15% of mark</em></div><span class="app-flag today">Due today</span></li>
+                <li><div class="what"><span>Lab report: cells</span><em>LFS 11 · 10% of mark</em></div><span class="app-flag three">In 3 days</span></li>
+              </ul>
+            </div>
+            <div class="app-panel">
+              <div class="app-row"><div><p class="app-eyebrow">Hockey this week</p><p style="font-size:15px">Two practices, one road game</p></div><span class="app-big num" style="font-size:28px">6.5<small style="font-size:13px;font-weight:400;color:var(--app-text-2)"> h</small></span></div>
+            </div>
+            <div class="app-tabs"><span class="on">Overview</span><span>Courses</span><span>Marks<span class="n">2</span></span><span>GPA<span class="n">1</span></span><span>Hockey</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="persona flip" style="margin-top:clamp(48px,7vw,96px)">
+      <div class="screen reveal">
+        <div class="laptop" role="img" aria-label="The Core16 Today page on a school laptop: Morning, Maya. Two things are due this week.">
+          <div class="lid"><div class="glass">
+            <div class="st-top"><img src="assets/mark.svg" alt="">Core16 <span>Today</span><nav><b>Today</b>Courses Marks GPA Hockey</nav></div>
+            <div class="st-hero">
+              <div class="st-hello"><p class="st-date">Friday, October 30</p><h1>Morning, Maya.</h1><p>Two things are due this week. Road game Friday.</p></div>
+              <svg class="st-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="track" cx="60" cy="60" r="50" pathLength="100"/><circle class="now" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="81.25 100" transform="rotate(-90 60 60)"/><circle class="done" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="50 100" transform="rotate(-90 60 60)"/><text x="60" y="58" class="big">13</text><text x="60" y="76" class="small">of 16 core</text></svg>
+              <svg class="st-gauge" viewBox="0 0 200 118" aria-hidden="true"><path class="track" d="M20 100 A80 80 0 0 1 180 100" pathLength="100"/><path class="fill" d="M20 100 A80 80 0 0 1 180 100" pathLength="100" stroke-dasharray="78.75 100"/><line class="tick" x1="115.87" y1="33.88" x2="121.48" y2="10.54"/><text x="100" y="88" class="big">3.15</text><text x="100" y="108" class="small">core GPA · minimum 2.3</text></svg>
+            </div>
+            <ol class="st-week" aria-hidden="true">
+              <li><span class="dow">Mon</span><span class="date">26</span><span class="none">Nothing</span></li>
+              <li class="today"><span class="dow">Tue</span><span class="date">27</span><span class="ev due"><i>Essay</i><em>LTST 11</em></span></li>
+              <li><span class="dow">Wed</span><span class="date">28</span><span class="ev hockey"><i>6:30 PM</i><em>Practice</em></span></li>
+              <li><span class="dow">Thu</span><span class="date">29</span><span class="ev session"><i>7:00 PM</i><em>Mentor call</em></span></li>
+              <li><span class="dow">Fri</span><span class="date">30</span><span class="ev hockey"><i>7:30 PM</i><em>Road game</em></span></li>
+            </ol>
+            <div class="st-list" aria-hidden="true">
+              <h2>Today</h2>
+              <ul>
+                <li><span>Essay: Literary Studies 11</span><span class="c">LTST 11</span></li>
+                <li><span>Lab report: cells, due Friday</span><span class="c">LFS 11</span></li>
+              </ul>
+            </div>
+          </div></div>
+          <div class="base"></div>
+        </div>
+      </div>
+      <ul class="points reveal">
+        <li><span class="n">06</span><div><h3>Today, on the school laptop</h3><p>A page a player opens each morning at school: what's due today, tomorrow and later this week, the hockey on top of it, and the same two figures the phone shows. It signs in with a short code from the phone, so there's no email to collect and no passkey on a board-managed laptop.</p></div></li>
+        <li><span class="n">07</span><div><h3>Changes wait for the phone</h3><p>The phone stays the only writer of the record. An edit made on the laptop or by a parent is held as waiting, and the phone applies it next time it syncs. Nothing changes a player's record behind their back.</p></div></li>
+        <li><span class="n">08</span><div><h3>Sessions with a mentor, when an advisor sets them up</h3><p>One-to-one video sessions with a hockey mentor or another professional. Every call has a second adult on it, shown by name, and is never recorded.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="parent">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">For the parent</p>
+      <h2>The same 16, on a page you can read in a minute.</h2>
+      <p class="lead">A parent signs in on the web and sees their child's standing the way an advisor does: the boxes, the core GPA, what's due, and what won't count. They can add practices and due dates to the calendar and enter a report-card mark. Marks a student logged stay theirs to show.</p>
+    </div>
+    <div class="persona">
+      <div class="screen reveal">
+        <div class="portal" role="img" aria-label="The parent's Core16 page for Maya Chen: 13 of 16 core courses, this week's calendar, a warning that Workplace Mathematics 11 won't count, and a video session that needs a second adult">
+          <div class="topbar"><img src="assets/mark.svg" alt="">Core16 <span>Your family</span><span class="me">Claire Chen</span></div>
+          <div class="body">
+            <div class="pagehead"><p>Grade 11 · British Columbia · synced today</p><h2>Maya Chen</h2><p class="sub">Figures are from the last sync of Maya's phone.</p></div>
+            <section class="child">
+              <svg class="hero-grid" viewBox="0 0 246 246" aria-hidden="true" id="parent16"></svg>
+              <div class="req-total"><b class="num">13</b><p>of 16 core courses counted, 8 complete</p><ul class="hero-key"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li><li class="unfilled">Not filled</li></ul></div>
+            </section>
+            <div class="flags"><span class="chip warn">Won't count: <b>Workplace Mathematics 11</b></span><span class="chip ok">Core pace: on pace</span><span class="chip info">▲ Near next band: <b>LFS 11</b></span><span class="chip">Five-year clock: starts fall 2029 at the latest</span></div>
+            <section class="panel">
+              <h3>This week <small>School in blue, hockey in orange</small></h3>
+              <ul class="week-days">
+                <li><span class="dow">Mon</span><span class="date">26</span><span class="none">Nothing</span></li>
+                <li class="today"><span class="dow">Tue</span><span class="date">27</span><span class="ev due"><i>Essay</i><em>LTST 11</em></span></li>
+                <li><span class="dow">Wed</span><span class="date">28</span><span class="ev hockey"><i>6:30 PM</i><em>Practice</em></span></li>
+                <li><span class="dow">Thu</span><span class="date">29</span><span class="ev session"><i>7:00 PM</i><em>Mentor call</em></span></li>
+                <li><span class="dow">Fri</span><span class="date">30</span><span class="ev hockey"><i>7:30 PM</i><em>Road game</em></span></li>
+              </ul>
+            </section>
+            <section class="panel">
+              <h3>Add to Maya's calendar</h3>
+              <div class="cal-form"><div class="field">Practice<div>Sunday 1 Nov, 7:00 AM, weekly</div></div><div class="field">Due date<div>Chemistry quiz, Thu 5 Nov</div></div><button class="pbtn primary" type="button" tabindex="-1">Add</button></div>
+              <p class="note"><span class="chip warn">Waiting for Maya's phone</span>&nbsp; A change you make here reaches the app when the phone next syncs.</p>
+            </section>
+            <section class="panel">
+              <h3>Video sessions</h3>
+              <div class="prow"><div><strong>Thu 29 Oct, 7:00 PM BC time</strong><br><em>Mentor call, 30 minutes. Nobody is down as the second adult yet, so the call can't start.</em></div><button class="pbtn" type="button" tabindex="-1">Be the second adult</button></div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <ul class="points reveal">
+        <li><span class="n">01</span><div><h3>The 16 as boxes, never a percentage</h3><p>One box per required course, filled from the left: complete, in progress, then planned. The count under it says how many are counted and how many are finished, so 13 of 16 with eight done reads exactly as it should.</p></div></li>
+        <li><span class="n">02</span><div><h3>What won't count, in the words NCAA uses</h3><p>A course on NCAA's excluded list shows as "Won't count" the week it's picked. A course NCAA has never assessed shows as needing a look, and the page says plainly it holds back the 16 until it's settled.</p></div></li>
+        <li><span class="n">03</span><div><h3>School and hockey on one calendar</h3><p>Due dates in blue, ice in orange, sessions in amber. Add a weekly practice or a due date here and the player's phone picks it up, marked as a parent's change, when it next syncs.</p></div></li>
+        <li><span class="n">04</span><div><h3>A second adult on every call</h3><p>No mentor session starts without a second adult on it. A parent takes that seat from their own page and joins by name. Report cards and the IEP go in as photos, for the advisor to enter.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="wrap how">
+    <div class="stage reveal" id="stage" data-step="1">
+      <div class="stage-card">
+        <div class="stage-title"><span class="eyebrow">Maya's Grade 11 timetable</span><b id="stageLabel">Entered</b></div>
+        <ul class="courses" aria-hidden="true">
+          <li class="ok">LTST 11</li><li class="ok">CMPS 10</li><li class="ok">LTST 10</li><li class="ok">EN 9</li>
+          <li class="ok">PREC 10</li><li class="ok">FMP 10</li><li class="x">WPM 11</li><li class="now">LFS 11</li>
+          <li class="ok">SC 10</li><li class="ok">SS 10</li><li class="now">EXPL 11</li><li class="ok">FR 10</li>
+          <li class="now">SP 10</li><li class="blank"></li><li class="blank"></li><li class="blank"></li>
+        </ul>
+        <div class="readers" aria-hidden="true"><span class="reader"><i></i>Maya's phone</span><span class="reader"><i></i>Today, at school</span><span class="reader"><i></i>Claire's page</span><span class="reader"><i></i>Advisor</span></div>
+      </div>
+    </div>
+    <ol class="steps">
+      <li class="step reveal" data-go="1"><span class="k">Step 1</span><h3>The phone holds the record</h3><p>Courses, marks and due dates go in on the player's iPhone, off the report card, and it works offline. Nothing in Core16 is computed anywhere else first.</p></li>
+      <li class="step reveal" data-go="2"><span class="k">Step 2</span><h3>Core16 checks it against NCAA's own list</h3><p>Each course is matched to the Eligibility Center's outline for the province, Ontario by code, BC by title. Marks become quality points on the province's bands. Approved courses fill the 16; excluded ones are named; anything unassessed holds back the count.</p></li>
+      <li class="step reveal" data-go="3"><span class="k">Step 3</span><h3>Everyone who looks after the player reads the same figures</h3><p>The phone syncs to Core16, and the same record appears on the parent's page, the player's Today page at school, and the advisor's roster. A change made anywhere else waits for the phone, so there is one record and no quiet edits.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band" id="clock">
+  <div class="wrap clock">
+    <div class="aside reveal">
+      <p class="eyebrow">Grade 11 and 12 decisions</p>
+      <h2 style="font-size:clamp(32px,4.4vw,56px)">How long to play junior is now a date.</h2>
+      <p>Under the NCAA's 2026 age rules, a player's five years of eligibility start the fall after their 19th birthday, or when they first enrol in college, whichever comes first. A birthday before 1 September starts it that fall; on or after, the next one.</p>
+      <p>Core16 works out the latest fall a player's clock can start from a birth month and year, and how many seasons that leaves after Grade 12 before it does. It's shown as a date, in a neutral colour, and it never touches the course figures.</p>
+    </div>
+    <div class="timeline reveal" role="img" aria-label="A player born in October 2009 graduating in 2027: two junior seasons, 2027 and 2028, before the clock starts in fall 2029 and runs to spring 2034">
+      <div class="tl"><span class="yr">2027</span><div class="bar">Graduates Grade 12</div></div>
+      <div class="tl"><span class="yr">2027</span><div class="bar jr">Junior season</div></div>
+      <div class="tl"><span class="yr">2028</span><div class="bar jr">Junior season</div></div>
+      <div class="tl"><span class="yr">2029</span><div class="bar clk"><b>Clock starts</b> Fall after the 19th birthday, at the latest</div></div>
+      <div class="tl"><span class="yr">2034</span><div class="bar clk"><b>Five years</b> run to spring 2034</div></div>
+      <p class="quiet" style="font-size:13px;grid-column:1/-1">Born October 2009. An August birthday in the same class would start a year earlier, with one junior season instead of two.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="trust">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">What Core16 won't say</p>
+      <h2>A confident wrong answer is the failure this product exists to prevent.</h2>
+      <p class="lead">Core16 tracks and flags. The NCAA Eligibility Center is the only certifier, and nothing on any screen pretends otherwise.</p>
+    </div>
+    <div class="rules">
+      <div class="rule-card reveal"><h3>Never "certified", never "eligible"</h3><p>Those are the Eligibility Center's words. Core16 says approved, won't count, or needs a look, and shows the 16 and the GPA that the Center will eventually see.</p></div>
+      <div class="rule-card reveal"><h3>No green while a course is unsettled</h3><p>A course NCAA hasn't assessed blocks the count however good the numbers look. The app and the portal hold the warning colour until an advisor or the school has settled it.</p><span class="ex">AVI4M: needs a look, so it holds back the 16</span></div>
+      <div class="rule-card reveal"><h3>Figures round away from the line</h3><p>A mark or GPA beside a threshold rounds down and the distance to the next band rounds up, so a student a hair under the minimum is never shown over it.</p><span class="ex">2.296 reads 2.29, <s>2.30</s>, beside "Below 2.3"</span></div>
+      <div class="rule-card reveal"><h3>An entered mark beats a computed one</h3><p>A report-card mark supersedes the app's own assignment average, because it reflects everything the teacher counted. Three logged assignments out of twelve is not a GPA.</p><span class="ex">Entered 85.96 stays 85.96, a 3 in BC</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="launch">
+  <div class="wrap" style="display:grid;gap:22px;justify-items:center">
+    <p class="eyebrow">Launching in Ontario and British Columbia</p>
+    <h2>CORE<span>16</span></h2>
+    <p class="lead" style="text-align:center">An iPhone app for the player, a web page for each parent, a Today page for school, and an advisor who sees all of it. Built for the family that is starting high school, not finishing it.</p>
+    <div class="ctas"><a class="btn primary" href="#top">Back to the top</a><a class="btn ghost" href="privacy/">Read the privacy policy</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Core16. Core16 tracks and flags; it does not certify eligibility.</span>
+    <span><a href="privacy/">Privacy</a> · NCAA outlines dated September 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* The 16 as boxes: 4 x 4, 54px boxes on a 64 pitch, filled from the left. */
+  function drawSixteen(svg, states, cls, tickD){
+    var out = '<defs><clipPath id="'+svg.id+'c"><rect width="54" height="54" rx="14"/></clipPath></defs>';
+    for (var i=0;i<16;i++){
+      var x=(i%4)*64, y=Math.floor(i/4)*64, s=states[i]||'empty';
+      out += '<g transform="translate('+x+' '+y+')"><g class="box" style="animation-delay:'+(i*55)+'ms">';
+      if (s==='half'){
+        out += '<g clip-path="url(#'+svg.id+'c)"><rect class="'+cls.done+'" width="27" height="54"/><rect class="'+cls.now+'" x="27" width="27" height="54"/></g><rect class="'+cls.edge+'" x="1" y="1" width="52" height="52" rx="13"/>';
+      } else if (s==='done'){
+        out += '<g clip-path="url(#'+svg.id+'c)"><rect class="'+cls.done+'" width="54" height="54"/></g><path class="tick" d="'+tickD+'"/>';
+      } else if (s==='now'){
+        out += '<g clip-path="url(#'+svg.id+'c)"><rect class="'+cls.now+'" width="54" height="54"/></g>';
+      } else if (s==='later'){
+        out += '<rect class="'+cls.later+'" x="1" y="1" width="52" height="52" rx="13"/>';
+      } else {
+        out += '<rect class="'+cls.empty+'" x="1" y="1" width="52" height="52" rx="13"/>';
+      }
+      out += '</g></g>';
+    }
+    svg.innerHTML = out;
+  }
+  var maya = ['done','done','done','done','done','done','done','done','now','now','now','now','later','empty','empty','empty'];
+  var hero = document.getElementById('hero16');
+  drawSixteen(hero, maya, {done:'done',now:'now',later:'later',empty:'empty',edge:'later'}, 'M16 28l8 8 15-16');
+  var parent = document.getElementById('parent16');
+  drawSixteen(parent, maya, {done:'completed',now:'in-progress',later:'planned',empty:'empty',edge:'planned'}, 'M16 28l8 8 15-16');
+  if (!reduce){
+    Array.prototype.forEach.call(hero.querySelectorAll('.box'), function(b){ b.classList.add('pop'); });
+  }
+
+  /* Reveal on scroll. Elements already in view, and every element without JS, stay as they are. */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduce){
+    var vh = window.innerHeight;
+    Array.prototype.forEach.call(reveals, function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top > vh * 0.92) el.classList.add('pre');
+    });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.05});
+    Array.prototype.forEach.call(reveals, function(el){ if (el.classList.contains('pre')) io.observe(el); });
+  }
+
+  /* Grade conversion, from the September 2026 province outlines (Grade 10 to 12 scale). */
+  var ON = [[80,4],[70,3],[60,2],[50,1]];
+  var BC = [[86,4],[73,3],[50,2]];
+  function points(bands, m){ for (var i=0;i<bands.length;i++){ if (m >= bands[i][0]) return bands[i][1]; } return 0; }
+  function nextBand(bands, m){ var next=null; for (var i=bands.length-1;i>=0;i--){ if (m < bands[i][0]){ next=bands[i]; break; } } return next; }
+  function fillScale(el, bands, m){
+    var cuts = bands.map(function(b){return b[0];}).reverse(); cuts.unshift(40); cuts.push(100);
+    var html='';
+    for (var i=0;i<cuts.length-1;i++){
+      var lo=cuts[i], hi=cuts[i+1], w=(hi-lo)/60*100;
+      var on = m >= lo, hot = on && m < hi;
+      html += '<i style="width:'+w+'%" class="'+(hot?'hot':(on?'on':''))+'"></i>';
+    }
+    el.innerHTML = html;
+  }
+  function describe(bands, m, prov){
+    var p = points(bands, m), n = nextBand(bands, m);
+    if (!n) return 'Top band. '+bands[0][0]+' and above is a 4 in '+prov+'.';
+    var d = n[0]-m;
+    if (p===0 && prov==='BC') return 'Below 50 scores 0 in BC; there is no D band. '+d+' more '+(d===1?'point':'points')+' reaches a 2.';
+    if (p===0) return 'Below 50 scores 0. '+d+' more '+(d===1?'point':'points')+' reaches a 1.';
+    return d+' more '+(d===1?'point':'points')+' reaches a '+n[1]+'.'+(d<=5?' Close enough that the app would show it.':'');
+  }
+  var mark = document.getElementById('mark');
+  function convert(){
+    var m = parseInt(mark.value,10);
+    document.getElementById('markOut').innerHTML = m+'<small>%</small>';
+    var on = points(ON,m), bc = points(BC,m);
+    document.getElementById('onPts').textContent = on;
+    document.getElementById('bcPts').textContent = bc;
+    document.getElementById('onDist').textContent = describe(ON,m,'Ontario');
+    document.getElementById('bcDist').textContent = describe(BC,m,'BC');
+    fillScale(document.getElementById('onScale'), ON, m);
+    fillScale(document.getElementById('bcScale'), BC, m);
+    var nOn = nextBand(ON,m), nBc = nextBand(BC,m);
+    document.getElementById('onCard').classList.toggle('cliff', !!nOn && nOn[0]-m<=5);
+    document.getElementById('bcCard').classList.toggle('cliff', !!nBc && nBc[0]-m<=5);
+  }
+  mark.addEventListener('input', convert); convert();
+
+  /* Course check. Real courses, real outcomes from NCAA's September 2026 outlines. */
+  var courses = [
+    {code:'ENG4U', title:'English', prov:'Ontario', status:'ok', verdict:'Approved: ENG4U', why:'A university-prep code on NCAA’s Ontario list. Counts one unit toward the four English the 16 needs.', next:'Next: nothing. Keep the mark up.', meta:['English','1.00 unit','Grade 12']},
+    {code:'MBF3C', title:'Foundations for College Mathematics', prov:'Ontario', status:'warn', verdict:'Won’t count: MBF3C', why:'NCAA names MBF3C as not approved, so it adds nothing to the 16 and nothing to the core GPA. If it’s the only math this year, the math slot stays open.', next:'Next: ask the school about a math course on NCAA’s list before the timetable locks.', meta:['Named exclusion','0 units','Grade 11']},
+    {code:'AVI4M', title:'Visual Arts', prov:'Ontario', status:'alarm', verdict:'Needs a look: AVI4M', why:'A real, ministry-listed course that NCAA’s Ontario list doesn’t carry. It isn’t approved or excluded, so it holds back the 16 until it’s resolved.', next:'Next: still being taken, so it can be swapped for a course NCAA counts. Once completed, the school can submit it to NCAA for review.', meta:['Unrecognized','Blocks the count','Advisor’s review queue']},
+    {code:'Workplace Mathematics 11', title:'WPM 11', prov:'BC', status:'warn', verdict:'Won’t count: Workplace Mathematics 11', why:'One of NCAA’s named exclusions for British Columbia, matched on its title the way every BC course is. The timetable has a math course; the 16 doesn’t.', next:'Next: Pre-calculus 11 or Foundations of Mathematics 11 would fill the slot.', meta:['Named exclusion','0 units','Grade 11']},
+    {code:'Literary Studies 11', title:'LTST 11', prov:'BC', status:'ok', verdict:'Approved: Literary Studies 11', why:'On NCAA’s BC list by title. A 4-credit course, so it counts a full unit toward English.', next:'Next: nothing. The essay is due Tuesday.', meta:['English','1.00 unit','Grade 11']},
+    {code:'Composition 10', title:'CMPS 10', prov:'BC', status:'ok', verdict:'Approved: Composition 10, half a unit', why:'Approved, and a 2-credit course, so it counts 0.50 of a unit. BC’s Grade 10 English requirement is met with two of these, and Core16 counts them as one unit together, not two.', next:'Next: pair it with Literary Studies 10 or another Grade 10 English elective.', meta:['English','0.50 unit','Grade 10']}
+  ];
+  var picks = document.getElementById('picks'), verdict = document.getElementById('verdict');
+  courses.forEach(function(c, i){
+    var b = document.createElement('button');
+    b.type='button'; b.className='pick'; b.setAttribute('aria-pressed', i===0 ? 'true':'false');
+    b.innerHTML = '<code>'+c.code+'</code><small>'+c.title+' · '+c.prov+'</small>';
+    b.addEventListener('click', function(){ show(i); });
+    picks.appendChild(b);
+  });
+  function show(i){
+    var c = courses[i];
+    Array.prototype.forEach.call(picks.children, function(b, j){ b.setAttribute('aria-pressed', i===j ? 'true':'false'); });
+    verdict.className = 'verdict' + (c.status==='ok' ? '' : ' '+c.status);
+    document.getElementById('vTitle').textContent = c.verdict;
+    document.getElementById('vWhy').textContent = c.why;
+    document.getElementById('vNext').textContent = c.next;
+    document.getElementById('vMeta').innerHTML = c.meta.map(function(m, k){
+      var cls = k===0 ? (c.status==='ok'?'ok':c.status) : '';
+      return '<span class="chip '+cls+'">'+m+'</span>';
+    }).join('');
+  }
+  show(0);
+
+  /* How it works: the stage follows whichever step is in the middle of the screen. */
+  var stage = document.getElementById('stage'), label = document.getElementById('stageLabel');
+  var steps = document.querySelectorAll('.step');
+  var labels = {1:'Entered', 2:'Checked against NCAA', 3:'Shared'};
+  function setStep(n){
+    stage.setAttribute('data-step', n); label.textContent = labels[n];
+    Array.prototype.forEach.call(steps, function(s){ s.classList.toggle('on', s.getAttribute('data-go')===String(n)); });
+  }
+  if ('IntersectionObserver' in window){
+    var so = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) setStep(e.target.getAttribute('data-go')); });
+    }, {rootMargin:'-40% 0px -45% 0px', threshold:0});
+    Array.prototype.forEach.call(steps, function(s){ so.observe(s); });
+  } else { setStep(3); }
+  setStep(1);
+})();
+</script>
 </body>
 </html>
