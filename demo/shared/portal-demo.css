@@ -1,0 +1,777 @@
+/* The Core16 portal's stylesheet, cut down for the two web demos (web/demo/today, web/demo/parent).
+   Copied from api/src/core16_api/portal/static/portal.css rather than linked, so the demo pages are
+   a snapshot of the portal's look and never reach the API. Fonts come from the site's own folder.
+   Rules for staff-only pages (roster, review queue, sessions, families) are left out. */
+/* Core16 advisor portal. Palette and table styling carried over from the
+   advisor-board mockup (web/board-x7k2/). The typefaces are served from this
+   origin (static/fonts/, each under the SIL Open Font License beside it),
+   never from Google Fonts: a page showing minors' records shouldn't make
+   third-party requests, and the CSP wouldn't allow one. Latin subset,
+   variable weight; the system face shows until a file arrives. */
+@font-face {
+  font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url("../../assets/fonts/bricolage-grotesque.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("../../assets/fonts/hanken-grotesk.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist Mono"; font-style: normal; font-weight: 400 500; font-display: swap;
+  src: url("../../assets/fonts/geist-mono.woff2") format("woff2");
+}
+:root {
+  --ink: #0E2340;
+  --ink2: #3C5573;
+  --ink3: #6E829B;
+  --ice: #E6ECF3;
+  --ice2: #F2F6FA;
+  --surface: #FFFFFF;
+  --rule: #CCDAE8;
+  --rule2: #A6BED6;
+  --blue: #0B4C86;
+  --alarm: #A8261C;
+  --alarmbg: #FAEAE8;
+  --warn: #8A5A00;
+  --warnbg: #FBF1DC;
+  --ok: #1B6140;
+  --okbg: #E4EFE9;
+  --okrule: #A9CBB9;
+  --alarmrule: #E0B3AE;
+  --warnrule: #E3CB95;
+  --warnstripe: #C99A2E;
+  --infobg: #E8F0F5;
+  --inforule: #A9C4D4;
+  /* Hockey on a parent's calendar. A warm orange, opposite --blue for
+     school: dark green and then violet both sat too close to the navy to
+     tell apart on a thin stripe (28 Sep 2026). */
+  --hockey: #A94A0C;
+  --hockeybg: #FDEBDD;
+  --onink: #FFFFFF;
+  --onalarm: #FFFFFF;
+  --backdrop: rgba(16, 32, 52, .45);
+  --hero: #0E2340;
+  --onhero: #FFFFFF;
+  --onhero2: #C4D4E6;
+  --herorule: #5F7C9C;
+  --sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Headings and big figures. */
+  --display: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius: 16px;
+  --radius-s: 10px;
+  color-scheme: light;
+}
+/* Dark mode. Follows the device unless someone picks Light or Dark in the top
+   bar, which theme.js applies as data-theme before the page paints. The token
+   list is repeated because CSS can't share one block between a media query
+   and an attribute selector. */
+@media (prefers-color-scheme: dark) {
+:root:not([data-theme="light"]) {
+  --ink: #E3EBF4;
+  --ink2: #AFC0D3;
+  --ink3: #8497AE;
+  --ice: #0A1420;
+  --ice2: #16263A;
+  --surface: #0F1C2C;
+  --rule: #22344A;
+  --rule2: #36506B;
+  --blue: #7DB2E3;
+  --alarm: #F0897E;
+  --alarmbg: #351B1A;
+  --warn: #E2B25E;
+  --warnbg: #2F2513;
+  --ok: #6FC79B;
+  --okbg: #122C20;
+  --okrule: #2D5E45;
+  --alarmrule: #6B312B;
+  --warnrule: #65501F;
+  --warnstripe: #C99A2E;
+  --infobg: #132A3D;
+  --inforule: #2E5573;
+  --hockey: #F29A5C;
+  --hockeybg: #36210F;
+  --onink: #0A1420;
+  --onalarm: #1E0A08;
+  --backdrop: rgba(0, 0, 0, .6);
+  --hero: #16263A;
+  --onhero: #E3EBF4;
+  --onhero2: #AFC0D3;
+  --herorule: #4A6585;
+  color-scheme: dark;
+}
+}
+:root[data-theme="dark"] {
+  --ink: #E3EBF4;
+  --ink2: #AFC0D3;
+  --ink3: #8497AE;
+  --ice: #0A1420;
+  --ice2: #16263A;
+  --surface: #0F1C2C;
+  --rule: #22344A;
+  --rule2: #36506B;
+  --blue: #7DB2E3;
+  --alarm: #F0897E;
+  --alarmbg: #351B1A;
+  --warn: #E2B25E;
+  --warnbg: #2F2513;
+  --ok: #6FC79B;
+  --okbg: #122C20;
+  --okrule: #2D5E45;
+  --alarmrule: #6B312B;
+  --warnrule: #65501F;
+  --warnstripe: #C99A2E;
+  --infobg: #132A3D;
+  --inforule: #2E5573;
+  --hockey: #F29A5C;
+  --hockeybg: #36210F;
+  --onink: #0A1420;
+  --onalarm: #1E0A08;
+  --backdrop: rgba(0, 0, 0, .6);
+  --hero: #16263A;
+  --onhero: #E3EBF4;
+  --onhero2: #AFC0D3;
+  --herorule: #4A6585;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--ice);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px 72px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* top bar */
+.topbar { border-bottom: 1px solid var(--rule2); background: var(--surface); }
+.topbar-in {
+  max-width: 1280px; margin: 0 auto; padding: 0 16px;
+  display: flex; align-items: center; gap: 24px; min-height: 54px; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; }
+.brand svg { width: 24px; height: 24px; color: var(--ink); flex: none; }
+.brand span { color: var(--ink3); font-weight: 400; }
+nav { display: flex; gap: 2px; }
+nav a {
+  color: var(--ink2); font-weight: 500; text-decoration: none;
+  padding: 8px 12px; border-bottom: 2px solid transparent;
+}
+nav a:hover { color: var(--ink); }
+nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--blue); }
+nav .badge {
+  display: inline-block; min-width: 20px; height: 20px; padding: 0 6px; margin-left: 4px;
+  border-radius: 10px; background: var(--alarm); color: var(--onalarm);
+  font-size: 12px; font-weight: 600; line-height: 20px; text-align: center;
+  font-variant-numeric: tabular-nums; vertical-align: 1px;
+}
+.me { margin-left: auto; display: flex; align-items: center; gap: 12px; color: var(--ink2); font-size: 13px; }
+.me form { margin: 0; }
+.linkbtn { font: inherit; color: var(--blue); background: none; border: none; padding: 0; cursor: pointer; }
+
+/* sign-in and enrollment */
+.card {
+  max-width: 440px; margin: 48px auto 0; padding: 24px;
+  background: var(--surface); border: 1px solid var(--rule);
+}
+.card h1 { margin: 0 0 10px; font-size: 20px; font-weight: 600; }
+.card p { margin: 0 0 14px; color: var(--ink2); }
+.primary {
+  font: inherit; font-weight: 600; color: var(--onink); background: var(--ink);
+  border: none; border-radius: var(--radius-s); padding: 10px 16px; cursor: pointer;
+}
+.primary:disabled { opacity: .6; cursor: default; }
+.status { min-height: 1.45em; margin: 12px 0 0; }
+.status.error { color: var(--alarm); }
+.notice { padding: 9px 12px; background: var(--ice2); border: 1px solid var(--rule); color: var(--ink); }
+.fineprint { max-width: 440px; margin: 12px auto 0; color: var(--ink3); font-size: 12px; }
+
+/* sections */
+.sec { margin-top: 26px; }
+.sechead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 9px; }
+h2 { font-size: 15px; font-weight: 600; margin: 0; }
+.sechead p { margin: 0; color: var(--ink3); font-size: 12.5px; }
+/* A collapsible section: the h2 sits in the summary, with a chevron that turns when open. */
+.fold > summary { cursor: pointer; list-style: none; }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary h2::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 9px 2px 1px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg); transition: transform 0.15s;
+}
+.fold[open] > summary h2::before { transform: rotate(45deg); }
+.fold:not([open]) > summary.sechead { margin-bottom: 0; }
+.panel.fold > summary h2 { display: inline-block; margin: 0; }
+.panel.fold[open] > summary { margin-bottom: 3px; }
+.empty { padding: 16px; background: var(--surface); border: 1px solid var(--rule); color: var(--ink3); }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.chip { font-size: 11.5px; font-weight: 400; padding: 2px 7px; border-radius: var(--radius-s); border: 1px solid; }
+.chip.alarm { color: var(--alarm); border-color: var(--alarmrule); background: var(--alarmbg); }
+.chip.warn { color: var(--warn); border-color: var(--warnrule); background: var(--warnbg); }
+.chip.info { color: var(--blue); border-color: var(--inforule); background: var(--infobg); }
+.sechead h2 .chip { margin-left: 6px; vertical-align: 2px; }
+code { font-family: var(--mono); font-size: 12.5px; }
+.quiet { margin: 0; color: var(--ink3); }
+.file { background: var(--surface); border: 1px solid var(--rule); margin-top: 10px; }
+.filehead { padding: 18px 20px; border-bottom: 1px solid var(--rule2); }
+.filehead h1 { margin: 0; font-size: 24px; font-weight: 600; }
+.meta { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 12px 0 0; font-size: 13px; }
+.meta dt { color: var(--ink3); font-size: 11.5px; }
+.meta dd { margin: 0; font-weight: 500; }
+.panel { padding: 18px 20px; border-bottom: 1px solid var(--rule); }
+.panel:last-child { border-bottom: none; }
+.panel h2 { margin: 0 0 3px; font-size: 14px; }
+.note { margin: 0 0 12px; color: var(--ink3); font-size: 12.5px; max-width: 80ch; }
+.verdict { padding: 13px 15px; border: 1px solid var(--okrule); border-radius: var(--radius-s); background: var(--okbg); }
+.verdict b { font-size: 15px; color: var(--ok); }
+.verdict.alarm { border-color: var(--alarmrule); background: var(--alarmbg); }
+.verdict.alarm b { color: var(--alarm); }
+.verdict.warn { border-color: var(--warnrule); background: var(--warnbg); }
+.verdict.warn b { color: var(--warn); }
+.verdict p { margin: 10px 0 0; color: var(--ink2); font-size: 12.5px; }
+.ask-why {
+  display: inline-block; width: 16px; height: 16px; border-radius: 50%; margin-left: 2px;
+  border: 1px solid currentColor; color: var(--blue); font: 600 11px/14px var(--sans);
+  text-align: center; vertical-align: 1px; cursor: pointer; user-select: none;
+}
+.ask-why:hover { background: var(--blue); color: var(--surface); }
+/* Shared by the Core courses and 10/7 panels: the big figure, the key,
+   and the bars the 10/7 gate still uses. */
+.req-total { display: flex; align-items: flex-end; gap: 12px; margin: 4px 0 12px; }
+.req-total b { font-size: 44px; line-height: .9; font-weight: 700; font-variant-numeric: tabular-nums; }
+.req-total p { margin: 0; color: var(--ink2); font-size: 13.5px; }
+.pace-row, .clock-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 640px; margin: 0 0 14px; font-size: 14px; }
+.pace-row abbr { border-bottom: 1px dotted var(--ink3); }
+.pace-row .by, .clock-row .by { color: var(--ink3); }
+.pace-row .chip { flex: none; font-size: 12.5px; font-weight: 600; padding: 3px 9px; }
+.req-key { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 10px; padding: 0; color: var(--ink2); font-size: 12.5px; }
+.req-key li::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: var(--radius-s); vertical-align: -1px; }
+.req-key .completed::before { background: var(--ink); }
+.req-key .in-progress::before { background: var(--warnstripe); }
+.req-key .planned::before { background: var(--rule2); }
+.req-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: 640px; }
+.req-bars li { display: grid; grid-template-columns: minmax(96px, 13em) 1fr 3.5em; align-items: center; gap: 12px; font-size: 14px; }
+.req-bars svg { display: block; width: 100%; height: 12px; border-radius: 6px; overflow: hidden; }
+.req-bars .req-count { font-family: var(--mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+.req-bars .met .req-count { color: var(--ok); }
+.req-bars .track { fill: var(--ice); }
+.req-bars .completed { fill: var(--ink); }
+.req-bars .in-progress { fill: var(--warnstripe); }
+.req-bars .planned { fill: var(--rule2); }
+.req-bars + .note { margin-top: 14px; }
+/* Core courses: the app's slot grid, one box per required course. The boxes
+   are what the 16 actually is, a count; the 10/7 panel above keeps a bar,
+   because a gate is a pace. --warnbg/--ice fills with a --warnstripe/--rule2 edge stand
+   in for the app's tinted fills, which are one colour at low opacity. */
+.core-slots {
+  list-style: none; margin: 0; padding: 0; max-width: 560px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px;
+}
+.core-slots li { display: grid; gap: 6px; justify-items: start; }
+.core-slots .slot-head { display: flex; align-items: baseline; gap: 6px; color: var(--ink2); font-size: 13.5px; }
+.core-slots .req-count { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.core-slots .met .req-count { color: var(--ok); }
+.core-slots svg { display: block; height: 30px; width: auto; max-width: 100%; }
+.core-slots .completed { fill: var(--ink); }
+.core-slots .in-progress { fill: var(--warnbg); }
+.core-slots .planned { fill: var(--ice); }
+.core-slots .edge { fill: none; stroke-width: 1.5; }
+.core-slots .edge.done { stroke: var(--ink); }
+.core-slots .edge.now { stroke: var(--warnstripe); }
+.core-slots .edge.later, .core-slots .edge.empty { stroke: var(--rule2); }
+.core-slots .edge.empty { stroke-dasharray: 4 3; }
+.core-slots .hit { fill: transparent; pointer-events: all; cursor: help; }
+.core-slots .tick { fill: none; stroke: var(--onink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.core-slots + .note { margin-top: 14px; }
+/* The one shortened label: dotted, so it reads as something to click. */
+.req-label abbr { border-bottom: 1px dotted var(--ink3); }
+@media (max-width: 520px) {
+  .req-bars li { grid-template-columns: 1fr 3.5em; gap: 4px 12px; }
+  .req-bars .req-label { grid-column: 1 / -1; }
+  .core-slots { grid-template-columns: minmax(0, 1fr); }
+}
+/* The Core GPA panel, after the app's GPA tab. */
+.gpa-head { display: flex; align-items: flex-end; gap: 12px; margin: 4px 0 12px; max-width: 480px; }
+.gpa-head b { font-size: 44px; line-height: .9; font-weight: 700; font-variant-numeric: tabular-nums; }
+.gpa-head p { margin: 0; color: var(--ink2); font-size: 13.5px; }
+.gpa-head .chip { margin-left: auto; align-self: center; font-size: 12.5px; font-weight: 600; padding: 3px 9px; }
+.chip.ok { color: var(--ok); border-color: var(--okrule); background: var(--okbg); }
+.gpa-scale { display: block; width: 100%; max-width: 480px; height: auto; margin-bottom: 12px; }
+.gpa-scale .track { fill: var(--ice); }
+.gpa-scale .fill { fill: var(--ink); }
+.gpa-scale .minimum { fill: var(--warnstripe); }
+.gpa-scale text { fill: var(--ink3); font-family: var(--mono); font-size: 9px; text-anchor: middle; }
+td.actions form { display: inline; margin-left: 14px; }
+.linkbtn.danger { color: var(--alarm); }
+.form-error.banner { padding: 9px 12px; margin: 0 0 10px; background: var(--alarmbg); border: 1px solid var(--alarmrule); }
+.notice { margin: 0 0 10px; padding: 9px 12px; background: var(--ice2); border: 1px solid var(--rule); }
+.staff-form { display: grid; gap: 12px; max-width: 760px; }
+.staff-form label { display: grid; gap: 4px; align-content: start; font-size: 12.5px; color: var(--ink2); font-weight: 500; }
+.staff-form input, .staff-form select {
+  font: inherit; color: var(--ink); padding: 7px 9px; border: 1px solid var(--rule2);
+  border-radius: var(--radius-s); background: var(--surface); max-width: 100%;
+}
+.staff-form .primary, .staff-form .note { justify-self: start; margin: 0; }
+/* families */
+table.families { min-width: 640px; }
+table.families td div + div { margin-top: 3px; }
+tr.muted td, tr.muted td a { color: var(--ink3); }
+.staff-form .opt { font-weight: 400; color: var(--ink3); }
+.staff-form h3 { margin: 4px 0 0; }
+.card.wide { max-width: 640px; }
+/* asking before something that can't be undone -- see portal.js */
+.ask {
+  width: min(460px, calc(100vw - 32px)); padding: 22px 24px; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--rule2); border-radius: var(--radius-s);
+}
+.ask::backdrop { background: var(--backdrop); }
+.ask h2 { margin: 0; font-size: 17px; }
+.ask p { margin: 10px 0 0; color: var(--ink2); }
+.ask p[hidden] { display: none; }
+.ask .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+@media (prefers-reduced-motion: no-preference) {
+  .ask[open] { animation: ask-in .13s ease-out; }
+  @keyframes ask-in { from { opacity: 0; transform: translateY(-6px); } }
+}
+.linkbox { display: flex; gap: 8px; flex-wrap: wrap; }
+.linkbox input {
+  flex: 1 1 280px; min-width: 0; font: 12.5px var(--mono); color: var(--ink);
+  padding: 8px 9px; border: 1px solid var(--rule2); border-radius: var(--radius-s); background: var(--ice2);
+}
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* renaming, archiving and deleting a student */
+.notice.top, .form-error.banner.top { margin: 12px 0 0; }
+.secondary, .danger {
+  font: inherit; font-weight: 600; justify-self: start; cursor: pointer;
+  border-radius: var(--radius-s); padding: 9px 15px; background: var(--surface);
+}
+.secondary { color: var(--ink); border: 1px solid var(--rule2); }
+.danger { color: var(--onalarm); background: var(--alarm); border: 1px solid var(--alarm); }
+/* A link-style button that's also dangerous (Revoke, Withdraw, Cancel) stays a
+   link: without this, .danger above fills it in and its red text vanishes. */
+.linkbtn.danger { background: none; border: none; padding: 0; font-weight: inherit; }
+.danger-zone h2 { color: var(--alarm); }
+
+/* appearance switch in the top bar */
+.brand svg rect[stroke] { stroke: var(--rule2); }
+.theme { display: inline-flex; border: 1px solid var(--rule2); border-radius: var(--radius-s); overflow: hidden; }
+.theme[hidden] { display: none; }
+.theme button {
+  font: inherit; font-size: 12px; color: var(--ink2); background: var(--surface);
+  border: none; padding: 3px 9px; cursor: pointer;
+}
+.theme button + button { border-left: 1px solid var(--rule2); }
+.theme button:hover { color: var(--ink); }
+.theme button[aria-pressed="true"] { color: var(--onink); background: var(--ink); }
+
+/* read aloud, not shown */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* A parent's page (parent.html): each student's figures, then one calendar. */
+.fineprint.wide { max-width: 80ch; margin: 26px 0 0; }
+.child .status { display: grid; gap: 14px; }
+.child .status > * { margin: 0; }
+/* The GPA row is capped narrower than the pace rows under it, which left its
+   chip about 160px left of theirs. On the parent page they share one width. */
+.child .status .gpa-head { max-width: 640px; }
+.agenda { list-style: none; margin: 8px 0 12px; padding: 0; max-width: 760px; }
+.agenda li { display: grid; grid-template-columns: 6.5em 1fr auto; align-items: baseline; gap: 12px; padding: 7px 0 7px 10px; border-bottom: 1px solid var(--rule); border-left: 3px solid var(--rule2); margin-bottom: 2px; font-size: 14px; }
+.agenda time { color: var(--ink2); font-variant-numeric: tabular-nums; }
+.agenda b { font-weight: 600; }
+.agenda em { display: block; font-style: normal; color: var(--ink3); font-size: 12.5px; }
+.agenda .due { border-left-color: var(--blue); }
+.agenda .hockey { border-left-color: var(--hockey); }
+.agenda .session { border-left-color: var(--warnstripe); }
+.agenda .done b, .agenda .done time { color: var(--ink3); font-weight: 400; }
+/* The month's list mixes school and hockey: a wider stripe, the calendar's
+   tint behind the row, and the kind named under the date. */
+.agenda.mixed li { border-left-width: 5px; padding-right: 8px; }
+.agenda.mixed .due { background: var(--infobg); }
+.agenda.mixed .hockey { background: var(--hockeybg); }
+.agenda.mixed .session { background: var(--warnbg); }
+.agenda .when { display: flex; flex-direction: column; }
+.agenda .when .at { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.agenda .done .when .at { color: var(--ink3); font-weight: 400; }
+.agenda .kind { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.agenda .due .kind { color: var(--blue); }
+.agenda .hockey .kind { color: var(--hockey); }
+.agenda .session .kind { color: var(--warn); }
+/* A parent's add and edit forms: a card, two columns, every box full width
+   in its column so the rows line up. One column on a phone. */
+.parent-edit .edit-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+.parent-edit .edit-fields .wide { grid-column: 1 / -1; }
+.parent-edit .edit-field input, .parent-edit .edit-field select { width: 100%; height: 38px; box-sizing: border-box; }
+.parent-edit .staff-form { gap: 16px; }
+/* Beside the repeat field on a wide screen, under it on a phone. */
+.parent-edit .field-note { margin: 0; align-self: end; font-size: 12px; color: var(--ink3); line-height: 1.4; }
+@media (max-width: 520px) {
+  .parent-edit .edit-fields { grid-template-columns: 1fr; }
+}
+.edit-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.edit-actions .secondary { text-decoration: none; }
+.remove-edit { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; }
+.remove-edit .quiet { flex-basis: 100%; margin: 0; }
+.agenda .item-extras { align-self: center; }
+.item-extras { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 10px; }
+.agenda .waiting-chip, .agenda .edit-link { font-size: 12px; }
+.agenda .edit-link { color: var(--blue); white-space: nowrap; }
+/* Buttons, not links: they're how a parent changes the calendar, and as
+   underlined text at the foot of a panel they read as fine print. */
+.add-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 8px; }
+.add-links .secondary {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 500; line-height: 1.2; padding: 7px 12px;
+  text-decoration: none;
+}
+.add-links .secondary svg { flex: none; color: var(--blue); }
+.add-links a.secondary:hover { border-color: var(--blue); }
+/* No course to put a due date under: the button stays, greyed, so the
+   choice is still visible, with a "?" saying why. */
+.add-links .add-off { display: inline-flex; align-items: center; gap: 6px; }
+.add-links .is-disabled { color: var(--ink3); border-style: dashed; cursor: not-allowed; }
+.add-links .is-disabled svg { color: var(--ink3); }
+.add-panel .note { margin: 0; }
+.agenda.calls li { align-items: center; }
+.call-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px 10px; }
+.call-actions form { margin: 0; }
+.call-actions .sub { color: var(--ink3); font-size: 12.5px; }
+.monthnav { display: flex; gap: 14px; margin-left: auto; font-size: 13px; }
+.monthnav a { color: var(--blue); }
+.cal-key { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 8px; padding: 0; color: var(--ink2); font-size: 12.5px; }
+.cal-key li::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: var(--radius-s); vertical-align: -1px; }
+.cal-key .due::before { background: var(--blue); }
+.cal-key .hockey::before { background: var(--hockey); }
+.cal-key .session::before { background: var(--warnstripe); }
+.cal-wrap .cal { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--surface); }
+.cal-wrap .cal th { padding: 6px 8px; border: 1px solid var(--rule); color: var(--ink3); font-size: 12px; font-weight: 600; text-align: left; }
+.cal-wrap .cal td { height: 96px; padding: 5px 6px; border: 1px solid var(--rule); vertical-align: top; overflow: hidden; }
+.cal-wrap .cal td.out { background: var(--ice2); }
+.cal-wrap .cal td.out .date { color: var(--ink3); }
+.cal-wrap .cal .date { display: block; margin-bottom: 3px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ink2); }
+.cal-wrap .cal td.today { box-shadow: inset 0 0 0 2px var(--blue); }
+.cal-wrap .cal td.today .date { color: var(--blue); font-weight: 700; }
+.cal-wrap .cal .ev { display: block; margin-top: 2px; padding: 1px 5px; border-left: 3px solid; font-size: 11.5px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-wrap .cal .ev i { font-style: normal; font-weight: 600; }
+.cal-wrap .cal .ev.due { border-color: var(--blue); background: var(--infobg); }
+.cal-wrap .cal .ev.hockey { border-color: var(--hockey); background: var(--hockeybg); }
+.cal .ev.session { border-color: var(--warnstripe); background: var(--warnbg); }
+.cal .ev.done { color: var(--ink3); background: none; }
+@media (max-width: 720px) {
+  .cal-wrap, .cal-key { display: none; }
+  .monthnav { margin-left: 0; width: 100%; }
+  .agenda li { grid-template-columns: 5.5em 1fr auto; }
+  /* A phone has no room for buttons beside a session: they go under it. */
+  .agenda.calls li { grid-template-columns: 5.5em 1fr; }
+  .agenda.calls .call-actions { grid-column: 1 / -1; justify-content: flex-start; }
+}
+
+/* Safari draws a <select> in its own system style and ignores the padding and
+   height set above, so it sits shorter than the text boxes beside it. Turning
+   the native look off and drawing the arrow ourselves makes it match Firefox. */
+select[name] {
+  -webkit-appearance: none; appearance: none; height: 34px; line-height: normal; padding: 7px 28px 7px 9px;
+  font: inherit; color: var(--ink); background-color: var(--surface); border: 1px solid var(--rule2); border-radius: var(--radius-s);
+  background-repeat: no-repeat; background-position: right 9px center; background-size: 10px 6px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236E829B' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Safari pads the inside of a date field, which leaves it taller than the text
+   boxes and dropdowns beside it. Pin it to the same height and drop the padding. */
+input[type="date"], input[type="time"], input[type="datetime-local"] { height: 34px; line-height: normal; }
+input[type="date"]::-webkit-datetime-edit, input[type="time"]::-webkit-datetime-edit,
+input[type="datetime-local"]::-webkit-datetime-edit { padding: 0; }
+input[type="date"]::-webkit-datetime-edit-fields-wrapper, input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper { padding: 0; }
+
+/* Which builds are running, quietly at the foot of every page. */
+.build-foot { display: flex; gap: 16px; flex-wrap: wrap; padding-top: 0; padding-bottom: 20px; }
+
+/* ------------------------------------------------------------------------
+   The October 2026 look, from the canvas mockup: a side menu for staff,
+   cards with soft corners, the 16 drawn as boxes wherever it's counted, and
+   large figures. It sits after the rules above and reshapes them rather than
+   replacing them, so every class the templates and tests use still means
+   what it did. Colours are still the tokens at the top.
+   ------------------------------------------------------------------------ */
+h1, h2, .count b, .req-total b, .gpa-head b, .figures dd, .cliff .jump { font-family: var(--display); letter-spacing: -.01em; }
+.wrap { padding-inline: 20px; }
+.primary, .secondary, .danger { padding: 10px 16px; }
+.duty .primary { padding: 6px 14px; }
+.card, .empty, .notice, .form-error.banner, .duty, .gate, .archived, .calwrap, .code-dialog, .ask { border-radius: var(--radius); }
+.card { padding: 28px; }
+.card h1 { font-size: 24px; }
+
+/* Every page opens the same way: an optional line above (the roster's
+   date), the title, and one or two sentences under it. Sections below use
+   h2 at the smaller size, never as a page title. */
+.pagehead { margin-top: 26px; }
+.pagehead p { margin: 0; color: var(--ink3); font-size: 13px; }
+.pagehead h1 { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.05; letter-spacing: -.02em; }
+.pagehead h1 + p { margin-top: 6px; max-width: 80ch; font-size: 14.5px; color: var(--ink2); }
+.pagehead h1 .chip { margin-left: 8px; vertical-align: 4px; letter-spacing: 0; }
+.pagehead h1 .tag { margin-left: 4px; vertical-align: 4px; font-size: 12px; letter-spacing: 0; }
+.pagehead + .sec { margin-top: 22px; }
+.pagehead + .notice, .pagehead + .form-error.banner { margin-top: 18px; }
+
+/* Staff pages on a wide screen: the top bar turns into a side menu. Below
+/* A file: each panel a card of its own rather than a slice of one sheet. */
+.file { display: grid; gap: 16px; background: none; border: none; }
+.file > * { min-width: 0; }
+.filehead, .panel, .panel:last-child { padding: 22px 24px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+.panel h2 { margin-bottom: 8px; font-size: 18px; }
+.filehead { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 18px; align-items: center; }
+.filehead > * { grid-column: 2; }
+.filehead > .avatar { grid-column: 1; grid-row: 1; }
+.avatar.big { width: 60px; height: 60px; font-family: var(--display); font-size: 21px; }
+.filehead h1 { font-size: 34px; font-weight: 700; line-height: 1.1; letter-spacing: -.02em; }
+.filehead .meta { grid-column: 1 / -1; gap: 8px; margin-top: 16px; }
+.filehead .meta > div { padding: 6px 12px; border-radius: var(--radius-s); background: var(--ice2); }
+.filehead .meta .meta-action { margin-left: 6px; font-weight: 400; font-size: 11.5px; color: var(--ink3); text-decoration: underline; }
+.filehead .meta .meta-action:hover { color: var(--ink); }
+.verdict { padding: 18px 20px; border-radius: 14px; }
+.verdict > b { font-family: var(--display); font-size: 19px; }
+.verdict .raised li { border-radius: var(--radius-s); }
+.req-total b, .gpa-head b { font-size: 56px; }
+.core-slots { max-width: 720px; gap: 18px 32px; }
+.core-slots svg { height: 38px; }
+.cliff { border-radius: 12px; padding: 14px 16px; }
+/* The student file on a wide screen: the record on the left, and beside it
+/* A parent's page. The summary is the one dark card: the 16 as the Core16
+   mark draws it, four by four, with the count beside it. The GPA, pace and
+   review rows are cards of their own, beside it when there's room. */
+.child > .sechead h2 { font-size: 40px; font-weight: 700; line-height: 1.05; letter-spacing: -.02em; }
+.child > .sechead p { flex-basis: 100%; font-size: 14.5px; color: var(--ink2); }
+.status-row, .status-side, .child-cols, .child-main, .child-side { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.status-row > *, .status-side > *, .child-main > *, .child-side > * { min-width: 0; }
+.child .status {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 36px; align-content: center; align-items: center;
+  margin: 0; padding: 28px; border-radius: 24px; background: var(--hero); border-color: var(--hero); color: var(--onhero);
+}
+.child .status:not(:has(*)) { display: none; }
+.child .status > * { grid-column: 2; margin: 0; }
+.child .status > .hero-grid { grid-column: 1; grid-row: 1 / span 3; width: min(246px, 100%); height: auto; }
+.child .status .req-total { align-items: flex-end; gap: 14px; }
+.child .status .req-total b { font-size: 84px; letter-spacing: -.03em; }
+.child .status .req-total p { color: var(--onhero2); font-size: 15px; }
+.hero-grid .completed { fill: var(--onhero); }
+.hero-grid .in-progress { fill: var(--warnstripe); }
+.hero-grid .planned { fill: var(--herorule); }
+.hero-grid .edge { fill: none; stroke: var(--herorule); stroke-width: 2; }
+.hero-grid .edge.empty { stroke-dasharray: 6 5; }
+.hero-grid .tick { fill: none; stroke: var(--hero); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.hero-key { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 0; color: var(--onhero2); font-size: 13.5px; }
+.hero-key li::before { content: ""; display: inline-block; width: 12px; height: 12px; box-sizing: border-box; margin-right: 7px; border-radius: 4px; vertical-align: -1px; }
+.hero-key .completed::before { background: var(--onhero); }
+.hero-key .in-progress::before { background: var(--warnstripe); }
+.hero-key .planned::before { background: var(--herorule); }
+.hero-key .unfilled::before { border: 1.5px dashed var(--onhero2); }
+.hero-more { justify-self: start; padding: 8px 0; color: var(--onhero); font-weight: 600; text-underline-offset: 3px; }
+.status-side > * { display: flex; align-items: center; justify-content: space-between; gap: 14px; max-width: none; margin: 0; padding: 20px 22px; border: 1px solid var(--rule); border-radius: 20px; background: var(--surface); }
+.status-side .gpa-head { align-items: center; }
+.status-side .gpa-head b { font-size: 44px; line-height: 1; letter-spacing: -.02em; }
+.status-side .gpa-head p { margin-right: auto; }
+.status-side .pace-row, .status-side .clock-row { font-size: 14.5px; }
+.status-side .pace-row .by { font-size: 13px; }
+.status-side .pace-row:has(.chip.warn) { background: var(--warnbg); border-color: var(--warnrule); }
+.status-side .pace-row:has(.chip.warn) .by { color: var(--warn); }
+.status-side .chip { padding: 3px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+@media (min-width: 940px) {
+  .status-row { grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); align-items: stretch; }
+  .status-side { align-content: stretch; grid-auto-rows: 1fr; }
+  .child-cols { grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); align-items: stretch; }
+  /* The two columns end level: the bottom panel of the shorter one grows.
+     On the right that is the one before the calendar panel, which is last
+     in the page and drawn first (below). */
+  .child-main, .child-side { display: flex; flex-direction: column; }
+  .child-main > :last-child, .child-side > :nth-last-child(2), .child-side > :only-child { flex: 1 0 auto; }
+}
+@media (max-width: 620px) {
+  .child .status { grid-template-columns: minmax(0, 1fr); }
+  .child .status > *, .child .status > .hero-grid { grid-column: 1; grid-row: auto; }
+  .child .status > .hero-grid { width: 180px; }
+  .child .status .req-total b { font-size: 64px; }
+  .child > .sechead h2 { font-size: 32px; }
+}
+/* Which student, for a family with several: one is shown at a time. */
+.child-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.child-tabs[hidden] { display: none; }
+.child-tabs button {
+  min-height: 44px; padding: 0 18px; border: 1px solid var(--rule2); border-radius: 22px;
+  background: none; color: var(--ink2); font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
+}
+.child-tabs button:hover { color: var(--ink); border-color: var(--ink2); }
+.child-tabs button[aria-pressed="true"] { color: var(--onink); background: var(--ink); border-color: var(--ink); font-weight: 600; }
+/* What's due: plain rows, since everything in this list is school work. */
+.child .panel { border-radius: 24px; }
+.child .panel h2 { font-size: 22px; }
+.child-main .agenda { max-width: none; }
+.child-main .agenda li { grid-template-columns: 6.5em minmax(0, 1fr) auto; align-items: center; margin: 0; padding: 12px 0; border-left: none; border-bottom: none; border-top: 1px solid var(--ice); border-radius: 0; font-size: 15px; }
+.child-main .agenda em { font-size: 13.5px; }
+.child-main .agenda .edit-link { padding: 6px 4px; font-size: 14px; font-weight: 600; text-decoration: none; }
+.child-main .agenda .edit-link:hover { text-decoration: underline; }
+.chip.today { color: var(--onhero); background: var(--hero); border-color: var(--hero); font-weight: 600; }
+/* What a parent can add: the calendar buttons first, stacked, the usual one
+   filled. */
+.child-side .add-panel:last-child { order: -1; }
+.child-side .add-links { flex-direction: column; align-items: stretch; }
+.child-side .add-links .secondary, .child-side .add-links .add-off { min-height: 48px; box-sizing: border-box; padding: 0 16px; border-radius: 14px; font-size: 15px; font-weight: 600; }
+.child-side .add-links .add-off { padding: 0; }
+.child-side .add-links .add-off .secondary { flex: 1; }
+.child-side .add-links a[href$="/hockey/new"] { order: -1; color: var(--onink); background: var(--ink); border-color: var(--ink); }
+.child-side .add-links a[href$="/hockey/new"] svg { color: inherit; }
+.child-side .add-links a.secondary[href$="/documents"] { justify-content: center; }
+.week-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+.week-head h2 { margin: 0 auto 0 0; }
+.week-head a { font-weight: 600; }
+.week-key { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; padding: 0; color: var(--ink2); font-size: 13px; }
+.week-key li::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 3px; vertical-align: -1px; }
+.week-key .due::before { background: var(--blue); }
+.week-key .hockey::before { background: var(--hockey); border-radius: 50%; }
+.week-key .session::before { background: var(--warnstripe); }
+/* This week, a day to a tile; today is the dark one. */
+.week-days { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(128px, 100%), 1fr)); gap: 10px; }
+.week-days li { display: flex; flex-direction: column; gap: 7px; min-height: 132px; padding: 12px; border-radius: 14px; background: var(--ice2); }
+.week-days .dow { color: var(--ink3); font-size: 12.5px; }
+.week-days .date { font-family: var(--display); font-size: 24px; font-weight: 600; line-height: 1; }
+/* The ring is what marks it in dark mode, where the card and the tiles are one colour. */
+.week-days li.today { background: var(--hero); color: var(--onhero); box-shadow: inset 0 0 0 2px var(--blue); }
+.week-days li.today .dow { color: var(--onhero2); }
+.week-days .ev { padding: 6px 9px; border-radius: 9px; font-size: 12.5px; line-height: 1.3; }
+.week-days .ev i { font-style: normal; font-weight: 600; }
+.week-days .ev em { display: block; font-style: normal; }
+.week-days .ev.due { background: var(--infobg); color: var(--blue); }
+.week-days .ev.hockey { background: var(--hockeybg); color: var(--hockey); }
+.week-days .ev.session { background: var(--warnbg); color: var(--warn); }
+.week-days .ev.done { opacity: .65; }
+/* An event a parent can change is a link to its form, in the week and in the month grid. */
+a.ev { color: inherit; text-decoration: none; }
+a.ev:hover { text-decoration: underline; }
+.week-days a.ev:hover { box-shadow: inset 0 0 0 1.5px currentColor; text-decoration: none; }
+.week-days .none { color: var(--ink3); font-size: 12.5px; }
+@media (max-width: 720px) { .week-days li { min-height: 0; } }
+.agenda li { border-radius: 0 8px 8px 0; }
+.add-links .secondary { padding: 10px 14px; font-size: 14px; }
+.cal-wrap { border-radius: var(--radius); }
+
+/* A professional's page: the next session as the one dark card. */
+/* A student's pages (student_*.html). */
+.code-form { display: grid; gap: 8px; }
+.code-form input { font-size: 20px; letter-spacing: .08em; text-transform: uppercase; }
+.st-tabs { display: flex; gap: 4px; margin: 0 0 14px; overflow-x: auto; scrollbar-width: none; }
+.st-tabs a { padding: 8px 14px; border-radius: 999px; color: var(--ink2); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.st-tabs a:hover { background: var(--ice); }
+.st-tabs a[aria-current="page"] { background: var(--ink); color: var(--onink); }
+.st-hero {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 20px;
+  padding: 24px 28px; margin-bottom: 14px; border-radius: var(--radius);
+  color: var(--onhero); background: linear-gradient(120deg, var(--hero), #1C4C80 70%, #2B6EA8);
+}
+.st-hello { flex: 1 1 280px; }
+.st-hello h1 { margin: 2px 0 6px; font: 600 32px/1.15 var(--display); }
+.st-hello p { margin: 0; color: var(--onhero2); }
+.st-hello .st-date { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.st-hello .st-clock { margin-top: 10px; font-size: 13px; }
+.st-dial { flex: 0 0 auto; text-decoration: none; }
+.st-ring { display: block; width: 136px; height: 136px; }
+.st-ring circle { fill: none; stroke-width: 11; stroke-linecap: round; }
+.st-ring .track { stroke: rgba(255, 255, 255, .16); }
+.st-ring .now { stroke: var(--warnstripe); }
+.st-ring .done { stroke: #FFFFFF; }
+.st-ring text, .st-gauge text { text-anchor: middle; }
+.st-ring .big { fill: var(--onhero); font: 600 30px var(--display); }
+.st-ring .small { fill: var(--onhero2); font-size: 10px; }
+.st-gauge { display: block; width: 210px; }
+.st-gauge path { fill: none; stroke-width: 13; stroke-linecap: round; }
+.st-gauge .track { stroke: var(--rule); }
+.st-gauge .tick { stroke: var(--ink); stroke-width: 3; }
+.st-gauge .big { fill: var(--ink); font: 600 34px var(--display); }
+.st-gauge .small { fill: var(--ink3); font-size: 10.5px; }
+.st-gauge.above .fill { stroke: var(--ok); }
+.st-gauge.below .fill { stroke: var(--alarm); }
+.st-gauge.review .fill { stroke: var(--warnstripe); }
+.st-hero .st-gauge .track { stroke: rgba(255, 255, 255, .16); }
+.st-hero .st-gauge .tick { stroke: #FFFFFF; }
+.st-hero .st-gauge .big { fill: var(--onhero); }
+.st-hero .st-gauge .small { fill: var(--onhero2); }
+.st-hero .st-gauge.above .fill { stroke: #7FD8AC; }
+.st-hero .st-gauge.below .fill { stroke: #FF9D92; }
+.st-week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.st-week li { display: grid; justify-items: center; gap: 2px; padding: 10px 4px; border: 1px solid var(--rule); border-radius: var(--radius-s); background: var(--surface); }
+.st-week li.today { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+.st-week .dow { color: var(--ink3); font-size: 12px; }
+.st-week b { font: 600 20px var(--display); }
+.st-week .dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; min-height: 8px; }
+.st-week i { width: 8px; height: 8px; border-radius: 50%; }
+.st-week i.due { background: var(--blue); }
+.st-week i.hockey { background: var(--hockey); }
+.st-week i.session { background: var(--warnstripe); }
+.st-key { margin: 8px 0 12px; }
+.st-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; align-items: start; }
+.st-columns > div { display: grid; gap: 12px; }
+.st-head { margin: 4px 0 12px; font: 600 26px var(--display); }
+.st-headrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.st-tabs ~ .panel { margin-top: 12px; }
+.st-tabs ~ .panel:first-of-type { margin-top: 0; }
+.st-list, .st-courses, .st-cliffs, .st-bars, .st-balances { margin: 0; padding: 0; list-style: none; }
+.st-item { display: grid; grid-template-columns: 84px 1fr auto; gap: 12px; padding: 10px 0 10px 12px; border-top: 1px solid var(--rule); border-left: 3px solid var(--rule2); }
+.st-item:first-child { border-top: 0; }
+.st-item.due { border-left-color: var(--blue); }
+.st-item.hockey { border-left-color: var(--hockey); }
+.st-item.session { border-left-color: var(--warnstripe); }
+.st-when { color: var(--ink3); font-size: 13px; }
+.st-when b { color: var(--ink2); }
+.st-what em, .st-course em { display: block; color: var(--ink2); font-size: 13px; font-style: normal; }
+.st-what .chip { margin-top: 4px; }
+.st-actions { display: flex; align-items: center; gap: 10px; font-size: 13px; white-space: nowrap; }
+.st-late { border-color: var(--warnrule); background: var(--warnbg); }
+.st-waiting { padding: 9px 12px; margin: 0 0 12px; border: 1px solid var(--warnrule); border-radius: var(--radius-s); background: var(--warnbg); }
+.st-foot { max-width: none; margin: 14px 0 0; }
+.st-courses li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 10px 0; border-top: 1px solid var(--rule); }
+.st-courses li:first-child { border-top: 0; }
+.st-course { flex: 1 1 260px; }
+.st-course .st-note { margin-top: 4px; color: var(--warn); }
+.st-course-side { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; }
+.st-status { color: var(--ink3); }
+.st-status.completed { color: var(--ok); }
+.st-mark { font: 500 15px var(--mono); }
+.st-pace { margin: 12px 0 0; }
+.st-gpa { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+.st-gpa p { margin: 8px 0 0; }
+.st-cliffs li { padding: 8px 0; border-top: 1px solid var(--rule); }
+.st-cliffs li:first-child { border-top: 0; }
+.st-bars li { display: grid; grid-template-columns: minmax(120px, 240px) 1fr; align-items: center; gap: 14px; padding: 6px 0; }
+.st-bar-label em { margin-left: 8px; color: var(--ink2); font: 500 13px var(--mono); }
+.st-bars svg { display: block; width: 100%; height: 12px; }
+.st-bars .track { fill: var(--ice); }
+.st-bars .fill { fill: var(--blue); }
+.st-bars .cut { stroke: var(--surface); stroke-width: .6; }
+.st-rink svg { display: block; width: 100%; max-height: 240px; }
+.st-rink .bar { fill: var(--hockeybg); stroke: var(--hockey); }
+.st-rink .bar.current { fill: var(--hockey); }
+.st-rink text { fill: var(--ink3); font-size: 8px; text-anchor: middle; }
+.st-rink line { stroke: var(--rule2); }
+.st-stats { display: flex; gap: 28px; margin-bottom: 8px; }
+.st-stats p { margin: 0; color: var(--ink2); }
+.st-stats b { display: block; color: var(--ink); font: 600 28px var(--display); }
+.st-balances { display: flex; flex-wrap: wrap; gap: 28px; }
+.st-balances li { color: var(--ink2); }
+.st-balances b { display: block; color: var(--ink); font: 600 28px var(--display); }
+@media (max-width: 560px) {
+  .st-item { grid-template-columns: 1fr; gap: 3px; }
+  .st-week { gap: 4px; }
+  .st-bars li { grid-template-columns: 1fr; gap: 3px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .st-ring .done, .st-ring .now, .st-gauge .fill { transition: stroke-dasharray .6s ease; }
+}

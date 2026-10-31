@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core16 demo · A parent's page</title>
+<meta name="description" content="A clickable demo of a parent's Core16 page: their child's 16 core courses, core GPA, what's due, hockey and school on one calendar, and a seat on every video session. Sample data for a fictional Grade 11 student in BC.">
+<link rel="icon" type="image/svg+xml" href="../../assets/mark.svg">
+<script>(function(){try{var t=localStorage.getItem('core16-demo-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../shared/demo.css">
+<link rel="stylesheet" href="../shared/portal-demo.css">
+<style>
+/* Demo-only additions; the portal's own rules are in portal-demo.css. */
+.hidden { display: none !important; }
+main.wrap > :first-child { margin-top: 22px; }
+.edit-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+.edit-field { display: grid; gap: 4px; align-content: start; font-size: 12.5px; color: var(--ink2); font-weight: 500; }
+.edit-field.wide { grid-column: 1 / -1; }
+.edit-field input, .edit-field select { width: 100%; height: 38px; box-sizing: border-box; font: inherit; color: var(--ink); padding: 7px 9px; border: 1px solid var(--rule2); border-radius: var(--radius-s); background: var(--surface); }
+.edit-field .opt { font-weight: 400; color: var(--ink3); }
+.staff-form { gap: 16px; }
+.field-note { margin: 0; align-self: end; font-size: 12px; color: var(--ink3); line-height: 1.4; }
+@media (max-width: 520px) { .edit-fields { grid-template-columns: 1fr; } }
+.to-sign.pending { background: var(--warnbg); border-color: var(--warnrule); }
+.sign-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sign-list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.sign-list a { color: var(--ink); }
+.sign-list a.primary { color: var(--onink); }
+.sec.child { margin-top: 24px; }
+.sechead h2 { font-family: var(--display); }
+.agreement { max-width: 720px; }
+.agreement h1 { font-family: var(--display); font-size: 28px; margin: 0 0 8px; }
+.agreement .text { display: grid; gap: 10px; margin: 16px 0; color: var(--ink2); max-width: 65ch; }
+.agreement .sign { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-top: 18px; }
+.call-actions button { cursor: pointer; }
+.docs-form { display: grid; gap: 12px; max-width: 520px; }
+.docs-form .drop { border: 2px dashed var(--rule2); border-radius: var(--radius); padding: 28px; text-align: center; color: var(--ink3); }
+.week-days a.ev, .cal a.ev { cursor: pointer; }
+.agenda .chip.ok { font-size: 12px; }
+.cal-wrap .cal td.today .date { color: var(--blue); }
+.pagehead { margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="demo-bar"><div class="in">
+  <a class="home" href="../../"><img src="../../assets/mark.svg" alt="">CORE<span>16</span><small>demo</small></a>
+  <nav aria-label="Demos"><a href="../app/">The player's app</a><a href="../today/">School laptop</a><a href="./" aria-current="page">Parent's page</a></nav>
+  <p class="note"><b>Sample data.</b> Claire Chen is the parent of Maya, a fictional Grade 11 player in BC. Nothing you enter here is saved.</p>
+  <button class="reset" type="button" id="reset">Start over</button>
+</div></div>
+
+<header class="topbar"><div class="topbar-in">
+  <div class="brand">
+    <svg viewBox="0 0 608 608" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="16.0" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="325.3" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="464.0" y="0.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="309.3" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="325.3" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="154.7" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="0.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="154.7" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/></svg>
+    <div>Core16 <span>your family</span></div>
+  </div>
+  <div class="me">
+    <span id="me-name">Claire Chen</span>
+    <button type="button" class="linkbtn" id="signout">Sign out</button>
+    <div class="theme" role="group" aria-label="Appearance">
+      <button type="button" data-theme-choice="system">Auto</button>
+      <button type="button" data-theme-choice="light">Light</button>
+      <button type="button" data-theme-choice="dark">Dark</button>
+    </div>
+  </div>
+</div></header>
+
+<main class="wrap" id="main"></main>
+<footer class="wrap build-foot"><span class="build">Core16 demo · figures from NCAA's September 2026 BC outline</span></footer>
+
+<dialog class="ask" id="ask" aria-labelledby="ask-title" aria-describedby="ask-detail">
+  <h2 id="ask-title"></h2>
+  <p id="ask-detail"></p>
+  <div class="buttons"><button type="button" class="secondary" id="ask-cancel" autofocus>Cancel</button><button type="button" class="primary" id="ask-go"></button></div>
+</dialog>
+
+<script src="../shared/bc-courses.js"></script>
+<script src="../shared/core16-demo.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = window.C16, h = C.escapeHTML, main = document.getElementById('main');
+  var data, fig, signedIn, view, form, notice, monthOffset, agreementSigned, documentsSent;
+  function start() {
+    data = C.makeStudent(); fig = C.figures(data); signedIn = true; view = 'home'; form = null; notice = null; monthOffset = 0; agreementSigned = null; documentsSent = 0; render();
+  }
+
+  /* theme switch, as the portal's */
+  var themeButtons = document.querySelectorAll('[data-theme-choice]');
+  function paintTheme() { var t = document.documentElement.getAttribute('data-theme') || 'system'; themeButtons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-choice') === t)); }); }
+  themeButtons.forEach(function (b) { b.addEventListener('click', function () {
+    var t = b.getAttribute('data-theme-choice');
+    if (t === 'system') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);
+    try { if (t === 'system') localStorage.removeItem('core16-demo-theme'); else localStorage.setItem('core16-demo-theme', t); } catch (e) {}
+    paintTheme();
+  }); });
+  paintTheme();
+
+  var ask = document.getElementById('ask');
+  function confirmThen(title, detail, go, danger, then) {
+    document.getElementById('ask-title').textContent = title; document.getElementById('ask-detail').textContent = detail;
+    var goBtn = document.getElementById('ask-go'); goBtn.textContent = go; goBtn.className = danger ? 'danger' : 'primary';
+    goBtn.onclick = function () { ask.close(); then(); }; document.getElementById('ask-cancel').onclick = function () { ask.close(); };
+    ask.showModal();
+  }
+  document.getElementById('reset').addEventListener('click', start);
+  document.getElementById('signout').addEventListener('click', function () { signedIn = false; render(); });
+
+  /* ---------- pieces ---------- */
+  var FIRST = 'Maya';
+  function unitsText(u) { return String(u); }
+  function plus() { return '<svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true" focusable="false"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>'; }
+  function waiting() { return data.edits.length; }
+  function dateLong(d) { return C.fmt(d, '%a %-d %b'); }
+
+  /* The 16 as the Core16 mark draws them: four by four, complete, then in progress, then planned. */
+  function heroGrid() {
+    var t = fig.alloc.totals, done = t.completed, live = t.counted, all = live + t.planned, out = '';
+    out += '<svg class="hero-grid" viewBox="0 0 246 246" width="246" height="246" role="img" aria-label="' + unitsText(live) + ' of 16 core courses counted"><defs><clipPath id="hero-1"><rect width="54" height="54" rx="14"/></clipPath></defs>';
+    for (var i = 0; i < 16; i++) {
+      var d = Math.min(Math.max(done - i, 0), 1), n = Math.min(Math.max(live - i, 0), 1) - d, l = Math.min(Math.max(all - i, 0), 1) - d - n;
+      out += '<g transform="translate(' + ((i % 4) * 64) + ' ' + (Math.floor(i / 4) * 64) + ')"><g clip-path="url(#hero-1)">' +
+        (d > 0 ? '<rect class="completed" width="' + (d * 54).toFixed(2) + '" height="54"/>' : '') +
+        (n > 0 ? '<rect class="in-progress" x="' + (d * 54).toFixed(2) + '" width="' + (n * 54).toFixed(2) + '" height="54"/>' : '') +
+        (l > 0 ? '<rect class="planned" x="' + ((d + n) * 54).toFixed(2) + '" width="' + (l * 54).toFixed(2) + '" height="54"/>' : '') + '</g>' +
+        (d >= 1 ? '<path class="tick" d="M16 28l8 8 15-16"/>' : '<rect class="edge' + (!(d || n || l) ? ' empty' : '') + '" x="1" y="1" width="52" height="52" rx="13"/>') + '</g>';
+    }
+    return out + '</svg>';
+  }
+  function coreSlots(prefix) {
+    var out = '<ul class="req-key" aria-hidden="true"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li></ul><ul class="core-slots">';
+    fig.alloc.bars.forEach(function (bar, i) {
+      var clip = prefix + '-' + i, wide = bar.slots.length * 35 - 5;
+      out += '<li' + (bar.met ? ' class="met"' : '') + '><span class="slot-head"><span class="req-label">' + h(bar.label) + '</span><span class="req-count">' + unitsText(bar.counted) + '/' + bar.need + '</span></span>';
+      out += '<svg viewBox="0 0 ' + wide + ' 30" preserveAspectRatio="xMinYMid meet" role="img" aria-label="' + h(bar.long) + ': ' + unitsText(bar.completed) + ' complete, ' + unitsText(bar.inProgress) + ' in progress, ' + unitsText(bar.planned) + ' planned, of ' + bar.need + '"><defs><clipPath id="' + clip + '"><rect width="30" height="30" rx="8"/></clipPath></defs>';
+      bar.slots.forEach(function (s, j) {
+        var tip = s.courses.map(function (c) { return c.course.title + (c.share < 1 - 1e-6 ? ' (' + C.unitsWord(c.share) + ')' : ''); }).join(', ');
+        out += '<g transform="translate(' + (j * 35) + ')">' + (tip ? '<title>' + h(tip) + '</title>' : '');
+        if (!s.empty) {
+          out += '<g clip-path="url(#' + clip + ')">' + (s.done ? '<rect class="completed" width="' + (s.done * 30).toFixed(2) + '" height="30"/>' : '') +
+            (s.now ? '<rect class="in-progress" x="' + (s.done * 30).toFixed(2) + '" width="' + (s.now * 30).toFixed(2) + '" height="30"/>' : '') +
+            (s.later ? '<rect class="planned" x="' + ((s.done + s.now) * 30).toFixed(2) + '" width="' + (s.later * 30).toFixed(2) + '" height="30"/>' : '') + '</g>';
+        }
+        out += s.full ? '<path class="tick" d="M9 15.5l4 4 8.5-8.5"/>' : '<rect class="edge ' + (s.done ? 'done' : s.now ? 'now' : s.later ? 'later' : 'empty') + '" x="0.75" y="0.75" width="28.5" height="28.5" rx="7.25"/>';
+        if (tip) out += '<rect class="hit" width="30" height="30" rx="8"/>';
+        out += '</g>';
+      });
+      out += '</svg></li>';
+    });
+    return out + '</ul>';
+  }
+
+  function extras(e) {
+    var out = '';
+    if (e.waiting) out += '<span class="chip warn waiting-chip">Waiting for ' + FIRST + '’s phone</span>';
+    if (e.kind === 'due') out += '<a class="edit-link" href="#" data-form="assignment_mark" data-id="' + e.item.id + '">' + (e.done ? 'Change mark' : 'Add mark') + '<span class="visually-hidden"> for ' + h(e.title) + '</span></a>';
+    if (e.kind === 'due' || e.kind === 'hockey') out += '<a class="edit-link" href="#" data-form="' + (e.kind === 'hockey' ? 'ice_session' : 'due_date') + '" data-id="' + e.item.id + '">Edit<span class="visually-hidden"> ' + h(e.title) + '</span></a>';
+    return out;
+  }
+  function evTag(e, grid) {
+    var editable = e.kind === 'due' || e.kind === 'hockey';
+    var open = editable ? '<a href="#" class="ev ' + e.kind + (e.done ? ' done' : '') + '" data-form="' + (e.kind === 'hockey' ? 'ice_session' : 'due_date') + '" data-id="' + e.item.id + '"' + (grid ? ' tabindex="-1"' : '') + ' title="' + h(e.title) + (e.detail ? ' (' + h(e.detail) + ')' : '') + '. Click to edit">' : '<span class="ev ' + e.kind + '" title="' + h(e.title) + (e.detail ? ' (' + h(e.detail) + ')' : '') + '">';
+    var body = grid ? ((e.at ? h(e.at.split(' ').slice(0, 2).join(' ')) + ' ' : '') + h(e.title)) : ((e.at ? '<b>' + h(e.at) + '</b> ' : '') + h(e.title) + (e.detail ? '<em>' + h(e.detail) + '</em>' : ''));
+    return open + (editable ? '<span class="visually-hidden">Edit </span>' : '') + body + (editable ? '</a>' : '</span>');
+  }
+  function monthOf(offset) { return new Date(C.today.getFullYear(), C.today.getMonth() + offset, 1); }
+  function weeksOf(monthStart) {
+    var first = C.weekStart(monthStart), nextMonth = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 1), weeks = [], d = first;
+    while (d < nextMonth) { var w = []; for (var i = 0; i < 7; i++) { w.push(d); d = C.addDays(d, 1); } weeks.push(w); }
+    return weeks;
+  }
+  function eventsOn(d) { return C.events(data, d, C.addDays(d, 1)); }
+
+  function thisWeek() {
+    var ws = C.weekStart(C.today), days = [];
+    for (var i = 0; i < 7; i++) days.push(C.addDays(ws, i));
+    return '<div class="panel week"><div class="week-head"><h2>This week</h2><ul class="week-key" aria-hidden="true"><li class="due">School</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul><a href="#calendar">Whole month</a></div><ol class="week-days">' +
+      days.map(function (d) {
+        var today = C.daysBetween(C.today, d) === 0, evs = eventsOn(d);
+        return '<li' + (today ? ' class="today"' : '') + '><span class="dow"><time datetime="' + C.iso(d) + '">' + C.fmt(d, '%a') + '</time>' + (today ? ' · Today' : '') + '</span><b class="date">' + d.getDate() + '</b>' +
+          (evs.length ? evs.map(function (e) { return evTag(e, false); }).join('') : '<span class="none">Nothing entered</span>') + '</li>';
+      }).join('') + '</ol></div>';
+  }
+
+  function homePage() {
+    var out = '';
+    if (notice) out += '<p class="notice" role="status">' + h(notice) + '</p>';
+    out += '<section class="panel to-sign' + (agreementSigned ? '' : ' pending') + '"><h2>Documents from Core16</h2><ul class="sign-list"><li><span><a href="#" data-view="agreement">Video sessions consent</a> · for ' + FIRST + '</span>' +
+      (agreementSigned ? '<span class="chip ok">Signed ' + C.fmt(agreementSigned, '%-d %b %Y') + '</span>' : '<a class="primary" href="#" data-view="agreement">Read and sign</a>') + '</li></ul></section>';
+    var t = fig.alloc.totals, g = fig.gpa, pace = fig.pace, clockText = fig.clock ? C.clockSummary(fig.clock) : null;
+    out += '<section class="sec child" id="student-1"><div class="sechead"><h2>Maya Chen</h2><p>Grade 11 · Southridge Secondary · last updated from ' + FIRST + '’s phone 2 hours ago</p></div><div class="file">';
+    out += '<div class="status-row"><div class="panel status">' + heroGrid() +
+      '<div class="req-total"><b>' + unitsText(t.counted) + '</b><p>of 16 core courses counted<br>' + unitsText(t.completed) + ' complete' + (t.planned ? ', ' + unitsText(t.planned) + ' more planned' : '') + '</p></div>' +
+      '<ul class="hero-key" aria-hidden="true"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li><li class="unfilled">Still to plan</li></ul>' +
+      '<a class="hero-more" href="#core-1" data-open="core-1">See them by category</a></div>';
+    out += '<div class="status-side"><div class="gpa-head"><b>' + C.gpaText(g.gpa) + '</b><p>core GPA<br>minimum ' + fig.minimum.toFixed(1) + '</p><span class="chip ' + (fig.review.length ? 'warn' : fig.above ? 'ok' : 'alarm') + '">' + (fig.review.length ? 'Needs review' : fig.above ? 'Above ' + fig.minimum : 'Below ' + fig.minimum) + '</span></div>';
+    if (pace) out += '<p class="pace-row"><span>Core pace: ' + unitsText(pace.units) + ' of ' + pace.target + ' core courses through Grade ' + pace.grade + '<span class="by"> · four a year keeps pace for 16. Not an NCAA rule.</span></span><span class="chip ' + (pace.behind ? 'warn' : 'ok') + '">' + (pace.behind ? 'Light' : 'On pace') + '</span></p>';
+    out += '<p class="clock-row"><span>Five-year clock: ' + (clockText ? 's' + h(clockText.slice(1)) : 'add ' + FIRST + '’s birth month in the app’s Profile to see when it starts') + '<span class="by"> · NCAA gives five years to play, starting the fall after a player turns 19, or at full-time college enrolment if sooner. A 19th birthday on or after 1 September means the following fall.</span></span></p>';
+    if (fig.review.length) out += '<p class="pace-row"><span>' + fig.review.length + ' ' + (fig.review.length === 1 ? 'course needs' : 'courses need') + ' review<span class="by"> · not on the NCAA’s approved list as entered, so ' + (fig.review.length === 1 ? 'it doesn’t' : 'they don’t') + ' count until that’s settled. ' + FIRST + ' or your advisor can say which.</span></span><span class="chip warn">To review</span></p>';
+    out += '</div></div>';
+    out += '<details class="panel fold" id="core-1"><summary><h2>Core courses by category</h2></summary>' + coreSlots('slot-1') + '<p class="note">Approved courses only, placed the way the NCAA fills its categories: English, math and science first, any beyond that into extra English, math or science, then everything else into additional. Hover a box for the course filling it; two courses can share one.</p></details>';
+    out += thisWeek();
+    /* due in the next 14 days, and the calls */
+    var dueSoon = C.events(data, C.day(-60), C.day(15)).filter(function (e) { return e.kind === 'due' && !e.done; });
+    out += '<div class="child-cols"><div class="child-main"><div class="panel"><h2>Due in the next 14 days</h2>' + (dueSoon.length ? '<ul class="agenda">' + dueSoon.map(function (e) {
+      var late = e.day < C.today, today = C.daysBetween(C.today, e.day) === 0;
+      return '<li class="due' + (late ? ' late' : '') + '"><time datetime="' + C.iso(e.day) + '">' + dateLong(e.day) + '</time><span><b>' + h(e.title) + '</b>' + (e.detail ? '<em>' + h(e.detail) + '</em>' : '') + '</span><span class="item-extras">' + (late ? '<span class="chip warn">Overdue</span>' : today ? '<span class="chip today">Today</span>' : '') + extras(e) + '</span></li>';
+    }).join('') + '</ul>' : '<p class="note">Nothing unmarked is due. This shows what ' + FIRST + ' has entered in the app, so work that was never entered isn’t here.</p>') + '</div>';
+    var calls = data.bookings.filter(function (b) { return b.booked && b.date >= C.today; });
+    if (calls.length) out += '<div class="panel"><h2>Video sessions</h2><p class="note">Every session has a second adult on the call besides ' + FIRST + ' and the professional: you, another parent, or someone at Core16. Nobody can join until someone is down for it. Either parent can join, whoever is down.</p><ul class="agenda calls">' + calls.map(function (b) {
+      var mine = b.seat === 'me';
+      return '<li class="session"><time datetime="' + C.iso(b.date) + '">' + dateLong(b.date) + '</time><span><b>' + C.clock(b.start) + ' BC time · ' + b.mentor.label + '</b><em>With ' + h(b.mentor.name) + ', ' + b.minutes + ' min</em><em>' + (mine ? 'You’re down as the second adult.' : b.seat ? h(b.seat) + ' is down as the second adult.' : 'Nobody is down as the second adult yet, so the call can’t start.') + '</em></span>' +
+        '<span class="call-actions">' + (!b.seat ? '<button type="button" class="secondary" data-seat="' + b.id + '">I’ll be on this call</button>' : mine ? '<button type="button" class="linkbtn" data-unseat="' + b.id + '">I can’t make it</button>' : '') + '</span></li>';
+    }).join('') + '</ul></div>';
+    out += '</div><div class="child-side">';
+    out += '<div class="panel add-panel"><h2>Report cards and IEP</h2><p class="note">Send photos of ' + FIRST + '’s earlier report cards, and their IEP if they have one, so your Core16 advisor can enter the marks for you.</p><p class="add-links"><a class="secondary" href="#" data-view="documents">Send documents</a></p>' + (documentsSent ? '<p class="note">' + documentsSent + ' ' + (documentsSent === 1 ? 'document' : 'documents') + ' sent to your advisor.</p>' : '') + '</div>';
+    var markCourses = data.courses.filter(function (c) { return c.status === 'inProgress' && C.isCore(c); });
+    out += '<details class="panel fold" id="marks-1" open><summary><h2>Enter a report-card mark</h2></summary><p class="note">For a course’s latest report card, or its final mark once it’s done. It takes the place of the average ' + FIRST + '’s assignments give, and reaches ' + FIRST + '’s phone the next time the app syncs. A single test or assignment is marked from its own line under "Due", or from the calendar below.</p><ul class="agenda">' +
+      markCourses.map(function (c) { return '<li class="due"><span></span><span><b>' + h(c.title) + '</b>' + (c.mark ? '<em>' + (c.mark.kind === 'proficiency' ? C.PROFICIENCY[c.mark.level][0] : C.num(c.mark.value) + '%') + ' entered' + (c.mark.waiting ? ', waiting for ' + FIRST + '’s phone' : '') + '</em>' : '') + '</span><span class="item-extras"><a class="edit-link" href="#" data-form="course_mark" data-id="' + c.id + '">Enter mark<span class="visually-hidden"> for ' + h(c.title) + '</span></a></span></li>'; }).join('') + '</ul></details>';
+    var w = waiting();
+    out += '<div class="panel add-panel"><h2>Add to ' + FIRST + '’s calendar</h2><p class="add-links"><a class="secondary" href="#" data-form="due_date" data-id="new">' + plus() + 'Add a due date</a><a class="secondary" href="#hockey/new" data-form="ice_session" data-id="new">' + plus() + 'Add a practice or game</a></p><p class="note">' +
+      (w ? w + ' ' + (w === 1 ? 'change is' : 'changes are') + ' waiting for ' + FIRST + '’s phone, and ' + (w === 1 ? 'reaches' : 'reach') + ' the app the next time it syncs.' : 'What you add reaches ' + FIRST + '’s phone the next time the app syncs. To change something already there, use Edit beside it.') + '</p></div>';
+    out += '</div></div></div></section>';
+    /* the month */
+    var m = monthOf(monthOffset), label = C.MONTHS[m.getMonth()] + ' ' + m.getFullYear(), weeks = weeksOf(m), next = new Date(m.getFullYear(), m.getMonth() + 1, 1);
+    out += '<section class="sec" id="calendar"><div class="sechead"><h2>' + label + '</h2><p>School and hockey.</p><nav class="monthnav" aria-label="Month"><a href="#calendar" data-month="-1">← Earlier</a><a href="#calendar" data-month="0">This month</a><a href="#calendar" data-month="1">Later →</a></nav></div>' +
+      '<ul class="cal-key" aria-hidden="true"><li class="due">School (due date)</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul><div class="tablewrap cal-wrap" aria-hidden="true"><table class="cal"><thead><tr>' + C.DOW.map(function (n) { return '<th scope="col">' + n + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      weeks.map(function (wk) { return '<tr>' + wk.map(function (d) {
+        var inMonth = d.getMonth() === m.getMonth(), today = C.daysBetween(C.today, d) === 0;
+        return '<td class="' + (inMonth ? 'in' : 'out') + (today ? ' today' : '') + '"><span class="date">' + d.getDate() + '</span>' + eventsOn(d).map(function (e) { return evTag(e, true); }).join('') + '</td>';
+      }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+    var monthEvents = C.events(data, m, next);
+    out += '<div class="file"><div class="panel"><h2>Everything in ' + label + '</h2>' + (monthEvents.length ? '<ul class="agenda mixed">' + monthEvents.map(function (e) {
+      return '<li class="' + e.kind + (e.done ? ' done' : '') + '"><span class="when"><time datetime="' + C.iso(e.day) + '">' + dateLong(e.day) + '</time>' + (e.at ? '<span class="at">' + h(e.at) + '</span>' : '') + '<span class="kind">' + {due: 'School', hockey: 'Hockey', session: 'Video session'}[e.kind] + '</span></span><span><b>' + h(e.title) + '</b><em>' + h(e.detail || '') + '</em></span><span class="item-extras">' + (e.kind === 'due' && e.done ? '<span class="chip ok">Marked</span>' : '') + extras(e) + '</span></li>';
+    }).join('') + '</ul>' : '<p class="note">Nothing entered for this month.</p>') + '</div></div></section>';
+    out += '<p class="fineprint wide">Core16 tracks and flags. Only the NCAA Eligibility Center certifies eligibility. Figures are the latest the program has worked out from what the phone sent. Every view of a student’s record is logged, yours included.</p>';
+    return out;
+  }
+
+  function agreementPage() {
+    return '<section class="card wide agreement"><h1>Video sessions consent</h1><p class="quiet">For Maya Chen · sent by your Core16 advisor</p><div class="text">' +
+      '<p>This is the demo’s stand-in for a document a parent reads and signs in the portal. The real wording is counsel’s, and the signed copy is kept as a PDF with the date, your name and the device it was signed on.</p>' +
+      '<p>In outline: one-to-one video sessions with a Core16 professional are never recorded, always have a second adult on the call, and can be cancelled by you at any time. The professional sees Maya’s first name, grade and the topic booked, nothing else.</p></div>' +
+      (agreementSigned ? '<p class="notice">Signed ' + C.fmt(agreementSigned, '%-d %B %Y') + '.</p>' : '<form class="sign" id="sign-form"><label class="edit-field"><span>Type your name to sign</span><input type="text" name="name" placeholder="Claire Chen" required></label><button type="submit" class="primary">Sign</button><a class="secondary" href="#" data-view="home">Back</a></form>') +
+      (agreementSigned ? '<p class="add-links"><a class="secondary" href="#" data-view="home">Back to your family</a></p>' : '') + '</section>';
+  }
+  function documentsPage() {
+    return '<section class="card wide"><h1>Send documents for Maya</h1><p>Photos of earlier report cards, and the IEP if Maya has one. Your advisor enters the marks and tells you when they’re in. Files go to Core16 only, never to the school or NCAA.</p>' +
+      '<form class="docs-form" id="docs-form"><div class="drop">In the demo nothing is uploaded. Pressing Send counts one document as sent.</div><div class="edit-actions"><button type="submit" class="primary">Send</button><a class="secondary" href="#" data-view="home">Cancel</a></div></form></section>';
+  }
+  function signedOutPage() {
+    return '<section class="card"><h1>Signed out</h1><p>A parent signs in with a passkey their advisor set up: Face ID, Touch ID or the device passcode, never a password.</p><p class="add-links"><button type="button" class="primary" id="signin">Sign in with a passkey</button></p></section>';
+  }
+
+  /* ---------- the forms (parent_edit.html) ---------- */
+  function field(label, inner, opts) { opts = opts || {}; return '<label class="edit-field' + (opts.wide ? ' wide' : '') + '"><span>' + label + (opts.optional ? ' <span class="opt">(optional)</span>' : '') + '</span>' + inner + '</label>'; }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function formPage() {
+    var f = form, kind = f.kind, item = f.item, heading, intro, fields = '', remove = '';
+    var lead = FIRST + '’s phone picks this up the next time the app syncs, and it shows as waiting on your page until then.';
+    if (kind === 'ice_session') {
+      heading = item ? 'Edit ' + FIRST + '’s ' + C.KIND[item.kind].toLowerCase() : 'Add a practice or game for ' + FIRST;
+      intro = lead;
+      fields = field('Date', '<input type="date" name="day" value="' + (item ? C.iso(item.date) : C.iso(C.day(1))) + '" required>') +
+        field('Start time', '<input type="time" name="start" value="' + (item && item.start != null ? pad2(Math.floor(item.start / 60)) + ':' + pad2(item.start % 60) : '18:00') + '" step="300">', {optional: true}) +
+        field('What it is', '<select name="kind" required>' + Object.keys(C.KIND).map(function (k) { return '<option value="' + k + '"' + (item && item.kind === k ? ' selected' : '') + '>' + C.KIND[k] + '</option>'; }).join('') + '</select>') +
+        field('Name', '<input type="text" name="title" value="' + h(item ? item.title : '') + '" maxlength="120" placeholder="The opponent, for a game">', {optional: true}) +
+        field('Minutes at the rink or gym', '<input type="number" name="minutes" value="' + (item ? item.minutes : 90) + '" min="1" max="1440" step="1" inputmode="numeric" required>') +
+        field('Travel minutes', '<input type="number" name="travel" value="' + (item && item.travel ? item.travel : '') + '" min="0" max="1440" step="1" inputmode="numeric" placeholder="There and back">', {optional: true}) +
+        (!item ? field('Repeat weekly until', '<input type="date" name="repeatUntil">', {optional: true}) + '<p class="field-note">Adds the same session every week up to that date. Each week is a session of its own, so one can be moved or removed alone, or removed with the weeks after it. Blank adds just the one.</p>' : '');
+      if (item) remove = '<div class="remove-edit"><button type="button" class="linkbtn danger" id="remove">Remove it</button></div>';
+    } else if (kind === 'assignment_mark') {
+      var c = C.courseOf(data, item);
+      heading = (item.score != null ? 'Change the mark for ' : 'Add a mark for ') + item.title;
+      intro = lead + ' The weight stays ' + FIRST + '’s, so this only counts toward the GPA once the assignment has one.';
+      fields = '<p class="quiet wide">' + h(c.title) + ' · ' + h(item.type) + ' · due ' + dateLong(item.due) + '</p>' +
+        field('Score', '<input type="text" name="score" value="' + (item.score != null ? C.num(item.score) : '') + '" inputmode="decimal" required>') +
+        field('Out of', '<input type="text" name="outOf" value="' + (item.outOf != null ? C.num(item.outOf) : '') + '" inputmode="decimal" required>');
+    } else if (kind === 'course_mark') {
+      heading = 'Enter a report-card mark for ' + item.title;
+      intro = lead + ' A report-card mark takes the place of the average worked out from the assignments ' + FIRST + ' has entered, so it changes the GPA and the "points from the next band" figures once it’s in.';
+      fields = '<p class="quiet wide">' + h(item.title) + ' · Grade ' + item.grade + ' · ' + C.PORTAL_STATUS[item.status] + '</p>' +
+        field('Mark (%)', '<input type="text" name="mark" value="' + (item.mark && item.mark.kind === 'percentage' ? C.num(item.mark.value) : '') + '" inputmode="decimal" required>') +
+        field('Report card dated', '<input type="date" name="received" max="' + C.iso(C.today) + '">', {optional: true}) + '<p class="field-note">Blank dates it today. The date is how ' + FIRST + ' and you can tell which report card a mark came from.</p>';
+    } else {
+      heading = item ? 'Edit ' + item.title : 'Add a due date for ' + FIRST;
+      intro = lead + ' The weight and the mark are ' + FIRST + '’s to fill in when it’s marked.';
+      var current = data.courses.filter(function (c) { return c.status === 'inProgress'; });
+      fields = (item ? '<p class="quiet wide">' + h(C.courseOf(data, item).title) + ' · ' + h(item.type) + '</p>' : field('Course', '<select name="courseID" required><option value="">Choose</option>' + current.map(function (c) { return '<option value="' + c.id + '">' + h(c.title) + '</option>'; }).join('') + '</select>', {wide: true})) +
+        field('Name', '<input type="text" name="title" value="' + h(item ? item.title : '') + '" maxlength="120" required>', {wide: true}) +
+        (item ? '' : field('What it is', '<select name="type" required>' + ['Assignment', 'Quiz', 'Test', 'Lab', 'Essay', 'Presentation', 'Exam', 'Culminating'].map(function (t) { return '<option>' + t + '</option>'; }).join('') + '</select>')) +
+        field('Due', '<input type="date" name="day" value="' + (item ? C.iso(item.due) : C.iso(C.day(7))) + '" required>');
+    }
+    return '<section class="card wide parent-edit"><h1>' + h(heading) + '</h1><p>' + intro + '</p><form class="staff-form" id="edit-form"><p class="form-error" id="form-error" hidden role="alert"></p><div class="edit-fields">' + fields + '</div><div class="edit-actions"><button type="submit" class="primary">' + (item ? 'Save' : 'Add') + '</button><a class="secondary" href="#" id="form-cancel">Cancel</a></div></form>' + remove + '</section>';
+  }
+  function submitForm(fd) {
+    var f = form, kind = f.kind, item = f.item, err = document.getElementById('form-error');
+    function fail(msg) { err.textContent = 'Nothing was saved. ' + msg; err.hidden = false; }
+    var numberOf = function (v) { v = String(v || '').trim(); return v === '' || isNaN(Number(v)) ? null : Number(v); };
+    var saved = (item ? 'Saved. ' : 'Added. ') + 'It reaches ' + FIRST + '’s phone the next time the app syncs.';
+    if (kind === 'ice_session') {
+      var minutes = numberOf(fd.get('minutes')), travel = numberOf(fd.get('travel')) || 0, dayV = fd.get('day'), start = fd.get('start');
+      if (!dayV) return fail('Enter a date.'); if (minutes == null || minutes < 1) return fail('Enter the minutes at the rink.');
+      var startMin = start ? (+start.split(':')[0]) * 60 + (+start.split(':')[1]) : null;
+      if (item) { item.date = C.parseISO(dayV); item.start = startMin; item.kind = fd.get('kind'); item.title = fd.get('title').trim(); item.minutes = minutes; item.travel = travel; item.by = 'Claire'; notice = saved; }
+      else {
+        var until = fd.get('repeatUntil') ? C.parseISO(fd.get('repeatUntil')) : null, d = C.parseISO(dayV), n = 0;
+        do { data.ice.push({id: C.nextID(), date: d, kind: fd.get('kind'), title: fd.get('title').trim(), minutes: minutes, travel: travel, start: startMin, toi: null, series: until ? 'new' : null, by: 'Claire'}); n++; d = C.addDays(d, 7); } while (until && d <= until);
+        notice = n === 1 ? saved : 'Added ' + n + ' sessions, one a week. They reach ' + FIRST + '’s phone the next time the app syncs.';
+      }
+    } else if (kind === 'assignment_mark') {
+      var score = numberOf(fd.get('score')), outOf = numberOf(fd.get('outOf'));
+      if (score == null || outOf == null || outOf <= 0) return fail('Enter the score and what it was out of.');
+      if (score < 0 || score > outOf * 1.2) return fail('The score should be between 0 and ' + C.num(outOf) + '.');
+      item.score = score; item.outOf = outOf; item.by = 'Claire'; notice = saved;
+    } else if (kind === 'course_mark') {
+      var mk = numberOf(fd.get('mark')); if (mk == null || mk < 0 || mk > 100) return fail('The mark should be a number from 0 to 100.');
+      item.mark = {kind: 'percentage', value: mk, received: fd.get('received') ? C.parseISO(fd.get('received')) : C.today, waiting: true}; notice = saved;
+    } else {
+      var title = (fd.get('title') || '').trim(), due = fd.get('day');
+      if (!title) return fail('Add a name.'); if (!due) return fail('Enter the due date.');
+      if (item) { item.title = title; item.due = C.parseISO(due); item.by = 'Claire'; }
+      else { if (!fd.get('courseID')) return fail('Choose a course.'); data.assignments.push({id: C.nextID(), courseID: fd.get('courseID'), title: title, type: fd.get('type'), due: C.parseISO(due), weight: 0, score: null, outOf: null, by: 'Claire'}); }
+      notice = saved;
+    }
+    data.edits.push({kind: kind}); form = null; view = 'home'; render();
+  }
+
+  /* ---------- render and wire ---------- */
+  function render() {
+    main.innerHTML = !signedIn ? signedOutPage() : form ? formPage() : view === 'agreement' ? agreementPage() : view === 'documents' ? documentsPage() : homePage();
+    document.getElementById('me-name').hidden = !signedIn; document.getElementById('signout').hidden = !signedIn;
+    notice = null;
+    window.scrollTo({top: 0, behavior: 'instant'});
+    wire();
+  }
+  function wire() {
+    var si = document.getElementById('signin'); if (si) si.addEventListener('click', function () { signedIn = true; render(); });
+    main.querySelectorAll('[data-view]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); view = a.getAttribute('data-view'); render(); }); });
+    main.querySelectorAll('[data-form]').forEach(function (a) { a.addEventListener('click', function (e) {
+      e.preventDefault(); var kind = a.getAttribute('data-form'), id = a.getAttribute('data-id'), item = null;
+      if (id !== 'new') item = (kind === 'ice_session' ? data.ice : kind === 'course_mark' ? data.courses : data.assignments).filter(function (x) { return x.id === id; })[0];
+      form = {kind: kind, item: item}; render();
+    }); });
+    main.querySelectorAll('[data-month]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); var n = +a.getAttribute('data-month'); monthOffset = n === 0 ? 0 : monthOffset + n; render(); location.hash = '#calendar'; document.getElementById('calendar').scrollIntoView(); }); });
+    main.querySelectorAll('[data-open]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); var d = document.getElementById(a.getAttribute('data-open')); d.open = true; d.scrollIntoView({behavior: 'smooth'}); }); });
+    main.querySelectorAll('[data-seat]').forEach(function (b) { b.addEventListener('click', function () {
+      var slot = data.bookings.filter(function (s) { return s.id === b.getAttribute('data-seat'); })[0]; slot.seat = 'me'; notice = 'You’re down as the second adult for ' + FIRST + '’s session on ' + dateLong(slot.date) + '. Join opens 10 minutes before it starts, from this page.'; render();
+    }); });
+    main.querySelectorAll('[data-unseat]').forEach(function (b) { b.addEventListener('click', function () {
+      var slot = data.bookings.filter(function (s) { return s.id === b.getAttribute('data-unseat'); })[0];
+      confirmThen('Take your name off this call?', 'Nobody else is down for it, so ' + FIRST + ' and the professional can’t join until someone is: another parent, or someone at Core16.', 'Take my name off', true, function () { slot.seat = null; notice = 'Your name is off the call.'; render(); });
+    }); });
+    var ef = document.getElementById('edit-form');
+    if (ef) {
+      ef.addEventListener('submit', function (e) { e.preventDefault(); submitForm(new FormData(ef)); });
+      document.getElementById('form-cancel').addEventListener('click', function (e) { e.preventDefault(); form = null; render(); });
+      var rm = document.getElementById('remove');
+      if (rm) rm.addEventListener('click', function () { confirmThen('Remove this from ' + FIRST + '’s hockey?', 'It comes off ' + FIRST + '’s phone the next time the app syncs.', 'Remove it', true, function () {
+        data.ice = data.ice.filter(function (s) { return s !== form.item; }); data.edits.push({kind: 'remove'}); notice = 'Removed. It comes off ' + FIRST + '’s phone the next time the app syncs.'; form = null; render();
+      }); });
+    }
+    var sf = document.getElementById('sign-form'); if (sf) sf.addEventListener('submit', function (e) { e.preventDefault(); if (!sf.name.value.trim()) return; agreementSigned = C.today; notice = 'Signed. A copy is kept with the date and your name.'; view = 'home'; render(); });
+    var df = document.getElementById('docs-form'); if (df) df.addEventListener('submit', function (e) { e.preventDefault(); documentsSent++; notice = 'Sent. Your advisor enters the marks and lets you know when they’re in.'; view = 'home'; render(); });
+  }
+  start();
+})();
+</script>
+</body>
+</html>

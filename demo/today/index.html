@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core16 demo · The Today page, on a school laptop</title>
+<meta name="description" content="A clickable demo of Core16's Today page: what a player opens each morning at school, signed in with a code from their phone. Sample data for a fictional Grade 11 student in BC.">
+<link rel="icon" type="image/svg+xml" href="../../assets/mark.svg">
+<script>
+/* The portal's theme switch: follows the device unless Light or Dark was chosen on this browser. */
+(function(){try{var t=localStorage.getItem('core16-demo-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<link rel="stylesheet" href="../shared/demo.css">
+<link rel="stylesheet" href="../shared/portal-demo.css">
+<style>
+/* Demo-only additions. The portal's own rules are in portal-demo.css, untouched. */
+.wrap { max-width: 1120px; }
+.topbar-in { max-width: 1120px; }
+.demo-only { margin: 0 0 12px; color: var(--ink3); font-size: 12.5px; }
+.st-tabs { margin: 20px 0; }
+.st-tabs a { cursor: pointer; border-bottom: 0; }
+.card { margin-top: 22px; }
+.st-courses .chip, .st-what .chip { font-size: 11.5px; }
+.st-hero .st-ring text.big { font-size: 30px; }
+.waiting-tag { display: inline-block; margin-left: 6px; }
+.st-item .st-actions a, .st-course-side a { color: var(--blue); }
+.hidden { display: none !important; }
+.edit-field.wide { grid-column: 1 / -1; }
+.edit-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+.edit-field { display: grid; gap: 4px; align-content: start; font-size: 12.5px; color: var(--ink2); font-weight: 500; }
+.edit-field input, .edit-field select { width: 100%; height: 38px; box-sizing: border-box; font: inherit; color: var(--ink); padding: 7px 9px; border: 1px solid var(--rule2); border-radius: var(--radius-s); background: var(--surface); }
+.edit-field .opt { font-weight: 400; color: var(--ink3); }
+.staff-form { gap: 16px; }
+.field-note { margin: 0; align-self: end; font-size: 12px; color: var(--ink3); line-height: 1.4; }
+@media (max-width: 520px) { .edit-fields { grid-template-columns: 1fr; } }
+.st-courses .add-course-note { color: var(--warn); }
+.st-stats + svg { max-width: 640px; }
+</style>
+</head>
+<body>
+<div class="demo-bar"><div class="in">
+  <a class="home" href="../../"><img src="../../assets/mark.svg" alt="">CORE<span>16</span><small>demo</small></a>
+  <nav aria-label="Demos"><a href="../app/">The player's app</a><a href="./" aria-current="page">School laptop</a><a href="../parent/">Parent's page</a></nav>
+  <p class="note"><b>Sample data.</b> Maya Chen is a fictional Grade 11 player in BC. Nothing you enter here is saved.</p>
+  <button class="reset" type="button" id="reset">Start over</button>
+</div></div>
+
+<header class="topbar"><div class="topbar-in">
+  <div class="brand">
+    <svg viewBox="0 0 608 608" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="16.0" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="325.3" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="464.0" y="0.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="309.3" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="325.3" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="154.7" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="0.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="154.7" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/></svg>
+    <div>Core16 <span>today</span></div>
+  </div>
+  <div class="me">
+    <span id="me-name">Maya Chen</span>
+    <button type="button" class="linkbtn" id="signout">Sign out</button>
+    <div class="theme" role="group" aria-label="Appearance">
+      <button type="button" data-theme-choice="system">Auto</button>
+      <button type="button" data-theme-choice="light">Light</button>
+      <button type="button" data-theme-choice="dark">Dark</button>
+    </div>
+  </div>
+</div></header>
+
+<main class="wrap" id="main"></main>
+<footer class="wrap build-foot"><span class="build">Core16 demo · figures from NCAA's September 2026 BC outline</span></footer>
+
+<dialog class="ask" id="ask" aria-labelledby="ask-title" aria-describedby="ask-detail">
+  <h2 id="ask-title"></h2>
+  <p id="ask-detail"></p>
+  <div class="buttons">
+    <button type="button" class="secondary" id="ask-cancel" autofocus>Cancel</button>
+    <button type="button" class="primary" id="ask-go"></button>
+  </div>
+</dialog>
+
+<script src="../shared/bc-courses.js"></script>
+<script src="../shared/core16-demo.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = window.C16, h = C.escapeHTML;
+  var main = document.getElementById('main');
+
+  /* The record as the phone last sent it, and the figures the server worked out from it.
+     Everything the student changes here waits for the phone, so the figures are frozen at
+     sign-in: that is how the real page behaves. */
+  var data, fig, signedIn = false, view = 'today', notice = null, form = null;
+  function start() { data = C.makeStudent(); fig = C.figures(data); signedIn = true; view = 'today'; notice = null; form = null; render(); }
+
+  /* ---------- theme switch ---------- */
+  var themeButtons = document.querySelectorAll('[data-theme-choice]');
+  function paintTheme() {
+    var t = document.documentElement.getAttribute('data-theme') || 'system';
+    themeButtons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-choice') === t)); });
+  }
+  themeButtons.forEach(function (b) { b.addEventListener('click', function () {
+    var t = b.getAttribute('data-theme-choice');
+    if (t === 'system') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);
+    try { if (t === 'system') localStorage.removeItem('core16-demo-theme'); else localStorage.setItem('core16-demo-theme', t); } catch (e) {}
+    paintTheme();
+  }); });
+  paintTheme();
+
+  /* ---------- the portal's own confirm dialog ---------- */
+  var ask = document.getElementById('ask');
+  function confirmThen(title, detail, go, danger, then) {
+    document.getElementById('ask-title').textContent = title;
+    document.getElementById('ask-detail').textContent = detail;
+    var goBtn = document.getElementById('ask-go');
+    goBtn.textContent = go; goBtn.className = danger ? 'danger' : 'primary';
+    goBtn.onclick = function () { ask.close(); then(); };
+    document.getElementById('ask-cancel').onclick = function () { ask.close(); };
+    ask.showModal();
+  }
+
+  document.getElementById('reset').addEventListener('click', start);
+  document.getElementById('signout').addEventListener('click', function () { start(); });
+
+  /* ---------- helpers shared by the pages ---------- */
+  var waitingCount = function () { return data.edits.length; };
+  var SPECIALTY = {hockey_mentor: 'Hockey mentor', sports_psychology: 'Sports psychology', performance_coach: 'Performance coach'};
+  function unitsText(u) { return Number.isInteger(u) ? String(u) : String(u); }
+  function dayText(d) { return C.fmt(d, '%b %-d'); }
+  function share(a, b) { return Math.max(0, Math.min(100, a / b * 100)).toFixed(2); }
+  function gaugePoint(value, r) {
+    r = r || 80; var f = value / 4, ang = Math.PI - Math.PI * f;
+    return [(100 + r * Math.cos(ang)).toFixed(2), (100 - r * Math.sin(ang)).toFixed(2)];
+  }
+  function coreRing() {
+    var t = fig.alloc.totals;
+    return '<svg class="st-ring" viewBox="0 0 120 120" role="img" aria-label="' + unitsText(t.counted) + ' of 16 core courses counted, ' + unitsText(t.completed) + ' complete">' +
+      '<circle class="track" cx="60" cy="60" r="50" pathLength="100"/>' +
+      '<circle class="now" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="' + share(t.counted, t.required) + ' 100" transform="rotate(-90 60 60)"/>' +
+      '<circle class="done" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="' + share(t.completed, t.required) + ' 100" transform="rotate(-90 60 60)"/>' +
+      '<text x="60" y="58" class="big">' + unitsText(t.counted) + '</text><text x="60" y="76" class="small">of ' + t.required + ' core</text></svg>';
+  }
+  function gpaGauge() {
+    var g = fig.gpa, tick = gaugePoint(fig.minimum), out = gaugePoint(fig.minimum, 92);
+    var cls = fig.review.length ? 'review' : fig.above ? 'above' : 'below';
+    return '<svg class="st-gauge ' + cls + '" viewBox="0 0 200 118" role="img" aria-label="Core GPA ' + C.gpaText(g.gpa) + ', minimum ' + fig.minimum.toFixed(1) + (fig.review.length ? ', needs review' : '') + '">' +
+      '<path class="track" d="M20 100 A80 80 0 0 1 180 100" pathLength="100"/>' +
+      (g.gpa != null ? '<path class="fill" d="M20 100 A80 80 0 0 1 180 100" pathLength="100" stroke-dasharray="' + share(g.gpa, 4) + ' 100"/>' : '') +
+      '<line class="tick" x1="' + tick[0] + '" y1="' + tick[1] + '" x2="' + out[0] + '" y2="' + out[1] + '"/>' +
+      '<text x="100" y="88" class="big">' + C.gpaText(g.gpa) + '</text><text x="100" y="108" class="small">core GPA · minimum ' + fig.minimum.toFixed(1) + '</text></svg>';
+  }
+  /* The core-course boxes, as _core_slots.html draws them. */
+  function coreSlots(prefix) {
+    var out = '<ul class="req-key" aria-hidden="true"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li></ul><ul class="core-slots">';
+    fig.alloc.bars.forEach(function (bar, i) {
+      var clip = prefix + '-' + i, wide = bar.slots.length * 35 - 5;
+      out += '<li' + (bar.met ? ' class="met"' : '') + '><span class="slot-head"><span class="req-label">' + h(bar.label) + '</span><span class="req-count">' + unitsText(bar.counted) + '/' + bar.need + '</span></span>';
+      out += '<svg viewBox="0 0 ' + wide + ' 30" preserveAspectRatio="xMinYMid meet" role="img" aria-label="' + h(bar.long) + ': ' + unitsText(bar.completed) + ' complete, ' + unitsText(bar.inProgress) + ' in progress, ' + unitsText(bar.planned) + ' planned, of ' + bar.need + '"><defs><clipPath id="' + clip + '"><rect width="30" height="30" rx="8"/></clipPath></defs>';
+      bar.slots.forEach(function (s, j) {
+        var tip = s.courses.map(function (c) { return c.course.title + (c.share < 1 - 1e-6 ? ' (' + C.unitsWord(c.share) + ')' : ''); }).join(', ');
+        out += '<g transform="translate(' + (j * 35) + ')">' + (tip ? '<title>' + h(tip) + '</title>' : '');
+        if (!s.empty) {
+          out += '<g clip-path="url(#' + clip + ')">';
+          if (s.done) out += '<rect class="completed" width="' + (s.done * 30).toFixed(2) + '" height="30"/>';
+          if (s.now) out += '<rect class="in-progress" x="' + (s.done * 30).toFixed(2) + '" width="' + (s.now * 30).toFixed(2) + '" height="30"/>';
+          if (s.later) out += '<rect class="planned" x="' + ((s.done + s.now) * 30).toFixed(2) + '" width="' + (s.later * 30).toFixed(2) + '" height="30"/>';
+          out += '</g>';
+        }
+        if (s.full) out += '<path class="tick" d="M9 15.5l4 4 8.5-8.5"/>';
+        else out += '<rect class="edge ' + (s.done ? 'done' : s.now ? 'now' : s.later ? 'later' : 'empty') + '" x="0.75" y="0.75" width="28.5" height="28.5" rx="7.25"/>';
+        if (tip) out += '<rect class="hit" width="30" height="30" rx="8"/>';
+        out += '</g>';
+      });
+      out += '</svg></li>';
+    });
+    return out + '</ul>';
+  }
+
+  /* Due dates, hockey and calls as the lists show them (_student_items.html). */
+  function eventRow(e, showDay) {
+    var when = showDay ? '<b>' + C.fmt(e.day, '%a') + '</b> ' + dayText(e.day) : e.at ? '<b>' + h(e.at) + '</b>' : '<b>' + {due: 'Due', hockey: 'Hockey', session: 'Call'}[e.kind] + '</b>';
+    var what = '<b>' + h(e.title) + '</b>' + (e.detail ? '<em>' + h(e.detail) + '</em>' : '') +
+      (e.kind === 'session' ? '<em>Join from the Core16 app on your phone.</em>' : '') +
+      (e.waiting ? '<span class="chip warn">Not on your phone yet</span>' : '');
+    var actions = '';
+    if (e.kind === 'due' && !e.done) actions = '<span class="st-actions"><a href="#" data-form="assignment_mark" data-id="' + e.item.id + '">Add mark<span class="visually-hidden"> for ' + h(e.title) + '</span></a><a href="#" data-form="due_date" data-id="' + e.item.id + '">Edit<span class="visually-hidden"> ' + h(e.title) + '</span></a></span>';
+    else if (e.kind === 'hockey') actions = '<span class="st-actions"><a href="#" data-form="ice_session" data-id="' + e.item.id + '">Edit<span class="visually-hidden"> ' + h(e.title) + '</span></a></span>';
+    return '<li class="st-item ' + e.kind + '"><span class="st-when">' + when + '</span><span class="st-what">' + what + '</span>' + actions + '</li>';
+  }
+  function eventsBetween(from, to) { return C.events(data, from, to); }
+
+  /* ---------- pages ---------- */
+  var TABS = [['today', 'Today'], ['courses', 'Courses'], ['marks', 'Marks'], ['gpa', 'GPA'], ['hockey', 'Hockey'], ['sessions', 'Sessions']];
+  function shell(inner) {
+    var tabs = '<nav class="st-tabs" aria-label="Your Core16">' + TABS.map(function (t) { return '<a href="#" data-tab="' + t[0] + '"' + (view === t[0] ? ' aria-current="page"' : '') + '>' + t[1] + '</a>'; }).join('') + '</nav>';
+    var n = waitingCount();
+    return tabs + (notice ? '<p class="notice" role="status">' + h(notice) + '</p>' : '') +
+      (n ? '<p class="st-waiting" role="status"><b>' + n + ' ' + (n === 1 ? 'change' : 'changes') + ' waiting for your phone.</b> Your GPA and core count update once the app has synced.</p>' : '') +
+      inner + '<p class="fineprint st-foot">Core16 tracks and flags. Only the NCAA Eligibility Center certifies.</p>';
+  }
+
+
+  function todayPage() {
+    var hour = new Date().getHours(), greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    var all = eventsBetween(C.day(-60), C.day(8));
+    var overdue = all.filter(function (e) { return e.kind === 'due' && !e.done && e.day < C.today; });
+    var todays = all.filter(function (e) { return C.daysBetween(C.today, e.day) === 0 && !(e.kind === 'due' && e.done); });
+    var tomorrow = all.filter(function (e) { return C.daysBetween(C.today, e.day) === 1 && !(e.kind === 'due' && e.done); });
+    var ahead = all.filter(function (e) { var n = C.daysBetween(C.today, e.day); return e.kind === 'due' && !e.done && n > 1 && n <= 7; });
+    var summary = (overdue.length ? overdue.length + ' overdue. ' : '') + (todays.length ? todays.length + ' on today.' : overdue.length ? '' : 'Nothing entered for today.');
+    var hero = '<section class="st-hero"><div class="st-hello"><p class="st-date">' + C.fmt(C.today, '%A, %B %-d') + '</p><h1>' + greeting + ', Maya.</h1><p>' + summary + '</p>' +
+      (fig.clock ? '<p class="st-clock">Five-year clock: ' + h(C.clockSummary(fig.clock)) + '</p>' : '') + '</div>' +
+      '<a class="st-dial" href="#" data-tab="courses">' + coreRing() + '</a><a class="st-dial" href="#" data-tab="gpa">' + gpaGauge() + '</a></section>';
+    var review = fig.review.length ? '<p class="st-waiting"><b>' + fig.review.length + ' core ' + (fig.review.length === 1 ? 'course needs' : 'courses need') + ' review.</b> <a href="#" data-tab="courses">See which</a>. Nothing here can say you’re on track until that’s settled.</p>' : '';
+    var week = '<ol class="st-week" aria-label="The next seven days">';
+    for (var i = 0; i < 7; i++) {
+      var d = C.day(i), evs = all.filter(function (e) { return C.daysBetween(d, e.day) === 0 && !(e.kind === 'due' && e.done); });
+      if (i === 0) evs = evs.concat(overdue);
+      week += '<li' + (i === 0 ? ' class="today"' : '') + '><span class="dow">' + C.fmt(d, '%a') + '</span><b>' + d.getDate() + '</b><span class="dots">' + evs.map(function (e) { return '<i class="' + e.kind + '" title="' + h(e.title) + '"></i>'; }).join('') + '</span><span class="visually-hidden">' + evs.length + ' ' + (evs.length === 1 ? 'item' : 'items') + '</span></li>';
+    }
+    week += '</ol><ul class="week-key st-key" aria-hidden="true"><li class="due">School</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul>';
+    function list(title, items, showDay, emptyText, cls) {
+      return '<section class="panel' + (cls ? ' ' + cls : '') + '"><h2>' + title + '</h2>' + (items.length ? '<ul class="st-list">' + items.map(function (e) { return eventRow(e, showDay); }).join('') + '</ul>' : '<p>' + emptyText + '</p>') + '</section>';
+    }
+    var cols = '<div class="st-columns"><div>' + (overdue.length ? list('Overdue', overdue, true, '', 'st-late') : '') + list('Today', todays, false, 'Nothing entered for today.') + '</div><div>' +
+      list('Tomorrow', tomorrow, false, 'Nothing entered for tomorrow.') + (ahead.length ? list('Due later this week', ahead, true, '') : '') + '</div></div>';
+    return shell(hero + review + week + cols + '<p class="fineprint st-foot">Last update from your phone: today.</p>');
+  }
+
+  function coursesPage() {
+    var pace = fig.pace;
+    var top = '<h1 class="st-head">Courses</h1><section class="panel"><h2>Your 16 core courses</h2>' + coreSlots('st') +
+      (pace ? '<p class="st-pace"><b>' + unitsText(pace.units) + ' of ' + pace.target + '</b> core courses through Grade ' + pace.grade + '. <span class="chip ' + (pace.behind ? 'warn' : 'ok') + '">' + (pace.behind ? 'Light' : 'On pace') + '</span> <span class="quiet">Four a year is arithmetic, not an NCAA rule.</span></p>' : '') + '</section>';
+    var grades = [12, 11, 10, 9].filter(function (g) { return data.courses.some(function (c) { return c.grade === g; }); });
+    var sections = grades.map(function (g) {
+      var rows = data.courses.filter(function (c) { return c.grade === g; }).map(function (c) {
+        var ms = C.matchStatus(c), m = c.mark || (c.status === 'completed' ? null : null);
+        var note = c.by ? 'Not on your phone yet' : ms === 'unrecognized' && C.isCore(c) ? 'Not on NCAA’s list as entered, so it doesn’t count until that’s settled.' : ms === 'unrecognized' ? 'Filed as not NCAA core.' : '';
+        var chip = ms === 'unrecognized' ? '<span class="chip warn">Needs review</span>' : ms === 'excluded' ? '<span class="chip alarm">Won’t count</span>' : '';
+        var markText = c.mark ? (c.mark.kind === 'proficiency' ? C.PROFICIENCY[c.mark.level][0] : C.num(c.mark.value)) : '';
+        var link = c.status !== 'planned' ? '<a href="#" data-form="course_mark" data-id="' + c.id + '">' + (c.mark ? 'Change mark' : 'Add mark') + '<span class="visually-hidden"> for ' + h(c.title) + '</span></a>' : '';
+        return '<li><span class="st-course"><b>' + h(c.title) + '</b><em>' + (c.code ? h(c.code) + ' · ' : '') + C.PORTAL_CATEGORY[c.category] + ' · ' + unitsText(c.units) + ' ' + (c.units === 1 ? 'unit' : 'units') + '</em>' +
+          (note ? '<em class="st-note">' + h(note) + '</em>' : '') + '</span><span class="st-course-side">' + chip + '<span class="st-status ' + c.status + '">' + C.PORTAL_STATUS[c.status] + '</span>' +
+          (markText ? '<b class="st-mark">' + h(markText) + (c.mark.waiting ? '<span class="chip warn waiting-tag">Not on your phone yet</span>' : '') + '</b>' : '') + link + '</span></li>';
+      }).join('');
+      return '<section class="panel"><h2>Grade ' + g + '</h2><ul class="st-courses">' + rows + '</ul></section>';
+    }).join('');
+    var choices = BC_COURSES.approved.filter(function (c) { return c.grade >= 11 && c.category !== 'nonCore'; }).sort(function (a, b) { return a.grade - b.grade || a.title.localeCompare(b.title); })
+      .map(function (c) { return '<option value="' + h(c.title) + '">' + h(c.title) + ' · Grade ' + c.grade + (c.code ? ' · ' + h(c.code) : '') + '</option>'; }).join('');
+    var add = '<section class="panel" id="add"><h2>Add a course</h2><p>Choose from NCAA’s list for your province. If your course isn’t there, type it into the app, which checks it and helps you file it.</p>' +
+      '<form class="staff-form" id="add-course"><div class="edit-fields"><label class="edit-field wide"><span>Course</span><input name="course" list="course-list" required autocomplete="off" placeholder="Start typing a title from NCAA’s BC list"><datalist id="course-list">' + choices + '</datalist></label>' +
+      '<label class="edit-field"><span>Status</span><select name="status" required><option value="inProgress">In progress</option><option value="planned">Planned</option><option value="completed">Complete</option></select></label>' +
+      '<label class="edit-field"><span>Mark <span class="opt">(needed if complete)</span></span><input name="mark" autocomplete="off" inputmode="decimal"></label></div>' +
+      '<div class="edit-actions"><button type="submit" class="primary">Add course</button></div><p class="field-error" id="add-error" hidden></p></form></section>';
+    return shell(top + sections + add);
+  }
+
+  function marksPage() {
+    var all = eventsBetween(C.day(-60), C.day(400)).filter(function (e) { return e.kind === 'due'; });
+    var late = all.filter(function (e) { return !e.done && e.day < C.today; });
+    var coming = all.filter(function (e) { return !e.done && e.day >= C.today; });
+    var done = C.marked(data);
+    var head = '<div class="st-headrow"><h1 class="st-head">Marks and due dates</h1><a class="primary" href="#" data-form="due_date" data-id="new">Add a due date</a></div>';
+    var out = head + (late.length ? '<section class="panel st-late"><h2>Overdue</h2><ul class="st-list">' + late.map(function (e) { return eventRow(e, true); }).join('') + '</ul></section>' : '') +
+      '<section class="panel"><h2>Coming up</h2>' + (coming.length ? '<ul class="st-list">' + coming.map(function (e) { return eventRow(e, true); }).join('') + '</ul>' : '<p>Nothing due that’s been entered.</p>') + '</section>' +
+      '<section class="panel"><h2>Marked</h2>' + (done.length ? '<ul class="st-list">' + done.map(function (a) {
+        var c = C.courseOf(data, a);
+        return '<li class="st-item due"><span class="st-when">' + dayText(a.due) + '</span><span class="st-what"><b>' + h(a.title) + '</b><em>' + h(c.title) + ' · ' + h(a.type) + '</em>' + (a.by ? '<span class="chip warn">Not on your phone yet</span>' : '') + '</span>' +
+          '<span class="st-actions"><b class="st-mark">' + C.num(a.score) + '/' + C.num(a.outOf) + '</b><a href="#" data-form="assignment_mark" data-id="' + a.id + '">Change<span class="visually-hidden"> the mark for ' + h(a.title) + '</span></a></span></li>';
+      }).join('') + '</ul>' : '<p>No marked work yet.</p>') + '</section>' +
+      '<p class="quiet">Weights, and removing an assignment, are in the app: they change your GPA.</p>';
+    return shell(out);
+  }
+
+  function gpaPage() {
+    var g = fig.gpa, why = fig.review.length ? (fig.review.length === 1 ? fig.review[0].title + ' isn’t' : fig.review.map(function (c) { return c.title; }).join(' and ') + ' aren’t') + ' on NCAA’s approved list as entered, so this GPA can’t be relied on until that’s settled.' : '';
+    var out = '<h1 class="st-head">GPA</h1><section class="panel st-gpa">' + gpaGauge() + '<div>' +
+      (fig.review.length ? '<span class="chip warn">Needs review</span><p>' + h(why) + '</p>' : fig.above ? '<span class="chip ok">Above the minimum</span>' : '<span class="chip alarm">Below the minimum</span>') +
+      '<p class="quiet">Over ' + unitsText(g.units) + ' core ' + (g.units === 1 ? 'unit' : 'units') + ' with a mark.</p></div></section>';
+    if (fig.cliffs.length) out += '<section class="panel"><h2>Where a few points would move it</h2><ul class="st-cliffs">' + fig.cliffs.map(function (cl) {
+      var n = C.roundUp(cl.pointsNeeded, 1);
+      return '<li><b>' + h(cl.course.code || cl.course.title) + '</b> is at ' + C.num(cl.percent) + '%. ' + C.num(n) + ' more ' + (C.num(n) === '1' ? 'point' : 'points') + ' reaches ' + cl.next.letter + ', which takes your GPA to <b>' + C.gpaText(cl.projected) + '</b>.</li>';
+    }).join('') + '</ul></section>';
+    var rows = data.courses.filter(function (c) { return C.isCore(c) && C.matchStatus(c) === 'approved' && C.markFor(data, c); }).sort(function (a, b) { return b.grade - a.grade || a.title.localeCompare(b.title); });
+    if (rows.length) out += '<section class="panel"><h2>Your marks against the bands</h2><p class="quiet">Ticks show where a mark moves up a band in your province.</p><ul class="st-bars">' + rows.map(function (c) {
+      var m = C.markFor(data, c), text = C.markText(m);
+      var bar = m.kind === 'percentage' ? '<svg viewBox="0 0 100 10" preserveAspectRatio="none" role="img" aria-label="' + h(c.title) + ': ' + text + '"><rect class="track" width="100" height="10" rx="2"/><rect class="fill" width="' + Math.min(100, m.value).toFixed(2) + '" height="10" rx="2"/>' + [50, 73, 86].map(function (cut) { return '<line class="cut" x1="' + cut + '" x2="' + cut + '" y1="0" y2="10"/>'; }).join('') + '</svg>' : '<span class="quiet">A proficiency level, so there’s no percentage to place.</span>';
+      return '<li><span class="st-bar-label">' + h(c.title) + '<em>' + h(text) + '</em></span>' + bar + '</li>';
+    }).join('') + '</ul></section>';
+    return shell(out);
+  }
+
+  function hockeyPage() {
+    var ice = fig.ice; // the chart reads the stored figures; the lists read the record, additions included
+    var live = C.iceTime(data);
+    var max = Math.max(60, Math.max.apply(null, ice.weeks.map(function (w) { return w.logged + w.planned; })));
+    var bars = ice.weeks.map(function (w, i) {
+      var x = i * 40 + 6, hgt = Math.round((w.logged + w.planned) / max * 90), label = C.fmt(w.start, '%b %-d');
+      return '<rect class="bar' + (w.current ? ' current' : '') + '" x="' + x + '" y="' + (100 - hgt) + '" width="28" height="' + hgt + '" rx="4"><title>Week of ' + label + ': ' + (w.logged + w.planned) + ' min</title></rect><text x="' + (x + 14) + '" y="116">' + label + '</text>';
+    }).join('');
+    var out = '<div class="st-headrow"><h1 class="st-head">Hockey</h1><a class="primary" href="#" data-form="ice_session" data-id="new">Add a session</a></div>' +
+      '<section class="panel st-rink"><div class="st-stats"><p><b>' + C.hours(ice.season) + '</b> hours logged</p><p><b>' + ice.gamesPlayed + '</b> ' + (ice.gamesPlayed === 1 ? 'game' : 'games') + ' played</p></div>' +
+      '<svg viewBox="0 0 320 124" role="img" aria-label="Minutes at the rink each week for the last eight weeks">' + bars + '<line x1="0" x2="320" y1="100" y2="100"/></svg></section>';
+    var up = live.upcoming.map(function (s) { return C.events(data, s.date, C.addDays(s.date, 1)).filter(function (e) { return e.item === s; })[0]; });
+    var logged = live.logged.map(function (s) { return C.events(data, s.date, C.addDays(s.date, 1)).filter(function (e) { return e.item === s; })[0]; });
+    out += '<section class="panel"><h2>Coming up</h2>' + (up.length ? '<ul class="st-list">' + up.map(function (e) { return eventRow(e, true); }).join('') + '</ul>' : '<p>Nothing entered.</p>') + '</section>' +
+      '<section class="panel"><h2>Logged</h2>' + (logged.length ? '<ul class="st-list">' + logged.map(function (e) { return eventRow(e, true); }).join('') + '</ul>' : '<p>Nothing logged yet.</p>') + '</section>';
+    return shell(out);
+  }
+
+  function sessionsPage() {
+    var booked = data.bookings.filter(function (b) { return b.booked; }), open = data.bookings.filter(function (b) { return !b.booked; });
+    var left = {}; Object.keys(C.CREDITS).forEach(function (k) { left[k] = C.CREDITS[k] - booked.filter(function (b) { return b.mentor.specialty === k; }).length; });
+    function when(b) { return '<span class="st-when"><b>' + C.fmt(b.date, '%a') + '</b> ' + dayText(b.date) + '<br>' + C.clock(b.start) + '</span>'; }
+    var out = '<h1 class="st-head">Video sessions</h1><section class="panel"><h2>Sessions left</h2><ul class="st-balances">' + Object.keys(left).map(function (k) { return '<li><b>' + left[k] + '</b>' + SPECIALTY[k] + '</li>'; }).join('') + '</ul></section>' +
+      '<section class="panel"><h2>Booked</h2>' + (booked.length ? '<ul class="st-list">' + booked.map(function (b) {
+        return '<li class="st-item session">' + when(b) + '<span class="st-what"><b>' + SPECIALTY[b.mentor.specialty] + '</b><em>With ' + h(b.mentor.name) + ', ' + b.minutes + ' min</em><em>Join from the Core16 app on your phone.</em></span><span class="st-actions"><button type="button" class="linkbtn danger" data-cancel="' + b.id + '">Cancel</button></span></li>';
+      }).join('') + '</ul>' : '<p>Nothing booked.</p>') + '</section>' +
+      '<section class="panel"><h2>Open times</h2>' + (open.length ? '<ul class="st-list">' + open.map(function (b) {
+        var can = left[b.mentor.specialty] > 0;
+        return '<li class="st-item session">' + when(b) + '<span class="st-what"><b>' + SPECIALTY[b.mentor.specialty] + '</b><em>With ' + h(b.mentor.name) + ', ' + b.minutes + ' min</em></span><span class="st-actions">' + (can ? '<button type="button" class="primary" data-book="' + b.id + '">Book</button>' : '<span class="quiet">None left of this kind</span>') + '</span></li>';
+      }).join('') + '</ul>' : '<p>No open times for the sessions you have left.</p>') + '</section>';
+    return shell(out);
+  }
+
+  /* ---------- the forms (parent_edit.html, with `own`) ---------- */
+  function field(label, inner, opts) {
+    opts = opts || {};
+    return '<label class="edit-field' + (opts.wide ? ' wide' : '') + '"><span>' + label + (opts.optional ? ' <span class="opt">(optional)</span>' : '') + '</span>' + inner + '</label>';
+  }
+  function formPage() {
+    var f = form, kind = f.kind, item = f.item, heading, intro, fields = '', remove = '';
+    var tomorrow = C.iso(C.day(1));
+    if (kind === 'ice_session') {
+      heading = item ? 'Edit a practice or game' : 'Add a practice or game';
+      intro = 'It shows here straight away and reaches your phone the next time the app syncs. Your figures update after that.';
+      fields = field('Date', '<input type="date" name="day" value="' + (item ? C.iso(item.date) : tomorrow) + '" required>') +
+        field('Start time', '<input type="time" name="start" value="' + (item && item.start != null ? pad2(Math.floor(item.start / 60)) + ':' + pad2(item.start % 60) : '18:00') + '" step="300">', {optional: true}) +
+        field('What it is', '<select name="kind" required>' + Object.keys(C.KIND).map(function (k) { return '<option value="' + k + '"' + (item && item.kind === k ? ' selected' : '') + '>' + C.KIND[k] + '</option>'; }).join('') + '</select>') +
+        field('Name', '<input type="text" name="title" value="' + h(item ? item.title : '') + '" maxlength="120" placeholder="The opponent, for a game">', {optional: true}) +
+        field('Minutes at the rink or gym', '<input type="number" name="minutes" value="' + (item ? item.minutes : 90) + '" min="1" max="1440" step="1" inputmode="numeric" required>') +
+        field('Travel minutes', '<input type="number" name="travel" value="' + (item && item.travel ? item.travel : '') + '" min="0" max="1440" step="1" inputmode="numeric" placeholder="There and back">', {optional: true}) +
+        (!item ? field('Repeat weekly until', '<input type="date" name="repeatUntil">', {optional: true}) + '<p class="field-note">Adds the same session every week up to that date. Each week is a session of its own, so one can be moved or removed alone, or removed with the weeks after it. Blank adds just the one.</p>' : '');
+      if (item) remove = '<div class="remove-edit"><button type="button" class="linkbtn danger" id="remove">Remove it</button></div>';
+    } else if (kind === 'assignment_mark') {
+      var c = C.courseOf(data, item);
+      heading = (item.score != null ? 'Change the mark for ' : 'Add a mark for ') + item.title;
+      intro = 'It shows here straight away and reaches your phone the next time the app syncs. Your figures update after that. This only counts toward your GPA once the assignment has a weight, which you set in the app.';
+      fields = '<p class="quiet wide">' + h(c.title) + ' · ' + h(item.type) + ' · due ' + C.fmt(item.due, '%a %-d %b') + '</p>' +
+        field('Score', '<input type="text" name="score" value="' + (item.score != null ? C.num(item.score) : '') + '" inputmode="decimal" required>') +
+        field('Out of', '<input type="text" name="outOf" value="' + C.num(item.outOf) + '" inputmode="decimal" required>');
+    } else if (kind === 'course_mark') {
+      var completed = item.status === 'completed';
+      heading = (item.mark ? 'Change the mark for ' : 'Add a mark for ') + item.title;
+      intro = 'It shows here straight away and reaches your phone the next time the app syncs. Your figures update after that. A report-card mark takes the place of the average from your assignments.';
+      fields = '<p class="quiet wide">' + h(item.title) + ' · Grade ' + item.grade + ' · ' + C.PORTAL_STATUS[item.status] + '</p>';
+      if (item.grade === 9) fields += field('Proficiency on the report card', '<select name="proficiency" required><option value="">Choose</option>' + Object.keys(C.PROFICIENCY).map(function (k) { return '<option value="' + k + '"' + (item.mark && item.mark.level === k ? ' selected' : '') + '>' + C.PROFICIENCY[k][0] + '</option>'; }).join('') + '</select>', {wide: true});
+      else fields += field(completed ? 'Final mark (%)' : 'Mark (%)', '<input type="text" name="mark" value="' + (item.mark && item.mark.kind === 'percentage' ? C.num(item.mark.value) : '') + '" inputmode="decimal" required>');
+      if (!completed) fields += field('Report card dated', '<input type="date" name="received" max="' + C.iso(C.today) + '">', {optional: true}) + '<p class="field-note">Blank dates it today. The date is how you can tell which report card a mark came from.</p>';
+    } else { // due_date
+      heading = item ? 'Edit ' + item.title : 'Add a due date';
+      intro = 'It shows here straight away and reaches your phone the next time the app syncs. Your figures update after that. Set the weight in the app when you know it, so the mark counts toward your GPA.';
+      var current = data.courses.filter(function (c) { return c.status === 'inProgress'; });
+      fields = (item ? '<p class="quiet wide">' + h(C.courseOf(data, item).title) + ' · ' + h(item.type) + '</p>' :
+        field('Course', '<select name="courseID" required><option value="">Choose</option>' + current.map(function (c) { return '<option value="' + c.id + '">' + h(c.title) + '</option>'; }).join('') + '</select>', {wide: true})) +
+        field('Name', '<input type="text" name="title" value="' + h(item ? item.title : '') + '" maxlength="120" required>', {wide: true}) +
+        (item ? '' : field('What it is', '<select name="type" required>' + ['Assignment', 'Quiz', 'Test', 'Lab', 'Essay', 'Presentation', 'Exam', 'Culminating'].map(function (t) { return '<option>' + t + '</option>'; }).join('') + '</select>')) +
+        field('Due', '<input type="date" name="day" value="' + (item ? C.iso(item.due) : C.iso(C.day(7))) + '" required>');
+    }
+    return '<section class="card wide parent-edit"><h1>' + h(heading) + '</h1><p>' + intro + '</p><form class="staff-form" id="edit-form"><p class="form-error" id="form-error" hidden role="alert"></p><div class="edit-fields">' + fields + '</div>' +
+      '<div class="edit-actions"><button type="submit" class="primary">' + (item ? 'Save' : 'Add') + '</button><a class="secondary" href="#" id="form-cancel">Cancel</a></div></form>' + remove + '</section>';
+  }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function submitForm(fd) {
+    var f = form, kind = f.kind, item = f.item, err = document.getElementById('form-error');
+    function fail(msg) { err.textContent = msg; err.hidden = false; }
+    var numberOf = function (v) { v = String(v || '').trim(); return v === '' || isNaN(Number(v)) ? null : Number(v); };
+    if (kind === 'ice_session') {
+      var minutes = numberOf(fd.get('minutes')), travel = numberOf(fd.get('travel')) || 0, dayV = fd.get('day'), start = fd.get('start');
+      if (!dayV) return fail('Nothing was saved. Enter a date.');
+      if (minutes == null || minutes < 1) return fail('Nothing was saved. Enter the minutes at the rink.');
+      var startMin = start ? (+start.split(':')[0]) * 60 + (+start.split(':')[1]) : null;
+      if (item) { item.date = C.parseISO(dayV); item.start = startMin; item.kind = fd.get('kind'); item.title = fd.get('title').trim(); item.minutes = minutes; item.travel = travel; item.by = 'Maya'; }
+      else {
+        var until = fd.get('repeatUntil') ? C.parseISO(fd.get('repeatUntil')) : null, d = C.parseISO(dayV), n = 0;
+        do { data.ice.push({id: C.nextID(), date: d, kind: fd.get('kind'), title: fd.get('title').trim(), minutes: minutes, travel: travel, start: startMin, toi: null, series: until ? 'new' : null, by: 'Maya'}); n++; d = C.addDays(d, 7); } while (until && d <= until);
+        notice = n === 1 ? 'Added. It reaches your phone the next time the app syncs.' : 'Added ' + n + ' sessions, one a week. They reach your phone the next time the app syncs.';
+      }
+      data.edits.push({kind: kind});
+      if (item) notice = 'Saved. It reaches your phone the next time the app syncs.';
+    } else if (kind === 'assignment_mark') {
+      var score = numberOf(fd.get('score')), outOf = numberOf(fd.get('outOf'));
+      if (score == null || outOf == null || outOf <= 0) return fail('Nothing was saved. Enter the score and what it was out of.');
+      if (score < 0 || score > outOf * 1.2) return fail('Nothing was saved. The score should be between 0 and ' + C.num(outOf) + '.');
+      item.score = score; item.outOf = outOf; item.by = 'Maya'; data.edits.push({kind: kind});
+      notice = 'Saved. It reaches your phone the next time the app syncs.';
+    } else if (kind === 'course_mark') {
+      if (item.grade === 9) { var lvl = fd.get('proficiency'); if (!lvl) return fail('Nothing was saved. Choose a proficiency level.'); item.mark = {kind: 'proficiency', level: lvl, waiting: true}; }
+      else { var mk = numberOf(fd.get('mark')); if (mk == null || mk < 0 || mk > 100) return fail('Nothing was saved. The mark should be a number from 0 to 100.'); item.mark = {kind: 'percentage', value: mk, received: fd.get('received') ? C.parseISO(fd.get('received')) : C.today, waiting: true}; }
+      data.edits.push({kind: kind}); notice = 'Saved. It reaches your phone the next time the app syncs.';
+    } else {
+      var title = (fd.get('title') || '').trim(), due = fd.get('day');
+      if (!title) return fail('Nothing was saved. Add a name.');
+      if (!due) return fail('Nothing was saved. Enter the due date.');
+      if (item) { item.title = title; item.due = C.parseISO(due); item.by = 'Maya'; notice = 'Saved. It reaches your phone the next time the app syncs.'; }
+      else {
+        if (!fd.get('courseID')) return fail('Nothing was saved. Choose a course.');
+        data.assignments.push({id: C.nextID(), courseID: fd.get('courseID'), title: title, type: fd.get('type'), due: C.parseISO(due), weight: 0, score: null, outOf: null, by: 'Maya'});
+        notice = 'Added. It reaches your phone the next time the app syncs.';
+      }
+      data.edits.push({kind: kind});
+    }
+    view = f.back; form = null; render();
+  }
+
+  /* ---------- render and wire ---------- */
+  function render() {
+        if (form) main.innerHTML = formPage();
+    else main.innerHTML = {today: todayPage, courses: coursesPage, marks: marksPage, gpa: gpaPage, hockey: hockeyPage, sessions: sessionsPage}[view]();
+    notice = null;
+    window.scrollTo({top: 0, behavior: 'instant'});
+    wire();
+  }
+  function wire() {
+    main.querySelectorAll('[data-tab]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); view = a.getAttribute('data-tab'); form = null; render(); }); });
+    main.querySelectorAll('[data-form]').forEach(function (a) { a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var kind = a.getAttribute('data-form'), id = a.getAttribute('data-id'), item = null;
+      if (id !== 'new') item = (kind === 'ice_session' ? data.ice : kind === 'course_mark' ? data.courses : data.assignments).filter(function (x) { return x.id === id; })[0];
+      form = {kind: kind, item: item, back: view}; render();
+    }); });
+    var ef = document.getElementById('edit-form');
+    if (ef) {
+      ef.addEventListener('submit', function (e) { e.preventDefault(); submitForm(new FormData(ef)); });
+      document.getElementById('form-cancel').addEventListener('click', function (e) { e.preventDefault(); form = null; render(); });
+      var rm = document.getElementById('remove');
+      if (rm) rm.addEventListener('click', function () { confirmThen('Remove this from your hockey?', 'It comes off your phone the next time the app syncs.', 'Remove it', true, function () {
+        data.ice = data.ice.filter(function (s) { return s !== form.item; }); data.edits.push({kind: 'remove'}); notice = 'Removed. It comes off your phone the next time the app syncs.'; view = form.back; form = null; render();
+      }); });
+    }
+    var ac = document.getElementById('add-course');
+    if (ac) ac.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var title = ac.course.value.trim(), status = ac.status.value, mark = ac.mark.value.trim(), err = document.getElementById('add-error');
+      function fail(m) { err.textContent = m; err.hidden = false; }
+      var entry = C.catalogEntry(title);
+      if (!entry) return fail('Nothing was added. Choose a course from NCAA’s list; a course that isn’t there goes in through the app.');
+      if (data.courses.some(function (c) { return C.normalizeTitle(c.title) === C.normalizeTitle(title); })) return fail('Nothing was added. That course is already on your list.');
+      if (status === 'completed' && (mark === '' || isNaN(Number(mark)) || Number(mark) < 0 || Number(mark) > 100)) return fail('Nothing was added. A completed course needs its final mark, 0 to 100.');
+      data.courses.push({id: C.nextID(), title: entry.title, code: entry.code, grade: entry.grade, category: entry.category, units: entry.units, status: status,
+                         mark: status === 'completed' ? {kind: 'percentage', value: Number(mark)} : null, typed: false, by: 'Maya'});
+      data.edits.push({kind: 'course'}); notice = 'Added ' + entry.title + '. It reaches your phone the next time the app syncs, and your core count and GPA update after that.'; render();
+    });
+    main.querySelectorAll('[data-book]').forEach(function (b) { b.addEventListener('click', function () {
+      var slot = data.bookings.filter(function (s) { return s.id === b.getAttribute('data-book'); })[0];
+      slot.booked = true; notice = 'Booked ' + SPECIALTY[slot.mentor.specialty] + ' with ' + slot.mentor.name + ' for ' + C.fmt(slot.date, '%a %-d %b') + ' at ' + C.clock(slot.start) + '. Join from the Core16 app on your phone.'; render();
+    }); });
+    main.querySelectorAll('[data-cancel]').forEach(function (b) { b.addEventListener('click', function () {
+      var slot = data.bookings.filter(function (s) { return s.id === b.getAttribute('data-cancel'); })[0];
+      var soon = C.daysBetween(C.today, slot.date) < 1;
+      confirmThen('Cancel this session?', soon ? 'It is less than a day away, so the session stays used.' : 'The session goes back in your balance.', 'Cancel the session', true, function () {
+        if (soon) data.bookings = data.bookings.filter(function (s) { return s !== slot; }); else { slot.booked = false; slot.seat = null; }
+        notice = 'Cancelled.'; render();
+      });
+    }); });
+  }
+  start();
+})();
+</script>
+</body>
+</html>

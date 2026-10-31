@@ -218,10 +218,11 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .app-chip{font-family:var(--app-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--radius-pill);background:var(--app-raised);color:var(--app-text-2)}
 .app-chip.good{color:var(--app-good);background:rgba(86,209,154,.14)}
 .app-chip.warn{color:var(--app-amber-text);background:rgba(255,176,32,.14)}
+.app-slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
 .app-slot-label{display:flex;justify-content:space-between;font-size:13px;color:var(--app-text-2)}
 .app-slot-label b{font-family:var(--app-mono);font-weight:500;color:var(--app-text)}
 .app-slots{display:flex;gap:5px}
-.app-slot{width:30px;height:30px;border-radius:var(--radius-box);background:var(--app-raised);display:grid;place-items:center;font-size:13px;color:var(--app-on-ink);font-weight:700}
+.app-slot{width:28px;height:28px;border-radius:var(--radius-box);background:var(--app-raised);display:grid;place-items:center;font-size:13px;color:var(--app-on-ink);font-weight:700}
 .app-slot.done{background:var(--app-ink)}
 .app-slot.half{background:linear-gradient(90deg,var(--app-ink) 50%,var(--app-raised) 50%)}
 .app-slot.now{background:var(--app-amber)}
@@ -273,7 +274,7 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .st-gauge .fill{fill:none;stroke:var(--student-hero-good);stroke-width:12;stroke-linecap:round}
 .st-gauge .tick{stroke:var(--onhero);stroke-width:2}
 .st-week{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:0 12px 12px;margin:0;list-style:none}
-.st-week li{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius-tile);padding:8px 8px 9px;display:grid;gap:3px;min-width:0}
+.st-week li{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius-tile);padding:8px 8px 9px;display:grid;gap:3px;min-width:0;align-content:start}
 .st-week li.today{box-shadow:inset 0 0 0 2px var(--blue)}
 .st-week .dow{font-size:10.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
 .st-week .date{font-family:var(--display);font-weight:700;font-size:16px}
@@ -323,7 +324,7 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .panel h3 small{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--ink3)}
 .panel .note{color:var(--ink2);font-size:12.5px}
 .week-days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0;padding:0;list-style:none}
-.week-days li{background:var(--ice2);border-radius:var(--radius-tile);padding:8px;display:grid;gap:3px;min-width:0}
+.week-days li{background:var(--ice2);border-radius:var(--radius-tile);padding:8px;display:grid;gap:3px;min-width:0;align-content:start}
 .week-days li.today{box-shadow:inset 0 0 0 2px var(--blue)}
 .week-days .dow{font-size:10.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
 .week-days .date{font-family:var(--display);font-weight:700;font-size:16px}
@@ -357,6 +358,9 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 [data-step="2"] .courses li.ok,[data-step="3"] .courses li.ok{background:var(--mark-filled);border-color:var(--mark-filled);color:var(--mark-top)}
 [data-step="2"] .courses li.now,[data-step="3"] .courses li.now{background:var(--site-amber);border-color:var(--site-amber);color:var(--site-ink)}
 [data-step="2"] .courses li.x,[data-step="3"] .courses li.x{border-color:#f0897e;color:#f0897e;text-decoration:line-through}
+[data-step="2"] .courses li.q,[data-step="3"] .courses li.q{border-color:#f0897e;color:#f0897e}
+[data-step="2"] .courses li.q::after,[data-step="3"] .courses li.q::after{content:"?";position:absolute;top:-7px;right:-7px;width:18px;height:18px;border-radius:50%;background:#f0897e;color:var(--site-ink);font-size:12px;font-weight:700;display:grid;place-items:center}
+[data-step="2"] .courses li.nc,[data-step="3"] .courses li.nc{opacity:.45}
 .readers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .readers-slot{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
 .readers-slot > div{overflow:hidden;min-height:0}
@@ -366,6 +370,9 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 @media (prefers-reduced-motion:reduce){.readers-slot,.readers-card{transition:none}}
 .reader{display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap;font-size:13px;color:var(--site-ink-light);background:var(--site-ink);border:1px solid var(--site-line-2);border-radius:var(--radius-pill);padding:7px 12px}
 .reader i{width:9px;height:9px;border-radius:50%;background:var(--site-amber)}
+a.reader{text-decoration:none;transition:background .15s,border-color .15s}
+a.reader:hover{background:var(--site-wash-2);border-color:var(--site-amber-line)}
+.try{display:flex;justify-content:center;margin-top:18px}
 .steps{display:grid;gap:clamp(40px,6vw,96px);margin:0;padding:0;list-style:none}
 .step{display:grid;gap:12px;scroll-margin-top:100px}
 .step .k{font-family:var(--site-display);font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--site-amber)}
@@ -410,7 +417,7 @@ footer a:hover{color:var(--site-amber)}
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Core16, top of page"><img src="assets/mark.svg" alt="" width="30" height="30"><b>CORE<span>16</span></b></a>
     <nav aria-label="Sections">
-      <a href="#why">Why</a><a href="#check">Try it</a><a href="#student">Student</a><a href="#parent">Parent</a><a href="#how">How it works</a><a href="#trust">What it won't say</a>
+      <a href="#why">Why</a><a href="#check">Try it</a><a href="#student">Student</a><a href="#parent">Parent</a><a href="#how">How it works</a><a href="#trust">What it won't say</a><a href="demo/">Demos</a>
     </nav>
     <span class="badge">Coming soon</span>
   </div>
@@ -425,17 +432,17 @@ footer a:hover{color:var(--site-amber)}
       <h1>Sixteen courses stand between a player and a US college roster. <em>Core16 counts them.</em></h1>
       <p class="lead">Every course checked against NCAA's own list for your province, every mark converted the way your province does it, and the 16 filled in one box at a time. On the player's phone, on a parent's web page, and on the laptop at school.</p>
       <div class="ctas">
-        <a class="btn primary" href="#student">See the player's app</a>
-        <a class="btn ghost" href="#parent">See the parent's page</a>
+        <a class="btn primary" href="demo/">Try the demos</a>
+        <a class="btn ghost" href="#student">See the player's app</a>
       </div>
       <div class="provinces">
         <div class="province">Ontario <strong>launching</strong></div>
         <div class="province">British Columbia <strong>launching</strong></div>
       </div>
     </div>
-    <div class="sixteen" role="img" aria-label="Thirteen of sixteen core courses counted: eight complete, four in progress, one planned">
+    <div class="sixteen" role="img" aria-label="Fourteen of sixteen core courses counted: ten complete, four in progress">
       <svg viewBox="0 0 246 246" role="img" aria-hidden="true" id="hero16"></svg>
-      <div class="total"><b class="num" id="heroCount" data-count="13">13</b><span>of 16 core courses</span></div>
+      <div class="total"><b class="num" id="heroCount" data-count="14">14</b><span>of 16 core courses</span></div>
       <ul class="key"><li class="done"><i></i>Complete</li><li class="now"><i></i>In progress</li><li class="later"><i></i>Planned</li><li class="empty"><i></i>Not filled</li></ul>
     </div>
   </div>
@@ -538,64 +545,70 @@ footer a:hover{color:var(--site-amber)}
         <li><span class="n">05</span><div><h3>Hockey hours beside the homework</h3><p>Practices, games, skills and off-ice sessions, with weekly and season hours and a heads-up when a due date lands on a heavy stretch of ice.</p></div></li>
       </ul>
       <div class="screen reveal">
-        <div class="phone" role="img" aria-label="The Core16 iPhone app's Overview screen for Maya, Grade 11 in BC: 13 of 16 core courses, core GPA 3.15, two things due this week">
+        <div class="phone" role="img" aria-label="The Core16 iPhone app's Overview screen for Maya, Grade 11 in BC: 14 of 16 core courses, core GPA 3.15 with two courses to review, an oral presentation due today">
           <div class="glass">
             <div class="notch"></div>
             <div class="app-top"><div><p class="app-eyebrow">Grade 11 · British Columbia</p><p class="app-title">Overview</p></div><span class="app-initials">MC</span></div>
             <div class="app-panel">
-              <header><span class="app-eyebrow">Core courses</span><span class="app-chip">13 of 16</span></header>
-              <div><div class="app-slot-label">English <b>3.5/4</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot half"></div></div></div>
-              <div><div class="app-slot-label">Math <b>2/3</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot later"></div></div></div>
-              <div><div class="app-slot-label">Science <b>2/2</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot now"></div></div></div>
-              <div><div class="app-slot-label">Additional <b>2/4</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot now"></div><div class="app-slot empty"></div><div class="app-slot empty"></div></div></div>
+              <header><span class="app-eyebrow">Core courses</span><span class="app-chip">14 of 16</span></header>
+              <div class="app-slot-grid">
+              <div><div class="app-slot-label">English <b>3/4</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot now"></div><div class="app-slot empty"></div></div></div>
+              <div><div class="app-slot-label">Math <b>2/3</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot empty"></div></div></div>
+              <div><div class="app-slot-label">Science <b>2/2</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div></div></div>
+              <div><div class="app-slot-label">Extra E/M/S <b>1/1</b></div><div class="app-slots"><div class="app-slot now"></div></div></div>
+              <div><div class="app-slot-label">Social sci. <b>2/2</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div></div></div>
+              <div><div class="app-slot-label">Additional <b>4/4</b></div><div class="app-slots"><div class="app-slot done">✓</div><div class="app-slot done">✓</div><div class="app-slot now"></div><div class="app-slot now"></div></div></div>
+              </div>
             </div>
             <div class="app-panel">
-              <header><span class="app-eyebrow">Core GPA</span><span class="app-chip good">Above 2.3</span></header>
-              <div class="app-row"><span class="app-big num">3.15</span><span class="app-sub">▲ Life Sciences 11 is 2 points from a 4.<br>Reaching it: 3.23</span></div>
+              <header><span class="app-eyebrow">Core GPA</span><span class="app-chip warn">Needs review</span></header>
+              <div class="app-row"><span class="app-big num">3.15</span><span class="app-sub">▲ Literary Studies 11 is 1 point from an A.<br>Reaching it: 3.23<br>2 courses to review</span></div>
             </div>
             <div class="app-panel">
               <header><span class="app-eyebrow">Next up</span><span class="app-chip">Marks</span></header>
               <ul class="app-list">
-                <li><div class="what"><span>Essay: Literary Studies 11</span><em>LTST 11 · 15% of mark</em></div><span class="app-flag today">Due today</span></li>
-                <li><div class="what"><span>Lab report: cells</span><em>LFS 11 · 10% of mark</em></div><span class="app-flag three">In 3 days</span></li>
+                <li><div class="what"><span>Oral presentation</span><em>Core French 11 · Presentation · 10%</em></div><span class="app-flag today">Due today</span></li>
+                <li><div class="what"><span>Poetry analysis essay</span><em>Literary Studies 11 · Essay · 10%</em></div><span class="app-flag tomorrow">Tomorrow</span></li>
               </ul>
             </div>
             <div class="app-panel">
-              <div class="app-row"><div><p class="app-eyebrow">Hockey this week</p><p style="font-size:15px">Two practices, one road game</p></div><span class="app-big num" style="font-size:28px">6.5<small style="font-size:13px;font-weight:400;color:var(--app-text-2)"> h</small></span></div>
+              <div class="app-row"><div><p class="app-eyebrow">Hockey this week</p><p style="font-size:15px">Two practices, power skating, a road game</p></div><span class="app-big num" style="font-size:28px">6.5<small style="font-size:13px;font-weight:400;color:var(--app-text-2)"> h</small></span></div>
             </div>
-            <div class="app-tabs"><span class="on"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 9.5 10 4l6.5 5.5"/><path d="M5.5 8.5V16h9V8.5"/><path d="M8.5 16v-4h3v4"/></svg>Overview</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.5" y="4" width="3" height="12" rx=".6"/><rect x="8" y="4" width="3" height="12" rx=".6"/><path d="m12.4 5.2 2.9-.8 3 11.6-2.9.8z"/></svg>Courses</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="12" height="11" rx="1.5"/><path d="M3 8.5h12M6.5 3v3M11.5 3v3"/><circle cx="15" cy="14.5" r="3.5" fill="#0a1017"/><path d="M15 12.8v1.9l1.3.8"/></svg>Marks<span class="n">2</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16.5h14"/><rect x="4" y="9" width="3" height="5"/><rect x="8.5" y="5" width="3" height="9"/><rect x="13" y="11" width="3" height="3"/></svg>GPA<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3 7.6 13.6a2.2 2.2 0 0 1-2 1.1H3.5"/><ellipse cx="14.5" cy="15.5" rx="2.5" ry="1.2"/></svg>Hockey</span></div>
+            <div class="app-tabs"><span class="on"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 9.5 10 4l6.5 5.5"/><path d="M5.5 8.5V16h9V8.5"/><path d="M8.5 16v-4h3v4"/></svg>Overview</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.5" y="4" width="3" height="12" rx=".6"/><rect x="8" y="4" width="3" height="12" rx=".6"/><path d="m12.4 5.2 2.9-.8 3 11.6-2.9.8z"/></svg>Courses</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="12" height="11" rx="1.5"/><path d="M3 8.5h12M6.5 3v3M11.5 3v3"/><circle cx="15" cy="14.5" r="3.5" fill="#0a1017"/><path d="M15 12.8v1.9l1.3.8"/></svg>Marks<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16.5h14"/><rect x="4" y="9" width="3" height="5"/><rect x="8.5" y="5" width="3" height="9"/><rect x="13" y="11" width="3" height="3"/></svg>GPA<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3 7.6 13.6a2.2 2.2 0 0 1-2 1.1H3.5"/><ellipse cx="14.5" cy="15.5" rx="2.5" ry="1.2"/></svg>Hockey</span></div>
           </div>
         </div>
+        <p class="try"><a class="btn ghost" href="demo/app/">Try the app</a></p>
       </div>
     </div>
 
     <div class="persona flip" style="margin-top:clamp(48px,7vw,96px)">
       <div class="screen reveal">
-        <div class="laptop" role="img" aria-label="The Core16 Today page on a school laptop: Morning, Maya. Two things are due this week.">
+        <div class="laptop" role="img" aria-label="The Core16 Today page on a school laptop: Good morning, Maya. One thing is due today, a road game Thursday.">
           <div class="lid"><div class="glass">
             <div class="st-top"><img src="assets/mark.svg" alt="">Core16 <span>Today</span><nav><b>Today</b>Courses Marks GPA Hockey</nav></div>
             <div class="st-hero">
-              <div class="st-hello"><p class="st-date">Friday, October 30</p><h1>Morning, Maya.</h1><p>Two things are due this week. Road game Friday.</p></div>
-              <svg class="st-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="track" cx="60" cy="60" r="50" pathLength="100"/><circle class="now" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="81.25 100" transform="rotate(-90 60 60)"/><circle class="done" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="50 100" transform="rotate(-90 60 60)"/><text x="60" y="58" class="big">13</text><text x="60" y="76" class="small">of 16 core</text></svg>
+              <div class="st-hello"><p class="st-date">Tuesday, October 27</p><h1>Good morning, Maya.</h1><p>2 on today. Road game Thursday.</p></div>
+              <svg class="st-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="track" cx="60" cy="60" r="50" pathLength="100"/><circle class="now" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="87.5 100" transform="rotate(-90 60 60)"/><circle class="done" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="62.5 100" transform="rotate(-90 60 60)"/><text x="60" y="58" class="big">14</text><text x="60" y="76" class="small">of 16 core</text></svg>
               <svg class="st-gauge" viewBox="0 0 200 118" aria-hidden="true"><path class="track" d="M20 100 A80 80 0 0 1 180 100" pathLength="100"/><path class="fill" d="M20 100 A80 80 0 0 1 180 100" pathLength="100" stroke-dasharray="78.75 100"/><line class="tick" x1="115.87" y1="33.88" x2="121.48" y2="10.54"/><text x="100" y="88" class="big">3.15</text><text x="100" y="108" class="small">core GPA · minimum 2.3</text></svg>
             </div>
             <ol class="st-week" aria-hidden="true">
               <li><span class="dow">Mon</span><span class="date">26</span><span class="none">Nothing</span></li>
-              <li class="today"><span class="dow">Tue</span><span class="date">27</span><span class="ev due"><i>Essay</i><em>LTST 11</em></span></li>
-              <li><span class="dow">Wed</span><span class="date">28</span><span class="ev hockey"><i>6:30 PM</i><em>Practice</em></span></li>
-              <li><span class="dow">Thu</span><span class="date">29</span><span class="ev session"><i>7:00 PM</i><em>Mentor call</em></span></li>
-              <li><span class="dow">Fri</span><span class="date">30</span><span class="ev hockey"><i>7:30 PM</i><em>Road game</em></span></li>
+              <li class="today"><span class="dow">Tue</span><span class="date">27</span><span class="ev due"><i>Oral presentation</i><em>FR 11</em></span><span class="ev hockey"><i>6:30 PM</i><em>Practice</em></span></li>
+              <li><span class="dow">Wed</span><span class="date">28</span><span class="ev due"><i>Essay</i><em>LTST 11</em></span><span class="ev hockey"><i>5:00 PM</i><em>Power skating</em></span></li>
+              <li><span class="dow">Thu</span><span class="date">29</span><span class="ev hockey"><i>7:30 PM</i><em>Road game</em></span></li>
+              <li><span class="dow">Fri</span><span class="date">30</span><span class="ev due"><i>Unit 1 test</i><em>WPM 11</em></span><span class="ev session"><i>7:00 PM</i><em>Mentor call</em></span></li>
             </ol>
             <div class="st-list" aria-hidden="true">
               <h2>Today</h2>
               <ul>
-                <li><span>Essay: Literary Studies 11</span><span class="c">LTST 11</span></li>
-                <li><span>Lab report: cells, due Friday</span><span class="c">LFS 11</span></li>
+                <li><span>Oral presentation: Core French 11</span><span class="c">FR 11</span></li>
+                <li><span>Practice, 6:30 PM</span><span class="c">1 h 30 min</span></li>
               </ul>
             </div>
           </div></div>
           <div class="base"></div>
         </div>
+        <p class="try"><a class="btn ghost" href="demo/today/">Try the Today page</a></p>
       </div>
       <ul class="points reveal">
         <li><span class="n">06</span><div><h3>Today, on the school laptop</h3><p>A page a player opens each morning at school: what's due today, tomorrow and later this week, the hockey on top of it, and the same two figures the phone shows. It signs in with a short code from the phone, so there's no email to collect and no passkey on a board-managed laptop.</p></div></li>
@@ -615,23 +628,23 @@ footer a:hover{color:var(--site-amber)}
     </div>
     <div class="persona">
       <div class="screen reveal">
-        <div class="portal" role="img" aria-label="The parent's Core16 page for Maya Chen: 13 of 16 core courses, this week's calendar, a warning that Workplace Mathematics 11 won't count, and a video session that needs a second adult">
+        <div class="portal" role="img" aria-label="The parent's Core16 page for Maya Chen: 14 of 16 core courses, two courses to review, this week's calendar, a warning that Workplace Mathematics 11 won't count, and a video session that needs a second adult">
           <div class="topbar"><img src="assets/mark.svg" alt="">Core16 <span>Your family</span><span class="me">Claire Chen</span></div>
           <div class="body">
-            <div class="pagehead"><p>Grade 11 · British Columbia · synced today</p><h2>Maya Chen</h2><p class="sub">Figures are from the last sync of Maya's phone.</p></div>
+            <div class="pagehead"><p>Grade 11 · British Columbia · last updated from Maya's phone 2 hours ago</p><h2>Maya Chen</h2><p class="sub">Figures are from the last sync of Maya's phone.</p></div>
             <section class="child">
               <svg class="hero-grid" viewBox="0 0 246 246" aria-hidden="true" id="parent16"></svg>
-              <div class="req-total"><b class="num">13</b><p>of 16 core courses counted, 8 complete</p><ul class="hero-key"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li><li class="unfilled">Not filled</li></ul></div>
+              <div class="req-total"><b class="num">14</b><p>of 16 core courses counted, 10 complete</p><ul class="hero-key"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li><li class="unfilled">Not filled</li></ul></div>
             </section>
-            <div class="flags"><span class="chip warn">Won't count: <b>Workplace Mathematics 11</b></span><span class="chip ok">Core pace: on pace</span><span class="chip info">▲ Near next band: <b>LFS 11</b></span><span class="chip">Five-year clock: starts fall 2029 at the latest</span></div>
+            <div class="flags"><span class="chip warn">2 courses need review</span><span class="chip warn">Won't count: <b>Workplace Mathematics 11</b></span><span class="chip ok">Core pace: on pace</span><span class="chip info">▲ Near next band: <b>LTST 11</b></span><span class="chip">Five-year clock: starts fall 2030 at the latest</span></div>
             <section class="panel">
               <h3>This week <small>School in blue, hockey in orange</small></h3>
               <ul class="week-days">
-                <li><span class="dow">Mon</span><span class="date">26</span><span class="none">Nothing</span></li>
-                <li class="today"><span class="dow">Tue</span><span class="date">27</span><span class="ev due"><i>Essay</i><em>LTST 11</em></span></li>
-                <li><span class="dow">Wed</span><span class="date">28</span><span class="ev hockey"><i>6:30 PM</i><em>Practice</em></span></li>
-                <li><span class="dow">Thu</span><span class="date">29</span><span class="ev session"><i>7:00 PM</i><em>Mentor call</em></span></li>
-                <li><span class="dow">Fri</span><span class="date">30</span><span class="ev hockey"><i>7:30 PM</i><em>Road game</em></span></li>
+              <li><span class="dow">Mon</span><span class="date">26</span><span class="none">Nothing</span></li>
+                <li class="today"><span class="dow">Tue</span><span class="date">27</span><span class="ev due"><i>Oral presentation</i><em>FR 11</em></span><span class="ev hockey"><i>6:30 PM</i><em>Practice</em></span></li>
+                <li><span class="dow">Wed</span><span class="date">28</span><span class="ev due"><i>Essay</i><em>LTST 11</em></span><span class="ev hockey"><i>5:00 PM</i><em>Power skating</em></span></li>
+                <li><span class="dow">Thu</span><span class="date">29</span><span class="ev hockey"><i>7:30 PM</i><em>Road game</em></span></li>
+                <li><span class="dow">Fri</span><span class="date">30</span><span class="ev due"><i>Unit 1 test</i><em>WPM 11</em></span><span class="ev session"><i>7:00 PM</i><em>Mentor call</em></span></li>
               </ul>
             </section>
             <section class="panel">
@@ -641,13 +654,14 @@ footer a:hover{color:var(--site-amber)}
             </section>
             <section class="panel">
               <h3>Video sessions</h3>
-              <div class="prow"><div><strong>Thu 29 Oct, 7:00 PM BC time</strong><br><em>Mentor call, 30 minutes. Nobody is down as the second adult yet, so the call can't start.</em></div><button class="pbtn" type="button" tabindex="-1">Be the second adult</button></div>
+              <div class="prow"><div><strong>Fri 30 Oct, 7:00 PM BC time</strong><br><em>Mentor call, 30 minutes. Nobody is down as the second adult yet, so the call can't start.</em></div><button class="pbtn" type="button" tabindex="-1">Be the second adult</button></div>
             </section>
           </div>
         </div>
+        <p class="try"><a class="btn ghost" href="demo/parent/">Try the parent's page</a></p>
       </div>
       <ul class="points reveal">
-        <li><span class="n">01</span><div><h3>The 16 as boxes, never a percentage</h3><p>One box per required course, filled from the left: complete, in progress, then planned. The count under it says how many are counted and how many are finished, so 13 of 16 with eight done reads exactly as it should.</p></div></li>
+        <li><span class="n">01</span><div><h3>The 16 as boxes, never a percentage</h3><p>One box per required course, filled from the left: complete, in progress, then planned. The count under it says how many are counted and how many are finished, so 14 of 16 with ten done reads exactly as it should.</p></div></li>
         <li><span class="n">02</span><div><h3>What won't count, in the words NCAA uses</h3><p>A course on NCAA's excluded list shows as "Won't count" the week it's picked. A course NCAA has never assessed shows as needing a look, and the page says plainly it holds back the 16 until it's settled.</p></div></li>
         <li><span class="n">03</span><div><h3>School and hockey on one calendar</h3><p>Due dates in blue, ice in orange, sessions in amber. Add a weekly practice or a due date here and the player's phone picks it up, marked as a parent's change, when it next syncs.</p></div></li>
         <li><span class="n">04</span><div><h3>A second adult on every call</h3><p>No mentor session starts without a second adult on it. A parent takes that seat from their own page and joins by name. Report cards and the IEP go in as photos, for the advisor to enter.</p></div></li>
@@ -660,22 +674,22 @@ footer a:hover{color:var(--site-amber)}
   <div class="wrap how">
     <div class="stage reveal" id="stage" data-step="1">
       <div class="stage-card">
-        <div class="stage-title"><span class="eyebrow">Maya's Grade 11 timetable</span><b id="stageLabel">Step 1 · Entered</b></div>
+        <div class="stage-title"><span class="eyebrow">Maya's Grade 10 and 11 courses</span><b id="stageLabel">Step 1 · Entered</b></div>
         <ul class="courses" aria-hidden="true">
-          <li class="ok">LTST 11</li><li class="ok">CMPS 10</li><li class="ok">LTST 10</li><li class="ok">EN 9</li>
-          <li class="ok">PREC 10</li><li class="ok">FMP 10</li><li class="x">WPM 11</li><li class="now">LFS 11</li>
-          <li class="ok">SC 10</li><li class="ok">SS 10</li><li class="now">EXPL 11</li><li class="ok">FR 10</li>
-          <li class="now">SP 10</li><li class="blank"></li><li class="blank"></li><li class="blank"></li>
+          <li class="now">LTST 11</li><li class="x">WPM 11</li><li class="now">LFSC 11</li><li class="now">EPSS 11</li>
+          <li class="now">FR 11</li><li class="q">PUN 11</li><li class="nc">Hockey Academy Skills 11</li><li class="ok">LTST 10</li>
+          <li class="ok">CMPS 10</li><li class="ok">FMP 10</li><li class="ok">SC 10</li><li class="ok">SS 10</li>
+          <li class="ok">FR 10</li><li class="q">PUN 10</li><li class="blank"></li><li class="blank"></li>
         </ul>
       </div>
       <div class="readers-slot" aria-hidden="true"><div><div class="stage-card readers-card">
         <div class="stage-title"><span class="eyebrow">Step 3 · Who reads the same record</span></div>
-        <div class="readers"><span class="reader"><i></i>Maya's phone</span><span class="reader"><i></i>School laptop</span><span class="reader"><i></i>Parent's page</span><span class="reader"><i></i>Advisor</span></div>
+        <div class="readers"><a class="reader" href="demo/app/"><i></i>Maya's phone</a><a class="reader" href="demo/today/"><i></i>School laptop</a><a class="reader" href="demo/parent/"><i></i>Parent's page</a><span class="reader"><i></i>Advisor</span></div>
       </div></div></div>
     </div>
     <ol class="steps">
       <li class="step reveal" data-go="1"><span class="k">Step 1</span><h3>The phone holds the record</h3><p>Courses, marks and due dates go in on the player's iPhone, off the report card, and it works offline. Nothing in Core16 is computed anywhere else first.</p></li>
-      <li class="step reveal" data-go="2"><span class="k">Step 2</span><h3>Core16 checks it against NCAA's own list</h3><p>Each course is matched to the Eligibility Center's outline for the province, Ontario by code, BC by title. Marks become quality points on the province's bands. Approved courses fill the 16; excluded ones are named; anything unassessed holds back the count.</p></li>
+      <li class="step reveal" data-go="2"><span class="k">Step 2</span><h3>Core16 checks it against NCAA's own list</h3><p>Each course is matched to the Eligibility Center's outline for the province, Ontario by code, BC by title. Marks become quality points on the province's bands. Approved courses fill the 16; excluded ones are named, like Workplace Mathematics 11; a course NCAA hasn't assessed, like Maya's Punjabi, gets a question mark and holds back the count.</p></li>
       <li class="step reveal" data-go="3"><span class="k">Step 3</span><h3>Everyone who looks after the player reads the same figures</h3><p>The phone syncs to Core16, and the same record appears on the parent's page, the player's Today page at school, and the advisor's roster. A change made anywhere else waits for the phone, so there is one record and no quiet edits.</p></li>
     </ol>
   </div>
@@ -721,7 +735,7 @@ footer a:hover{color:var(--site-amber)}
     <p class="eyebrow">Launching in Ontario and British Columbia</p>
     <h2>CORE<span>16</span></h2>
     <p class="lead" style="text-align:center">An iPhone app for the player, a web page for each parent, a Today page for school, and an advisor who sees all of it. Built for the family that is starting high school, not finishing it.</p>
-    <div class="ctas"><a class="btn primary" href="#top">Back to the top</a><a class="btn ghost" href="privacy/">Read the privacy policy</a></div>
+    <div class="ctas"><a class="btn primary" href="demo/">Try the demos</a><a class="btn ghost" href="privacy/">Read the privacy policy</a></div>
   </div>
 </section>
 
@@ -760,7 +774,7 @@ footer a:hover{color:var(--site-amber)}
     }
     svg.innerHTML = out;
   }
-  var maya = ['done','done','done','done','done','done','done','done','now','now','now','now','later','empty','empty','empty'];
+  var maya = ['done','done','done','done','done','done','done','done','done','done','now','now','now','now','empty','empty'];
   var hero = document.getElementById('hero16');
   drawSixteen(hero, maya, {done:'done',now:'now',later:'later',empty:'empty',edge:'later'}, 'M16 28l8 8 15-16');
   var parent = document.getElementById('parent16');
