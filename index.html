@@ -74,11 +74,11 @@ img,svg{max-width:100%}
 .brand img{width:30px;height:30px;border-radius:7px}
 .brand b{font-family:var(--site-display);font-weight:700;font-size:20px;letter-spacing:.03em}
 .brand b span{color:var(--site-amber)}
-.top nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.top nav{display:flex;align-items:center;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
 .top nav::-webkit-scrollbar{display:none}
 .top nav a{font-size:14px;color:var(--site-ink-light);text-decoration:none;padding:8px 10px;border-radius:var(--radius-s);white-space:nowrap}
 .top nav a:hover{color:var(--site-paper);background:var(--site-wash)}
-.top nav a.demos{color:var(--site-amber);border:1px solid var(--site-amber-line);border-radius:var(--radius-pill);padding:7px 14px;margin-left:6px;font-weight:600}
+.top nav a.demos{font-family:var(--site-display);font-weight:500;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--site-amber);background:transparent;border:1px solid var(--site-amber-line);border-radius:var(--radius-pill);padding:5px 12px;margin-left:6px;line-height:1.55}
 .top nav a.demos:hover{color:var(--site-amber);background:var(--site-amber-wash);border-color:var(--site-amber)}
 .badge{font-family:var(--site-display);font-weight:500;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--site-amber);background:var(--site-amber-wash);border:1px solid var(--site-amber-line);border-radius:var(--radius-pill);padding:5px 12px;white-space:nowrap}
 @media (max-width:760px){.top nav{display:none}}
@@ -86,7 +86,7 @@ img,svg{max-width:100%}
 /* Hero */
 .hero{padding-block:clamp(48px,8vw,104px) clamp(40px,6vw,80px)}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:center}
-.hero h1{font-size:clamp(40px,5.4vw,70px);line-height:1}
+.hero h1{font-size:clamp(40px,5.4vw,70px);line-height:1.08}
 .hero h1 em{font-style:normal;color:var(--site-amber)}
 .hero .copy{display:grid;gap:26px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
@@ -579,7 +579,7 @@ footer a:hover{color:var(--site-amber)}
             <div class="app-tabs"><span class="on"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 9.5 10 4l6.5 5.5"/><path d="M5.5 8.5V16h9V8.5"/><path d="M8.5 16v-4h3v4"/></svg>Overview</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.5" y="4" width="3" height="12" rx=".6"/><rect x="8" y="4" width="3" height="12" rx=".6"/><path d="m12.4 5.2 2.9-.8 3 11.6-2.9.8z"/></svg>Courses</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="12" height="11" rx="1.5"/><path d="M3 8.5h12M6.5 3v3M11.5 3v3"/><circle cx="15" cy="14.5" r="3.5" fill="#0a1017"/><path d="M15 12.8v1.9l1.3.8"/></svg>Marks<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16.5h14"/><rect x="4" y="9" width="3" height="5"/><rect x="8.5" y="5" width="3" height="9"/><rect x="13" y="11" width="3" height="3"/></svg>GPA<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3 7.6 13.6a2.2 2.2 0 0 1-2 1.1H3.5"/><ellipse cx="14.5" cy="15.5" rx="2.5" ry="1.2"/></svg>Hockey</span></div>
           </div>
         </div>
-        <p class="try"><a class="btn ghost" href="demo/app/">Try the app</a></p>
+        <p class="try"><a class="btn ghost" href="demo/app/">Try the player's app</a></p>
       </div>
     </div>
 
@@ -610,7 +610,7 @@ footer a:hover{color:var(--site-amber)}
           </div></div>
           <div class="base"></div>
         </div>
-        <p class="try"><a class="btn ghost" href="demo/today/">Try the Today page</a></p>
+        <p class="try"><a class="btn ghost" href="demo/today/">Try the player at school</a></p>
       </div>
       <ul class="points reveal">
         <li><span class="n">06</span><div><h3>Today, on the school laptop</h3><p>A page a player opens each morning at school: what's due today, tomorrow and later this week, the hockey on top of it, and the same two figures the phone shows. It signs in with a short code from the phone, so there's no email to collect and no passkey on a board-managed laptop.</p></div></li>

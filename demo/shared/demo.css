@@ -2,18 +2,19 @@
    part of the site and the screen under it reads as the product. */
 @font-face{font-family:"Oswald";font-weight:500 700;font-display:swap;src:url("../../assets/fonts/oswald-latin.woff2") format("woff2")}
 .demo-bar{position:relative;z-index:30;background:#0e1a2b;color:#f7f7f5;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.4;border-bottom:1px solid rgba(191,214,242,.16);-webkit-font-smoothing:antialiased}
-.demo-bar .in{max-width:1280px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.demo-bar .in{max-width:1180px;margin:0 auto;min-height:60px;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
 .demo-bar a{color:inherit}
-.demo-bar .home{display:flex;align-items:center;gap:9px;text-decoration:none;font-family:"Oswald",sans-serif;font-weight:700;font-size:18px;letter-spacing:.03em}
-.demo-bar .home img{width:26px;height:26px;border-radius:6px}
+.demo-bar .home{display:flex;align-items:center;gap:10px;text-decoration:none}
+.demo-bar .home b{font-family:"Oswald",sans-serif;font-weight:700;font-size:20px;letter-spacing:.03em}
+.demo-bar .home img{width:30px;height:30px;border-radius:7px}
 .demo-bar .home span{color:#f0a600}
-.demo-bar .home small{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-weight:400;font-size:13px;color:#bfd6f2;letter-spacing:0;margin-left:2px}
-.demo-bar nav{display:flex;gap:4px;flex-wrap:wrap}
-.demo-bar nav a{text-decoration:none;color:#bfd6f2;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.demo-bar .home small{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-weight:400;font-size:13px;color:#bfd6f2;letter-spacing:0}
+.demo-bar nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto;order:2}
+.demo-bar nav a{text-decoration:none;color:#bfd6f2;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap;font-weight:500}
 .demo-bar nav a:hover{background:rgba(191,214,242,.07)}
-.demo-bar nav a[aria-current="page"]{color:#0e1a2b;background:#f0a600;border-color:#f0a600;font-weight:600}
-.demo-bar .note{margin:0 0 0 auto;color:#bfd6f2;font-size:13px;max-width:52ch}
+.demo-bar nav a[aria-current="page"]{color:#0e1a2b;background:#f0a600;border-color:#f0a600}
+.demo-bar .note{margin:0;color:#bfd6f2;font-size:13px;max-width:52ch;order:1}
 .demo-bar .note b{color:#f7f7f5;font-weight:600}
-.demo-bar button.reset{font:inherit;font-size:13px;color:#f7f7f5;background:transparent;border:1px solid rgba(191,214,242,.32);border-radius:999px;padding:5px 12px;cursor:pointer}
+.demo-bar button.reset{order:3;font:inherit;font-size:13px;color:#f7f7f5;background:transparent;border:1px solid rgba(191,214,242,.32);border-radius:999px;padding:5px 12px;cursor:pointer}
 .demo-bar button.reset:hover{background:rgba(191,214,242,.11)}
-@media (max-width:760px){.demo-bar .note{margin-left:0;flex-basis:100%}}
+@media (max-width:760px){.demo-bar nav{margin-left:0}.demo-bar .note{order:4;flex-basis:100%}}

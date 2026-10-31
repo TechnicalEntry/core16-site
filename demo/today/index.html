@@ -3,17 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Core16 demo · The Today page, on a school laptop</title>
+<title>Core16 demo · Player at school</title>
 <meta name="description" content="A clickable demo of Core16's Today page: what a player opens each morning at school, signed in with a code from their phone. Sample data for a fictional Grade 11 student in BC.">
 <link rel="icon" type="image/svg+xml" href="../../assets/mark.svg">
 <script>
 /* The portal's theme switch: follows the device unless Light or Dark was chosen on this browser. */
 (function(){try{var t=localStorage.getItem('core16-demo-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
 </script>
-<link rel="stylesheet" href="../shared/demo.css?v=2">
-<link rel="stylesheet" href="../shared/portal-demo.css?v=2">
+<link rel="stylesheet" href="../shared/demo.css?v=7">
+<link rel="stylesheet" href="../shared/portal-demo.css?v=7">
 <style>
 /* Demo-only additions. The portal's own rules are in portal-demo.css, untouched. */
+/* The homepage's width and gutters, so the strip, the top bar and the page line up with core16.ca */
+.wrap, .topbar-in { max-width: 1180px; }
+.wrap { padding-inline: 16px; }
 .demo-only { margin: 0 0 12px; color: var(--ink3); font-size: 12.5px; }
 .st-tabs { margin: 20px 0; }
 .st-tabs a { cursor: pointer; border-bottom: 0; }
@@ -37,8 +40,8 @@
 </head>
 <body>
 <div class="demo-bar"><div class="in">
-  <a class="home" href="../../"><img src="../../assets/mark.svg" alt="">CORE<span>16</span><small>demo</small></a>
-  <nav aria-label="Demos"><a href="../app/">The player's app</a><a href="./" aria-current="page">School laptop</a><a href="../parent/">Parent's page</a></nav>
+  <a class="home" href="../../"><img src="../../assets/mark.svg" alt=""><b>CORE<span>16</span></b><small>demo</small></a>
+  <nav aria-label="Demos"><a href="../app/">Player's app</a><a href="./" aria-current="page">Player at school</a><a href="../parent/">Parent's page</a></nav>
   <p class="note"><b>Sample data.</b> Maya Chen is a fictional Grade 11 player in BC. Nothing you enter here is saved.</p>
   <button class="reset" type="button" id="reset">Start over</button>
 </div></div>
