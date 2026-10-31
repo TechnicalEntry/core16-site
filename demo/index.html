@@ -12,20 +12,20 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--site-ink);color:var(--site-paper);font-family:var(--site-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(240,166,0,.07) 0%,transparent 48%),repeating-linear-gradient(90deg,rgba(191,214,242,.035) 0,rgba(191,214,242,.035) 1px,transparent 1px,transparent 64px)}
-.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:clamp(40px,7vw,88px) max(16px,env(safe-area-inset-right,0px)) 72px max(16px,env(safe-area-inset-left,0px))}
-.eyebrow{font-family:var(--site-display);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--site-amber);margin:0 0 12px}
-h1{font-family:var(--site-display);font-weight:700;letter-spacing:.01em;line-height:1.02;font-size:clamp(36px,5vw,64px);margin:0 0 16px;text-wrap:balance;max-width:16em}
-.lead{font-size:clamp(17px,1.6vw,20px);color:var(--site-ink-light);max-width:36em;margin:0 0 clamp(28px,4vw,48px)}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+.eyebrow{font-family:var(--site-display);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--site-amber);margin:0 0 8px}
+h1{font-family:var(--site-display);font-weight:700;letter-spacing:.01em;line-height:1.05;font-size:clamp(30px,3.6vw,44px);margin:0 0 10px;text-wrap:balance;max-width:20em}
+.lead{font-size:16px;color:var(--site-ink-light);max-width:60em;margin:0 0 22px}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 @media (max-width:860px){.grid{grid-template-columns:1fr}}
-.card{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius);padding:26px 24px 24px;display:grid;gap:12px;align-content:start;min-width:0;color:inherit;text-decoration:none;transition:transform .15s var(--ease),background .15s}
+.card{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius);padding:20px 22px;display:grid;gap:10px;align-content:start;min-width:0;color:inherit;text-decoration:none;transition:transform .15s var(--ease),background .15s}
 .card:hover{transform:translateY(-2px);background:var(--site-wash-2)}
 .card .who{font-family:var(--site-display);font-weight:500;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--site-amber)}
-.card h2{font-family:var(--site-display);font-weight:700;font-size:28px;line-height:1.08;margin:0}
+.card h2{font-family:var(--site-display);font-weight:700;font-size:26px;line-height:1.08;margin:0}
 .card p{margin:0;color:var(--site-ink-light);font-size:15.5px}
-.card .go{margin-top:6px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--radius-s);background:var(--site-amber);color:var(--site-ink);font-weight:600;font-size:15px;width:fit-content}
+.card .go{margin-top:2px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--radius-s);background:var(--site-amber);color:var(--site-ink);font-weight:600;font-size:15px;width:fit-content}
 .card ul{margin:0;padding-left:18px;color:var(--site-ink-light);font-size:14.5px;display:grid;gap:4px}
-.fine{margin:clamp(28px,4vw,48px) 0 0;color:rgba(191,214,242,.75);font-size:14px;max-width:60em}
+.fine{margin:22px 0 0;color:rgba(191,214,242,.75);font-size:14px;max-width:60em}
 .fine b{color:var(--site-paper);font-weight:600}
 </style>
 </head>
@@ -37,7 +37,7 @@ h1{font-family:var(--site-display);font-weight:700;letter-spacing:.01em;line-hei
 <main class="wrap">
   <p class="eyebrow">Try it</p>
   <h1>Three screens, one record. Click around.</h1>
-  <p class="lead">Each demo runs on the same sample student: Maya Chen, a fictional Grade 11 player in British Columbia. The figures are worked out the way the real product works them out, from NCAA's September 2026 BC outline. Nothing you enter is saved, and reloading starts over.</p>
+  <p class="lead">Each demo runs on the same sample student, Maya Chen, a fictional Grade 11 player in British Columbia, with the figures worked out the way the real product works them out. Nothing you enter is saved; reloading starts over.</p>
   <div class="grid">
     <a class="card" href="app/"><span class="who">For the player</span><h2>Player's app</h2><p>The record itself. Open a course, add one, enter a report-card mark and watch the core GPA move. The five tabs, Profile, and every sheet and alert.</p><ul><li>The 16 as boxes, by subject</li><li>Due dates with urgency flags</li><li>Hockey hours beside the homework</li></ul><span class="go">Try the player's app</span></a>
     <a class="card" href="today/"><span class="who">For the player, on a school laptop</span><h2>Player at school</h2><p>What a player opens on a school laptop each morning: what's due, the hockey on top of it, and the same figures as the phone. Signs in with a code from the phone.</p><ul><li>Today, tomorrow and later this week</li><li>Marks, GPA and hockey pages</li><li>Changes wait for the phone</li></ul><span class="go">Try the player at school</span></a>
