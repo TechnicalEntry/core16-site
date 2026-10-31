@@ -23,8 +23,10 @@
   color-scheme:dark;
   /* Site dialect (core16.ca) */
   --site-ink:#0e1a2b; --site-ink-light:#bfd6f2; --site-amber:#f0a600; --site-good:#1f8a5c; --site-paper:#f7f7f5;
-  --site-line:rgba(191,214,242,.16); --site-line-2:rgba(191,214,242,.32); --site-wash:rgba(191,214,242,.07); --site-wash-2:rgba(191,214,242,.11);
-  --site-amber-wash:rgba(240,166,0,.14); --site-amber-line:rgba(240,166,0,.38);
+  --site-line:rgba(191,214,242,.16); --site-line-2:rgba(191,214,242,.32);
+  /* The washes are opaque mixes of the same tint into the page colour, so the rink's lines don't show through a card */
+  --site-wash:color-mix(in srgb,#bfd6f2 7%,#0e1a2b); --site-wash-2:color-mix(in srgb,#bfd6f2 11%,#0e1a2b);
+  --site-amber-wash:color-mix(in srgb,#f0a600 14%,#0e1a2b); --site-amber-line:rgba(240,166,0,.38);
   --site-display:"Oswald",-apple-system,"Segoe UI",sans-serif;
   --site-body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   /* Logo tile */
@@ -49,7 +51,7 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:clip}
 body{margin:0;background:var(--site-ink);color:var(--site-paper);font-family:var(--site-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:clip}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--site-ink)}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -84,11 +86,13 @@ img,svg{max-width:100%}
 @media (max-width:760px){.top nav{display:none}}
 
 /* Hero */
-.hero{padding-block:clamp(48px,8vw,104px) clamp(40px,6vw,80px)}
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:center}
-.hero h1{font-size:clamp(40px,5.4vw,70px);line-height:1.08}
+/* The opening fills the first screen, less the top bar, with its content centred in it; on a shorter
+   window it grows instead, with the same air above and below */
+.hero{padding-block:clamp(40px,5vw,64px);min-height:calc(100svh - 61px - env(safe-area-inset-top,0px));display:grid;align-content:center}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero h1{font-size:clamp(34px,4.2vw,56px);line-height:1.08}
 .hero h1 em{font-style:normal;color:var(--site-amber)}
-.hero .copy{display:grid;gap:26px}
+.hero .copy{display:grid;gap:20px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--radius-s);text-decoration:none;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer;transition:transform .15s var(--ease),background .15s}
 .btn:hover{transform:translateY(-1px)}
@@ -100,8 +104,8 @@ img,svg{max-width:100%}
 .province{font-family:var(--site-display);font-weight:500;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-s);padding:9px 14px}
 .province strong{color:#38b57e;font-weight:500}
 
-.sixteen{position:relative;display:grid;gap:18px;justify-items:center}
-.sixteen svg{width:min(100%,420px);height:auto;display:block}
+.sixteen{position:relative;display:grid;gap:14px;justify-items:center}
+.sixteen svg{width:min(100%,300px);height:auto;display:block}
 .sixteen .box{transform-box:fill-box;transform-origin:center}
 .sixteen .done{fill:var(--mark-filled)}
 .sixteen .now{fill:var(--site-amber)}
@@ -109,7 +113,7 @@ img,svg{max-width:100%}
 .sixteen .empty{fill:none;stroke:var(--mark-empty);stroke-width:3;stroke-dasharray:8 7}
 .sixteen .tick{fill:none;stroke:var(--mark-top);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .sixteen .total{display:flex;align-items:baseline;gap:12px;font-family:var(--site-display)}
-.sixteen .total b{font-size:64px;line-height:.9;font-weight:700;letter-spacing:-.01em}
+.sixteen .total b{font-size:52px;line-height:.9;font-weight:700;letter-spacing:-.01em}
 .sixteen .total span{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--site-ink-light);font-weight:500}
 .key{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:13px;color:var(--site-ink-light)}
 .key li{list-style:none;display:flex;align-items:center;gap:7px}
@@ -123,7 +127,7 @@ img,svg{max-width:100%}
   .js .sixteen .box.pop{animation:pop .55s var(--ease) both}
   @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 }
-@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.sixteen{order:-1}.sixteen svg{width:min(100%,300px)}}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.sixteen{order:-1}.sixteen svg{width:min(100%,240px)}}
 
 /* Sections */
 section.band{padding-block:clamp(56px,8vw,112px);border-top:1px solid var(--site-line)}
@@ -140,11 +144,22 @@ section.band{padding-block:clamp(56px,8vw,112px);border-top:1px solid var(--site
 .code{font-family:var(--mono);font-size:12.5px;padding:4px 9px;border-radius:var(--radius-box);background:var(--site-wash-2);border:1px solid var(--site-line)}
 .code.x{color:#ffb9a6;border-color:rgba(255,185,166,.3);text-decoration:line-through}
 
-/* Reveal on scroll: visible at rest, nudged in only once the page has loaded with JS */
-.reveal{transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.js .reveal.pre{opacity:0;transform:translateY(22px)}
+/* Reveal on scroll: visible at rest, slid in only once the page has loaded with JS. Copy comes in
+   from the left and screens from the right; cards and numbered points arrive one after another. */
+.reveal{transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.js .reveal.pre{opacity:0;transform:translateY(32px)}
+.js .reveal.from-left.pre{transform:translateX(-56px)}
+.js .reveal.from-right.pre{transform:translateX(56px)}
 .js .reveal.pre.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{transition:none}.js .reveal.pre{opacity:1;transform:none}}
+.grid3 .reveal:nth-child(2),.rules .reveal:nth-child(2){transition-delay:.12s}
+.grid3 .reveal:nth-child(3),.rules .reveal:nth-child(3){transition-delay:.24s}
+.rules .reveal:nth-child(4){transition-delay:.36s}
+.points li{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .points.pre li{opacity:0;transform:translateX(-28px)}
+.js .points.from-right.pre li{transform:translateX(28px)}
+.js .points.pre.in li{opacity:1;transform:none}
+.points li:nth-child(2){transition-delay:.1s}.points li:nth-child(3){transition-delay:.2s}.points li:nth-child(4){transition-delay:.3s}.points li:nth-child(5){transition-delay:.4s}
+@media (prefers-reduced-motion:reduce){.reveal,.points li{transition:none}.js .reveal.pre,.js .points.pre li{opacity:1;transform:none}}
 
 /* Converter */
 .two{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
@@ -207,9 +222,17 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .points h3{font-size:21px;line-height:1.15;margin-bottom:4px;font-family:var(--site-body);font-weight:650;letter-spacing:0}
 .points p{color:var(--site-ink-light);font-size:15.5px}
 
-.phone{width:min(100%,414px);margin:0 auto;background:#0b1118;border-radius:48px;padding:12px;box-shadow:0 30px 70px rgba(0,0,0,.5),inset 0 0 0 1px rgba(191,214,242,.18);position:relative}
-.phone .glass{background:var(--app-ground);border-radius:38px;overflow:hidden;color:var(--app-text);font-family:var(--app-body);font-size:14px;line-height:1.4;padding:14px 16px 84px;min-height:600px;position:relative}
-.phone .notch{width:110px;height:30px;background:#0b1118;border-radius:0 0 18px 18px;margin:-14px auto 10px}
+/* The phone, drawn as the demo draws it: a titanium rim with the side buttons, the Dynamic Island in
+   a status bar, iPhone proportions, and the home indicator under the tab bar */
+.phone{width:min(100%,414px);margin:0 auto;background:#0c0e12;border-radius:60px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 2px #3b414b,0 0 0 3.5px #15181d,inset 0 0 0 1px #262b33;position:relative}
+.phone::before,.phone::after{content:"";position:absolute;width:3.5px;border-radius:2px;background:#3b414b}
+.phone::before{left:-5.5px;top:170px;height:62px;box-shadow:0 78px 0 0 #3b414b,0 -56px 0 0 #3b414b}
+.phone::after{right:-5.5px;top:220px;height:96px}
+.phone .glass{background:var(--app-ground);border-radius:49px;overflow:hidden;color:var(--app-text);font-family:var(--app-body);font-size:14px;line-height:1.4;padding:62px 16px 104px;aspect-ratio:390/846;position:relative}
+.phone .statusbar{position:absolute;top:0;left:0;right:0;height:60px;z-index:3;pointer-events:none;background:linear-gradient(var(--app-ground) 0 40px,transparent);display:flex;justify-content:space-between;align-items:flex-start;padding:18px 36px 0 40px;font:600 17px/1 var(--app-body);letter-spacing:-.2px;color:var(--app-text)}
+.phone .statusbar svg{width:50px;height:12px;fill:var(--app-text)}
+.phone .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:122px;height:36px;border-radius:20px;background:#000;z-index:4}
+.phone .homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--app-text);opacity:.85;z-index:5}
 .app-eyebrow{font-family:var(--app-mono);font-size:11px;font-weight:500;letter-spacing:.9px;text-transform:uppercase;color:var(--app-text-2)}
 .app-title{font-family:var(--app-display);font-weight:800;font-size:32px;line-height:1.05;margin:2px 0 12px}
 .app-top{display:flex;justify-content:space-between;align-items:center}
@@ -231,7 +254,7 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .app-slot.later{background:transparent;border:1.5px solid var(--app-hairline)}
 .app-slot.empty{background:transparent;border:1.5px dashed var(--app-hairline)}
 .app-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.app-big{font-family:var(--app-display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.app-big{font-family:var(--app-display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
 .app-sub{font-size:12.5px;color:var(--app-text-2)}
 .app-list{display:grid;gap:0;margin:0;padding:0;list-style:none}
 .app-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--app-hairline)}
@@ -243,7 +266,7 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .app-flag.tomorrow{background:var(--urgency-tomorrow);color:#fff}
 .app-flag.three{background:rgba(255,176,32,.18);color:var(--urgency-three-days-text)}
 .app-flag.week{background:rgba(140,184,242,.18);color:var(--urgency-week)}
-.app-tabs{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:10px 6px 22px;background:rgba(10,16,23,.92);border-top:1px solid var(--app-hairline);backdrop-filter:blur(8px)}
+.app-tabs{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:10px 6px 30px;background:rgba(10,16,23,.92);border-top:1px solid var(--app-hairline);backdrop-filter:blur(8px)}
 .app-tabs > span{font-size:10px;color:var(--app-text-2);display:grid;justify-items:center;gap:4px;position:relative}
 .app-tabs > span svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .app-tabs > span.on{color:var(--app-accent)}
@@ -350,7 +373,8 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .stage{position:sticky;top:calc(80px + env(safe-area-inset-top,0px));display:grid}
 @media (max-width:900px){.stage{position:static}}
 .stage-card{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-hero);padding:26px;display:grid;gap:18px;min-height:360px;align-content:center}
-.stage-title{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 10px}
+/* Two lines always, so the heading keeps its shape as the step label changes length. */
+.stage-title{display:grid;gap:4px;justify-items:start}
 .stage-title .eyebrow{color:var(--site-ink-light)}
 .stage-title b{font-family:var(--site-display);font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--site-amber)}
 .courses{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:0;list-style:none}
@@ -405,7 +429,7 @@ a.reader:hover{background:var(--site-wash-2);border-color:var(--site-amber-line)
 .rule-card .ex s{color:#ffb9a6}
 
 /* CTA + footer */
-.cta{text-align:center;display:grid;gap:22px;justify-items:center;padding-block:clamp(56px,8vw,112px)}
+.cta{text-align:center;display:grid;gap:22px;justify-items:center;align-content:center;padding-block:clamp(56px,8vw,112px);min-height:calc(100svh - 92px)}
 .cta h2{font-size:clamp(40px,7vw,96px);letter-spacing:.02em}
 .cta h2 span{color:var(--site-amber)}
 footer{position:relative;z-index:1;border-top:1px solid var(--site-line);padding-block:24px 36px;font-size:13px;color:rgba(191,214,242,.55)}
@@ -480,14 +504,14 @@ footer a:hover{color:var(--site-amber)}
 
 <section class="band" id="convert">
   <div class="wrap two">
-    <div class="aside reveal">
+    <div class="aside reveal from-left">
       <p class="eyebrow">Try it</p>
       <h2 style="font-size:clamp(32px,4.4vw,56px)">One mark, two provinces</h2>
       <p>Drag the mark. Core16 converts it to NCAA quality points the way each province's outline does, and shows how close the mark sits to the next band. That nearness is what the app calls a cliff, and it only ever shows it for a course still in progress, where the mark can still move.</p>
       <p class="callout">The BC 86 is the highest-value number in the app. One more point, one more quality point.</p>
       <p class="quiet" style="font-size:13.5px">Bands from the NCAA Eligibility Center's September 2026 province outlines. Grade 10 to 12 scale shown; BC Grade 9 uses proficiency words, not percentages.</p>
     </div>
-    <div class="tool reveal">
+    <div class="tool reveal from-right">
       <label for="mark"><span>Report-card mark</span><output id="markOut" for="mark" class="num">85<small>%</small></output></label>
       <input type="range" id="mark" min="40" max="100" value="85" step="1" aria-label="Report-card mark, percent">
       <div class="bands">
@@ -539,17 +563,17 @@ footer a:hover{color:var(--site-amber)}
       <p class="lead">The iPhone app is the record. Courses and marks go in off the report card, it works offline against NCAA's list, and it keeps the hockey log in the same place as the due dates.</p>
     </div>
     <div class="persona">
-      <ul class="points reveal">
+      <ul class="points reveal from-left">
         <li><span class="n">01</span><div><h3>Overview, with no verdict</h3><p>The core courses counted, core GPA against the 2.3 minimum, the next two due dates and the nearest cliff. The app never says "on track" as one word, because the Eligibility Center is the only one who can.</p></div></li>
         <li><span class="n">02</span><div><h3>Add a course, get the answer straight away</h3><p>Search the list for your grade and province, or type one the list doesn't have. A course NCAA won't count says so before it's on the timetable, not after the credit is earned.</p></div></li>
         <li><span class="n">03</span><div><h3>Marks, due dates and reminders</h3><p>Log assignments and the report-card mark. Due dates carry a flag that gets louder as the day comes, and can mirror into a Core16 calendar with an alert the night before.</p></div></li>
         <li><span class="n">04</span><div><h3>Where to focus</h3><p>A course three points from the next band gets a nudge showing the exact core GPA that reaching it would give. Two core courses in one subject at a C or below gets flagged as a pattern worth getting help with.</p></div></li>
         <li><span class="n">05</span><div><h3>Hockey hours beside the homework</h3><p>Practices, games, skills and off-ice sessions, with weekly and season hours and a heads-up when a due date lands on a heavy stretch of ice.</p></div></li>
       </ul>
-      <div class="screen reveal">
+      <div class="screen reveal from-right">
         <div class="phone" role="img" aria-label="The Core16 iPhone app's Overview screen for Maya, Grade 11 in BC: 14 of 16 core courses, core GPA 3.15 with two courses to review, an oral presentation due today">
           <div class="glass">
-            <div class="notch"></div>
+            <div class="statusbar" aria-hidden="true"><span>9:41</span><svg viewBox="0 0 50 12"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="3" width="3" height="9" rx="1"/><rect x="13.5" y="1" width="3" height="11" rx="1"/><rect x="24" y="1" width="22" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="26" y="3" width="16" height="7" rx="1.5"/><rect x="47" y="4.5" width="2" height="4" rx="1"/></svg></div><div class="island"></div>
             <div class="app-top"><div><p class="app-eyebrow">Grade 11 · British Columbia</p><p class="app-title">Overview</p></div><span class="app-initials">MC</span></div>
             <div class="app-panel">
               <header><span class="app-eyebrow">Core courses</span><span class="app-chip">14 of 16</span></header>
@@ -577,6 +601,7 @@ footer a:hover{color:var(--site-amber)}
               <div class="app-row"><div><p class="app-eyebrow">Hockey this week</p><p style="font-size:15px">Two practices, power skating, a road game</p></div><span class="app-big num" style="font-size:28px">6.5<small style="font-size:13px;font-weight:400;color:var(--app-text-2)"> h</small></span></div>
             </div>
             <div class="app-tabs"><span class="on"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 9.5 10 4l6.5 5.5"/><path d="M5.5 8.5V16h9V8.5"/><path d="M8.5 16v-4h3v4"/></svg>Overview</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.5" y="4" width="3" height="12" rx=".6"/><rect x="8" y="4" width="3" height="12" rx=".6"/><path d="m12.4 5.2 2.9-.8 3 11.6-2.9.8z"/></svg>Courses</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="12" height="11" rx="1.5"/><path d="M3 8.5h12M6.5 3v3M11.5 3v3"/><circle cx="15" cy="14.5" r="3.5" fill="#0a1017"/><path d="M15 12.8v1.9l1.3.8"/></svg>Marks<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16.5h14"/><rect x="4" y="9" width="3" height="5"/><rect x="8.5" y="5" width="3" height="9"/><rect x="13" y="11" width="3" height="3"/></svg>GPA<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3 7.6 13.6a2.2 2.2 0 0 1-2 1.1H3.5"/><ellipse cx="14.5" cy="15.5" rx="2.5" ry="1.2"/></svg>Hockey</span></div>
+            <div class="homebar"></div>
           </div>
         </div>
         <p class="try"><a class="btn ghost" href="demo/app/">Try the player's app</a></p>
@@ -584,7 +609,7 @@ footer a:hover{color:var(--site-amber)}
     </div>
 
     <div class="persona flip" style="margin-top:clamp(48px,7vw,96px)">
-      <div class="screen reveal">
+      <div class="screen reveal from-left">
         <div class="laptop" role="img" aria-label="The Core16 Today page on a school laptop: Good morning, Maya. One thing is due today, a road game Thursday.">
           <div class="lid"><div class="glass">
             <div class="st-top"><img src="assets/mark.svg" alt="">Core16 <span>Today</span><nav><b>Today</b>Courses Marks GPA Hockey</nav></div>
@@ -612,7 +637,7 @@ footer a:hover{color:var(--site-amber)}
         </div>
         <p class="try"><a class="btn ghost" href="demo/today/">Try the player at school</a></p>
       </div>
-      <ul class="points reveal">
+      <ul class="points reveal from-right">
         <li><span class="n">06</span><div><h3>Today, on the school laptop</h3><p>A page a player opens each morning at school: what's due today, tomorrow and later this week, the hockey on top of it, and the same two figures the phone shows. It signs in with a short code from the phone, so there's no email to collect and no passkey on a board-managed laptop.</p></div></li>
         <li><span class="n">07</span><div><h3>Changes wait for the phone</h3><p>The phone stays the only writer of the record. An edit made on the laptop or by a parent is held as waiting, and the phone applies it next time it syncs. Nothing changes a player's record behind their back.</p></div></li>
         <li><span class="n">08</span><div><h3>Sessions with a mentor, when an advisor sets them up</h3><p>One-to-one video sessions with a hockey mentor or another professional. Every call has a second adult on it, shown by name, and is never recorded.</p></div></li>
@@ -629,7 +654,7 @@ footer a:hover{color:var(--site-amber)}
       <p class="lead">A parent signs in on the web and sees their child's standing the way an advisor does: the boxes, the core GPA, what's due, and what won't count. They can add practices and due dates to the calendar and enter a report-card mark. Marks a student logged stay theirs to show.</p>
     </div>
     <div class="persona">
-      <div class="screen reveal">
+      <div class="screen reveal from-left">
         <div class="portal" role="img" aria-label="The parent's Core16 page for Maya Chen: 14 of 16 core courses, two courses to review, this week's calendar, a warning that Workplace Mathematics 11 won't count, and a video session that needs a second adult">
           <div class="topbar"><img src="assets/mark.svg" alt="">Core16 <span>Your family</span><span class="me">Claire Chen</span></div>
           <div class="body">
@@ -662,7 +687,7 @@ footer a:hover{color:var(--site-amber)}
         </div>
         <p class="try"><a class="btn ghost" href="demo/parent/">Try the parent's page</a></p>
       </div>
-      <ul class="points reveal">
+      <ul class="points reveal from-right">
         <li><span class="n">01</span><div><h3>The 16 as boxes, never a percentage</h3><p>One box per required course, filled from the left: complete, in progress, then planned. The count under it says how many are counted and how many are finished, so 14 of 16 with ten done reads exactly as it should.</p></div></li>
         <li><span class="n">02</span><div><h3>What won't count, in the words NCAA uses</h3><p>A course on NCAA's excluded list shows as "Won't count" the week it's picked. A course NCAA has never assessed shows as needing a look, and the page says plainly it holds back the 16 until it's settled.</p></div></li>
         <li><span class="n">03</span><div><h3>School and hockey on one calendar</h3><p>Due dates in blue, ice in orange, sessions in amber. Add a weekly practice or a due date here and the player's phone picks it up, marked as a parent's change, when it next syncs.</p></div></li>
@@ -674,7 +699,7 @@ footer a:hover{color:var(--site-amber)}
 
 <section class="band" id="how">
   <div class="wrap how">
-    <div class="stage reveal" id="stage" data-step="1">
+    <div class="stage reveal from-left" id="stage" data-step="1">
       <div class="stage-card">
         <div class="stage-title"><span class="eyebrow">Maya's Grade 10 and 11 courses</span><b id="stageLabel">Step 1 · Entered</b></div>
         <ul class="courses" aria-hidden="true">
@@ -699,13 +724,13 @@ footer a:hover{color:var(--site-amber)}
 
 <section class="band" id="clock">
   <div class="wrap clock">
-    <div class="aside reveal">
+    <div class="aside reveal from-left">
       <p class="eyebrow">Grade 11 and 12 decisions</p>
       <h2 style="font-size:clamp(32px,4.4vw,56px)">How long to play junior is now a date.</h2>
       <p>Under the NCAA's 2026 age rules, a player's five years of eligibility start the fall after their 19th birthday, or when they first enrol in college, whichever comes first. A birthday before 1 September starts it that fall; on or after, the next one.</p>
       <p>Core16 works out the latest fall a player's clock can start from a birth month and year, and how many seasons that leaves after Grade 12 before it does. It's shown as a date, in a neutral colour, and it never touches the course figures.</p>
     </div>
-    <div class="timeline reveal" role="img" aria-label="A player born in October 2009 graduating in 2027: two junior seasons, 2027 and 2028, before the clock starts in fall 2029 and runs to spring 2034">
+    <div class="timeline reveal from-right" role="img" aria-label="A player born in October 2009 graduating in 2027: two junior seasons, 2027 and 2028, before the clock starts in fall 2029 and runs to spring 2034">
       <div class="tl"><span class="yr">2027</span><div class="bar">Graduates Grade 12</div></div>
       <div class="tl"><span class="yr">2027</span><div class="bar jr">Junior season</div></div>
       <div class="tl"><span class="yr">2028</span><div class="bar jr">Junior season</div></div>
@@ -797,6 +822,16 @@ footer a:hover{color:var(--site-amber)}
       entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
     }, {rootMargin:'0px 0px -8% 0px', threshold:0.05});
     Array.prototype.forEach.call(reveals, function(el){ if (el.classList.contains('pre')) io.observe(el); });
+    /* A nav link jumps past whole sections, which the observer never sees: anything the page has
+       scrolled beyond is shown, so a reader who scrolls back up doesn't find it blank. */
+    var catchUp = function(){
+      var vh = window.innerHeight;
+      Array.prototype.forEach.call(document.querySelectorAll('.reveal.pre:not(.in)'), function(el){
+        if (el.getBoundingClientRect().top < vh * 0.92){ el.classList.add('in'); io.unobserve(el); }
+      });
+    };
+    window.addEventListener('scroll', catchUp, {passive:true});
+    window.addEventListener('hashchange', function(){ setTimeout(catchUp, 50); });
   }
 
   /* Grade conversion, from the September 2026 province outlines (Grade 10 to 12 scale). */
@@ -870,7 +905,9 @@ footer a:hover{color:var(--site-amber)}
   }
   show(0);
 
-  /* How it works: the stage follows whichever step is in the middle of the screen. */
+  /* How it works: the stage follows whichever step straddles the centre line of the screen. The band
+     is a thin slice at 50%, so a step takes over when its heading reaches the middle, not when it
+     first shows at the bottom. */
   var stage = document.getElementById('stage'), label = document.getElementById('stageLabel');
   var steps = document.querySelectorAll('.step');
   var labels = {1:'Step 1 · Entered', 2:'Step 2 · Checked against NCAA', 3:'Step 3 · Shared'};
@@ -881,7 +918,7 @@ footer a:hover{color:var(--site-amber)}
   if ('IntersectionObserver' in window){
     var so = new IntersectionObserver(function(entries){
       entries.forEach(function(e){ if (e.isIntersecting) setStep(e.target.getAttribute('data-go')); });
-    }, {rootMargin:'-40% 0px -45% 0px', threshold:0});
+    }, {rootMargin:'-49% 0px -49% 0px', threshold:0});
     Array.prototype.forEach.call(steps, function(s){ so.observe(s); });
   } else { setStep(3); }
   setStep(1);
