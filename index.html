@@ -334,17 +334,20 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .prow em{font-style:normal;color:var(--ink2);font-size:12.5px}
 .cal-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
 @media (max-width:480px){.cal-form{grid-template-columns:1fr}}
-.field{display:grid;gap:4px;font-size:11.5px;color:var(--ink2)}
-.field div{border:1px solid var(--rule2);border-radius:var(--radius-s);padding:7px 10px;font-size:13px;color:var(--ink);background:var(--surface);font-family:var(--sans)}
+.field{display:grid;gap:4px;font-size:11.5px;color:var(--ink2);min-width:0}
+.field div{border:1px solid var(--rule2);border-radius:var(--radius-s);padding:0 10px;min-height:36px;display:flex;align-items:center;font-size:13px;color:var(--ink);background:var(--surface);font-family:var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.panel .note.wait{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0}
+.panel .note.wait .chip{flex:none}
+.panel .note.wait span:last-child{flex:1 1 220px}
 .field div.mono{font-family:var(--mono)}
 
 /* How it works */
 .how{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
 @media (max-width:900px){.how{grid-template-columns:1fr}}
-.stage{position:sticky;top:calc(80px + env(safe-area-inset-top,0px));display:grid;gap:18px}
+.stage{position:sticky;top:calc(80px + env(safe-area-inset-top,0px));display:grid}
 @media (max-width:900px){.stage{position:static}}
 .stage-card{background:var(--site-wash);border:1px solid var(--site-line);border-radius:var(--radius-hero);padding:26px;display:grid;gap:18px;min-height:360px;align-content:center}
-.stage-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.stage-title{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 10px}
 .stage-title .eyebrow{color:var(--site-ink-light)}
 .stage-title b{font-family:var(--site-display);font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--site-amber)}
 .courses{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:0;list-style:none}
@@ -354,9 +357,14 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 [data-step="2"] .courses li.ok,[data-step="3"] .courses li.ok{background:var(--mark-filled);border-color:var(--mark-filled);color:var(--mark-top)}
 [data-step="2"] .courses li.now,[data-step="3"] .courses li.now{background:var(--site-amber);border-color:var(--site-amber);color:var(--site-ink)}
 [data-step="2"] .courses li.x,[data-step="3"] .courses li.x{border-color:#f0897e;color:#f0897e;text-decoration:line-through}
-.readers{display:flex;gap:10px;flex-wrap:wrap;opacity:.25;transition:opacity .5s var(--ease)}
-[data-step="3"] .readers{opacity:1}
-.reader{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--site-ink-light);background:var(--site-ink);border:1px solid var(--site-line-2);border-radius:var(--radius-pill);padding:7px 12px}
+.readers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.readers-slot{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.readers-slot > div{overflow:hidden;min-height:0}
+.readers-card{margin-top:18px;min-height:0;padding:18px 22px 20px;gap:12px;opacity:0;transform:translateY(10px);transition:opacity .45s var(--ease) .1s,transform .45s var(--ease) .1s}
+[data-step="3"] .readers-slot{grid-template-rows:1fr}
+[data-step="3"] .readers-card{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.readers-slot,.readers-card{transition:none}}
+.reader{display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap;font-size:13px;color:var(--site-ink-light);background:var(--site-ink);border:1px solid var(--site-line-2);border-radius:var(--radius-pill);padding:7px 12px}
 .reader i{width:9px;height:9px;border-radius:50%;background:var(--site-amber)}
 .steps{display:grid;gap:clamp(40px,6vw,96px);margin:0;padding:0;list-style:none}
 .step{display:grid;gap:12px;scroll-margin-top:100px}
@@ -628,8 +636,8 @@ footer a:hover{color:var(--site-amber)}
             </section>
             <section class="panel">
               <h3>Add to Maya's calendar</h3>
-              <div class="cal-form"><div class="field">Practice<div>Sunday 1 Nov, 7:00 AM, weekly</div></div><div class="field">Due date<div>Chemistry quiz, Thu 5 Nov</div></div><button class="pbtn primary" type="button" tabindex="-1">Add</button></div>
-              <p class="note"><span class="chip warn">Waiting for Maya's phone</span>&nbsp; A change you make here reaches the app when the phone next syncs.</p>
+              <div class="cal-form"><div class="field">Practice<div>Sun 1 Nov, 7:00 AM, weekly</div></div><div class="field">Due date<div>Chemistry quiz, Thu 5 Nov</div></div><button class="pbtn primary" type="button" tabindex="-1">Add</button></div>
+              <p class="note wait"><span class="chip warn">Waiting for Maya's phone</span><span>A change you make here reaches the app when the phone next syncs.</span></p>
             </section>
             <section class="panel">
               <h3>Video sessions</h3>
@@ -652,15 +660,18 @@ footer a:hover{color:var(--site-amber)}
   <div class="wrap how">
     <div class="stage reveal" id="stage" data-step="1">
       <div class="stage-card">
-        <div class="stage-title"><span class="eyebrow">Maya's Grade 11 timetable</span><b id="stageLabel">Entered</b></div>
+        <div class="stage-title"><span class="eyebrow">Maya's Grade 11 timetable</span><b id="stageLabel">Step 1 · Entered</b></div>
         <ul class="courses" aria-hidden="true">
           <li class="ok">LTST 11</li><li class="ok">CMPS 10</li><li class="ok">LTST 10</li><li class="ok">EN 9</li>
           <li class="ok">PREC 10</li><li class="ok">FMP 10</li><li class="x">WPM 11</li><li class="now">LFS 11</li>
           <li class="ok">SC 10</li><li class="ok">SS 10</li><li class="now">EXPL 11</li><li class="ok">FR 10</li>
           <li class="now">SP 10</li><li class="blank"></li><li class="blank"></li><li class="blank"></li>
         </ul>
-        <div class="readers" aria-hidden="true"><span class="reader"><i></i>Maya's phone</span><span class="reader"><i></i>Today, at school</span><span class="reader"><i></i>Claire's page</span><span class="reader"><i></i>Advisor</span></div>
       </div>
+      <div class="readers-slot" aria-hidden="true"><div><div class="stage-card readers-card">
+        <div class="stage-title"><span class="eyebrow">Step 3 · Who reads the same record</span></div>
+        <div class="readers"><span class="reader"><i></i>Maya's phone</span><span class="reader"><i></i>School laptop</span><span class="reader"><i></i>Parent's page</span><span class="reader"><i></i>Advisor</span></div>
+      </div></div></div>
     </div>
     <ol class="steps">
       <li class="step reveal" data-go="1"><span class="k">Step 1</span><h3>The phone holds the record</h3><p>Courses, marks and due dates go in on the player's iPhone, off the report card, and it works offline. Nothing in Core16 is computed anywhere else first.</p></li>
@@ -846,7 +857,7 @@ footer a:hover{color:var(--site-amber)}
   /* How it works: the stage follows whichever step is in the middle of the screen. */
   var stage = document.getElementById('stage'), label = document.getElementById('stageLabel');
   var steps = document.querySelectorAll('.step');
-  var labels = {1:'Entered', 2:'Checked against NCAA', 3:'Shared'};
+  var labels = {1:'Step 1 · Entered', 2:'Step 2 · Checked against NCAA', 3:'Step 3 · Shared'};
   function setStep(n){
     stage.setAttribute('data-step', n); label.textContent = labels[n];
     Array.prototype.forEach.call(steps, function(s){ s.classList.toggle('on', s.getAttribute('data-go')===String(n)); });
