@@ -7,8 +7,8 @@
 <meta name="description" content="A clickable demo of a parent's Core16 page: their child's 16 core courses, core GPA, what's due, hockey and school on one calendar, and a seat on every video session. Sample data for a fictional Grade 11 student in BC.">
 <link rel="icon" type="image/svg+xml" href="../../assets/mark.svg">
 <script>(function(){try{var t=localStorage.getItem('core16-demo-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<link rel="stylesheet" href="../shared/demo.css">
-<link rel="stylesheet" href="../shared/portal-demo.css">
+<link rel="stylesheet" href="../shared/demo.css?v=2">
+<link rel="stylesheet" href="../shared/portal-demo.css?v=2">
 <style>
 /* Demo-only additions; the portal's own rules are in portal-demo.css. */
 .hidden { display: none !important; }
@@ -31,7 +31,9 @@ main.wrap > :first-child { margin-top: 22px; }
 .agreement { max-width: 720px; }
 .agreement h1 { font-family: var(--display); font-size: 28px; margin: 0 0 8px; }
 .agreement .text { display: grid; gap: 10px; margin: 16px 0; color: var(--ink2); max-width: 65ch; }
-.agreement .sign { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-top: 18px; }
+.agreement .sign { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; margin-top: 18px; }
+.agreement .sign .edit-field { flex: 1 1 240px; }
+.agreement .sign .primary, .agreement .sign .secondary { height: 38px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 16px; text-decoration: none; }
 .call-actions button { cursor: pointer; }
 .docs-form { display: grid; gap: 12px; max-width: 520px; }
 .docs-form .drop { border: 2px dashed var(--rule2); border-radius: var(--radius); padding: 28px; text-align: center; color: var(--ink3); }
@@ -45,7 +47,7 @@ main.wrap > :first-child { margin-top: 22px; }
 <div class="demo-bar"><div class="in">
   <a class="home" href="../../"><img src="../../assets/mark.svg" alt="">CORE<span>16</span><small>demo</small></a>
   <nav aria-label="Demos"><a href="../app/">The player's app</a><a href="../today/">School laptop</a><a href="./" aria-current="page">Parent's page</a></nav>
-  <p class="note"><b>Sample data.</b> Claire Chen is the parent of Maya, a fictional Grade 11 player in BC. Nothing you enter here is saved.</p>
+  <p class="note"><b>Sample data.</b> Maya Chen is a fictional Grade 11 player in BC. Nothing you enter here is saved.</p>
   <button class="reset" type="button" id="reset">Start over</button>
 </div></div>
 
