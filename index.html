@@ -241,10 +241,10 @@ input[type=range]{width:100%;accent-color:var(--site-amber);height:44px;margin:0
 .app-flag.three{background:rgba(255,176,32,.18);color:var(--urgency-three-days-text)}
 .app-flag.week{background:rgba(140,184,242,.18);color:var(--urgency-week)}
 .app-tabs{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:10px 6px 22px;background:rgba(10,16,23,.92);border-top:1px solid var(--app-hairline);backdrop-filter:blur(8px)}
-.app-tabs span{font-size:10px;color:var(--app-text-2);display:grid;justify-items:center;gap:4px;position:relative}
-.app-tabs span::before{content:"";width:18px;height:18px;border-radius:5px;border:1.5px solid currentColor;opacity:.8}
-.app-tabs span.on{color:var(--app-accent)}
-.app-tabs span .n{position:absolute;top:-6px;right:-8px;background:var(--app-bad);color:#fff;font-size:9px;font-weight:700;border-radius:999px;padding:0 5px;line-height:14px}
+.app-tabs > span{font-size:10px;color:var(--app-text-2);display:grid;justify-items:center;gap:4px;position:relative}
+.app-tabs > span svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.app-tabs > span.on{color:var(--app-accent)}
+.app-tabs > span .n{position:absolute;display:inline-block;top:-6px;right:-8px;background:var(--app-bad);color:#fff;font-size:9px;font-weight:700;border-radius:999px;padding:0 5px;line-height:14px}
 
 .laptop{width:min(100%,560px);margin:0 auto}
 .laptop .lid{background:#0b1118;border-radius:18px 18px 4px 4px;padding:12px 12px 10px;box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 0 0 1px rgba(191,214,242,.18)}
@@ -555,7 +555,7 @@ footer a:hover{color:var(--site-amber)}
             <div class="app-panel">
               <div class="app-row"><div><p class="app-eyebrow">Hockey this week</p><p style="font-size:15px">Two practices, one road game</p></div><span class="app-big num" style="font-size:28px">6.5<small style="font-size:13px;font-weight:400;color:var(--app-text-2)"> h</small></span></div>
             </div>
-            <div class="app-tabs"><span class="on">Overview</span><span>Courses</span><span>Marks<span class="n">2</span></span><span>GPA<span class="n">1</span></span><span>Hockey</span></div>
+            <div class="app-tabs"><span class="on"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 9.5 10 4l6.5 5.5"/><path d="M5.5 8.5V16h9V8.5"/><path d="M8.5 16v-4h3v4"/></svg>Overview</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.5" y="4" width="3" height="12" rx=".6"/><rect x="8" y="4" width="3" height="12" rx=".6"/><path d="m12.4 5.2 2.9-.8 3 11.6-2.9.8z"/></svg>Courses</span><span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="12" height="11" rx="1.5"/><path d="M3 8.5h12M6.5 3v3M11.5 3v3"/><circle cx="15" cy="14.5" r="3.5" fill="#0a1017"/><path d="M15 12.8v1.9l1.3.8"/></svg>Marks<span class="n">2</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16.5h14"/><rect x="4" y="9" width="3" height="5"/><rect x="8.5" y="5" width="3" height="9"/><rect x="13" y="11" width="3" height="3"/></svg>GPA<span class="n">1</span></span><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3 7.6 13.6a2.2 2.2 0 0 1-2 1.1H3.5"/><ellipse cx="14.5" cy="15.5" rx="2.5" ry="1.2"/></svg>Hockey</span></div>
           </div>
         </div>
       </div>
