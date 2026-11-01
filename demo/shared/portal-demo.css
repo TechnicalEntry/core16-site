@@ -668,8 +668,8 @@ a.ev:hover { text-decoration: underline; }
 /* A student's pages (student_*.html). */
 .code-form { display: grid; gap: 8px; }
 .code-form input { font-size: 20px; letter-spacing: .08em; text-transform: uppercase; }
-.st-tabs { display: flex; gap: 4px; margin: 0 0 14px; overflow-x: auto; scrollbar-width: none; }
-.st-tabs a { padding: 8px 14px; border-radius: 999px; color: var(--ink2); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.st-tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; margin: 20px 0; padding: 5px; background: var(--surface); border: 1px solid var(--rule2); border-radius: var(--radius); }
+.st-tabs a { padding: 11px 8px; border-bottom: 0; border-radius: var(--radius-s); color: var(--ink); font-size: 16px; font-weight: 600; text-align: center; text-decoration: none; white-space: nowrap; }
 .st-tabs a:hover { background: var(--ice); }
 .st-tabs a[aria-current="page"] { background: var(--ink); color: var(--onink); }
 .st-hero {
@@ -768,6 +768,7 @@ a.ev:hover { text-decoration: underline; }
 .st-balances li { color: var(--ink2); }
 .st-balances b { display: block; color: var(--ink); font: 600 28px var(--display); }
 @media (max-width: 560px) {
+  .st-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .st-item { grid-template-columns: 1fr; gap: 3px; }
   .st-week { gap: 4px; }
   .st-bars li { grid-template-columns: 1fr; gap: 3px; }
