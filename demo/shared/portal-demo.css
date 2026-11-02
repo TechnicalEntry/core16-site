@@ -618,8 +618,8 @@ h1, h2, .count b, .req-total b, .gpa-head b, .figures dd, .cliff .jump { font-fa
 .child-main .agenda { max-width: none; }
 .child-main .agenda li { grid-template-columns: 6.5em minmax(0, 1fr) auto; align-items: center; margin: 0; padding: 12px 0; border-left: none; border-bottom: none; border-top: 1px solid var(--ice); border-radius: 0; font-size: 15px; }
 .child-main .agenda em { font-size: 13.5px; }
-.child-main .agenda .edit-link { padding: 6px 4px; font-size: 14px; font-weight: 600; text-decoration: none; }
-.child-main .agenda .edit-link:hover { text-decoration: underline; }
+.agenda .edit-link { padding: 6px 4px; font-size: 14px; font-weight: 600; text-decoration: none; }
+.agenda .edit-link:hover { text-decoration: underline; }
 .chip.today { color: var(--onhero); background: var(--hero); border-color: var(--hero); font-weight: 600; }
 /* What a parent can add: the calendar buttons first, stacked, the usual one
    filled. */
