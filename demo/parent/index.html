@@ -9,6 +9,7 @@
 <script>(function(){try{var t=localStorage.getItem('core16-demo-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <link rel="stylesheet" href="../shared/demo.css?v=7">
 <link rel="stylesheet" href="../shared/portal-demo.css?v=8">
+<link rel="stylesheet" href="../shared/demo-tour.css?v=1">
 <style>
 /* Demo-only additions; the portal's own rules are in portal-demo.css. */
 /* The homepage's width and gutters, so the strip, the top bar and the page line up with core16.ca */
@@ -59,8 +60,9 @@ main.wrap > :first-child { margin-top: 22px; }
     <svg viewBox="0 0 608 608" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="16.0" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="325.3" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="464.0" y="0.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="309.3" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="325.3" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="154.7" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="0.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="154.7" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/></svg>
     <div>Core16 <span>your family</span></div>
   </div>
-  <div class="me">
+  <div class="me" data-tour="yours">
     <span id="me-name">Claire Chen</span>
+    <button type="button" class="linkbtn" id="tour-start" data-tour-start>Show me around</button>
     <button type="button" class="linkbtn" id="signout">Sign out</button>
     <div class="theme" role="group" aria-label="Appearance">
       <button type="button" data-theme-choice="system">Auto</button>
@@ -81,6 +83,7 @@ main.wrap > :first-child { margin-top: 22px; }
 
 <script src="../shared/bc-courses.js"></script>
 <script src="../shared/core16-demo.js"></script>
+<script src="../shared/demo-tour.js?v=1"></script>
 <script>
 (function () {
   'use strict';
@@ -179,7 +182,7 @@ main.wrap > :first-child { margin-top: 22px; }
   function thisWeek() {
     var ws = C.weekStart(C.today), days = [];
     for (var i = 0; i < 7; i++) days.push(C.addDays(ws, i));
-    return '<div class="panel week"><div class="week-head"><h2>This week</h2><ul class="week-key" aria-hidden="true"><li class="due">School</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul><a href="#calendar">Whole month</a></div><ol class="week-days">' +
+    return '<div class="panel week" data-tour="week"><div class="week-head"><h2>This week</h2><ul class="week-key" aria-hidden="true"><li class="due">School</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul><a href="#calendar">Whole month</a></div><ol class="week-days">' +
       days.map(function (d) {
         var today = C.daysBetween(C.today, d) === 0, evs = eventsOn(d);
         return '<li' + (today ? ' class="today"' : '') + '><span class="dow"><time datetime="' + C.iso(d) + '">' + C.fmt(d, '%a') + '</time>' + (today ? ' · Today' : '') + '</span><b class="date">' + d.getDate() + '</b>' +
@@ -190,15 +193,15 @@ main.wrap > :first-child { margin-top: 22px; }
   function homePage() {
     var out = '';
     if (notice) out += '<p class="notice" role="status">' + h(notice) + '</p>';
-    out += '<section class="panel to-sign' + (agreementSigned ? '' : ' pending') + '"><h2>Documents from Core16</h2><ul class="sign-list"><li><span><a href="#" data-view="agreement">Video sessions consent</a> · for ' + FIRST + '</span>' +
+    out += '<section data-tour="agreements" class="panel to-sign' + (agreementSigned ? '' : ' pending') + '"><h2>Documents from Core16</h2><ul class="sign-list"><li><span><a href="#" data-view="agreement">Video sessions consent</a> · for ' + FIRST + '</span>' +
       (agreementSigned ? '<span class="chip ok">Signed ' + C.fmt(agreementSigned, '%-d %b %Y') + '</span>' : '<a class="primary" href="#" data-view="agreement">Read and sign</a>') + '</li></ul></section>';
     var t = fig.alloc.totals, g = fig.gpa, pace = fig.pace, clockText = fig.clock ? C.clockSummary(fig.clock) : null;
     out += '<section class="sec child" id="student-1"><div class="sechead"><h2>Maya Chen</h2><p>Grade 11 · Southridge Secondary · last updated from ' + FIRST + '’s phone 2 hours ago</p></div><div class="file">';
-    out += '<div class="status-row"><div class="panel status">' + heroGrid() +
+    out += '<div class="status-row"><div class="panel status" data-tour="standing">' + heroGrid() +
       '<div class="req-total"><b>' + unitsText(t.counted) + '</b><p>of 16 core courses counted<br>' + unitsText(t.completed) + ' complete' + (t.planned ? ', ' + unitsText(t.planned) + ' more planned' : '') + '</p></div>' +
       '<ul class="hero-key" aria-hidden="true"><li class="completed">Complete</li><li class="in-progress">In progress</li><li class="planned">Planned</li><li class="unfilled">Still to plan</li></ul>' +
       '<a class="hero-more" href="#core-1" data-open="core-1">See them by category</a></div>';
-    out += '<div class="status-side"><div class="gpa-head"><b>' + C.gpaText(g.gpa) + '</b><p>core GPA<br>minimum ' + fig.minimum.toFixed(1) + '</p><span class="chip ' + (fig.review.length ? 'warn' : fig.above ? 'ok' : 'alarm') + '">' + (fig.review.length ? 'Needs review' : fig.above ? 'Above ' + fig.minimum : 'Below ' + fig.minimum) + '</span></div>';
+    out += '<div class="status-side" data-tour="figures"><div class="gpa-head"><b>' + C.gpaText(g.gpa) + '</b><p>core GPA<br>minimum ' + fig.minimum.toFixed(1) + '</p><span class="chip ' + (fig.review.length ? 'warn' : fig.above ? 'ok' : 'alarm') + '">' + (fig.review.length ? 'Needs review' : fig.above ? 'Above ' + fig.minimum : 'Below ' + fig.minimum) + '</span></div>';
     if (pace) out += '<p class="pace-row"><span>Core pace: ' + unitsText(pace.units) + ' of ' + pace.target + ' core courses through Grade ' + pace.grade + '<span class="by"> · four a year keeps pace for 16. Not an NCAA rule.</span></span><span class="chip ' + (pace.behind ? 'warn' : 'ok') + '">' + (pace.behind ? 'Light' : 'On pace') + '</span></p>';
     out += '<p class="clock-row"><span>Five-year clock: ' + (clockText ? 's' + h(clockText.slice(1)) : 'add ' + FIRST + '’s birth month in the app’s Profile to see when it starts') + '<span class="by"> · NCAA gives five years to play, starting the fall after a player turns 19, or at full-time college enrolment if sooner. A 19th birthday on or after 1 September means the following fall.</span></span></p>';
     if (fig.review.length) out += '<p class="pace-row"><span>' + fig.review.length + ' ' + (fig.review.length === 1 ? 'course needs' : 'courses need') + ' review<span class="by"> · not on the NCAA’s approved list as entered, so ' + (fig.review.length === 1 ? 'it doesn’t' : 'they don’t') + ' count until that’s settled. ' + FIRST + ' or your advisor can say which.</span></span><span class="chip warn">To review</span></p>';
@@ -207,17 +210,17 @@ main.wrap > :first-child { margin-top: 22px; }
     out += thisWeek();
     /* due in the next 14 days, and the calls */
     var dueSoon = C.events(data, C.day(-60), C.day(15)).filter(function (e) { return e.kind === 'due' && !e.done; });
-    out += '<div class="child-cols"><div class="child-main"><div class="panel"><h2>Due in the next 14 days</h2>' + (dueSoon.length ? '<ul class="agenda">' + dueSoon.map(function (e) {
+    out += '<div class="child-cols"><div class="child-main"><div class="panel" data-tour="due"><h2>Due in the next 14 days</h2>' + (dueSoon.length ? '<ul class="agenda">' + dueSoon.map(function (e) {
       var late = e.day < C.today, today = C.daysBetween(C.today, e.day) === 0;
       return '<li class="due' + (late ? ' late' : '') + '"><time datetime="' + C.iso(e.day) + '">' + dateLong(e.day) + '</time><span><b>' + h(e.title) + '</b>' + (e.detail ? '<em>' + h(e.detail) + '</em>' : '') + '</span><span class="item-extras">' + (late ? '<span class="chip warn">Overdue</span>' : today ? '<span class="chip today">Today</span>' : '') + extras(e) + '</span></li>';
     }).join('') + '</ul>' : '<p class="note">Nothing unmarked is due. This shows what ' + FIRST + ' has entered in the app, so work that was never entered isn’t here.</p>') + '</div>';
     var calls = data.bookings.filter(function (b) { return b.booked && b.date >= C.today; });
-    if (calls.length) out += '<div class="panel"><h2>Video sessions</h2><p class="note">Every session has a second adult on the call besides ' + FIRST + ' and the professional: you, another parent, or someone at Core16. Nobody can join until someone is down for it. Either parent can join, whoever is down.</p><ul class="agenda calls">' + calls.map(function (b) {
+    if (calls.length) out += '<div class="panel" data-tour="calls"><h2>Video sessions</h2><p class="note">Every session has a second adult on the call besides ' + FIRST + ' and the professional: you, another parent, or someone at Core16. Nobody can join until someone is down for it. Either parent can join, whoever is down.</p><ul class="agenda calls">' + calls.map(function (b) {
       var mine = b.seat === 'me';
       return '<li class="session"><time datetime="' + C.iso(b.date) + '">' + dateLong(b.date) + '</time><span><b>' + C.clock(b.start) + ' BC time · ' + b.mentor.label + '</b><em>With ' + h(b.mentor.name) + ', ' + b.minutes + ' min</em><em>' + (mine ? 'You’re down as the second adult.' : b.seat ? h(b.seat) + ' is down as the second adult.' : 'Nobody is down as the second adult yet, so the call can’t start.') + '</em></span>' +
         '<span class="call-actions">' + (!b.seat ? '<button type="button" class="secondary" data-seat="' + b.id + '">I’ll be on this call</button>' : mine ? '<button type="button" class="linkbtn" data-unseat="' + b.id + '">I can’t make it</button>' : '') + '</span></li>';
     }).join('') + '</ul></div>';
-    out += '</div><div class="child-side">';
+    out += '</div><div class="child-side" data-tour="add">';
     out += '<div class="panel add-panel"><h2>Report cards and IEP</h2><p class="note">Send photos of ' + FIRST + '’s earlier report cards, and their IEP if they have one, so your Core16 advisor can enter the marks for you.</p><p class="add-links"><a class="secondary" href="#" data-view="documents">Send documents</a></p>' + (documentsSent ? '<p class="note">' + documentsSent + ' ' + (documentsSent === 1 ? 'document' : 'documents') + ' sent to your advisor.</p>' : '') + '</div>';
     var markCourses = data.courses.filter(function (c) { return c.status === 'inProgress' && C.isCore(c); });
     out += '<details class="panel fold" id="marks-1" open><summary><h2>Enter a report-card mark</h2></summary><p class="note">For a course’s latest report card, or its final mark once it’s done. It takes the place of the average ' + FIRST + '’s assignments give, and reaches ' + FIRST + '’s phone the next time the app syncs. A single test or assignment is marked from its own line under "Due", or from the calendar below.</p><ul class="agenda">' +
@@ -229,13 +232,13 @@ main.wrap > :first-child { margin-top: 22px; }
     /* the month */
     var m = monthOf(monthOffset), label = C.MONTHS[m.getMonth()] + ' ' + m.getFullYear(), weeks = weeksOf(m), next = new Date(m.getFullYear(), m.getMonth() + 1, 1);
     out += '<section class="sec" id="calendar"><div class="sechead"><h2>' + label + '</h2><p>School and hockey.</p><nav class="monthnav" aria-label="Month"><a href="#calendar" data-month="-1">← Earlier</a><a href="#calendar" data-month="0">This month</a><a href="#calendar" data-month="1">Later →</a></nav></div>' +
-      '<ul class="cal-key" aria-hidden="true"><li class="due">School (due date)</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul><div class="tablewrap cal-wrap" aria-hidden="true"><table class="cal"><thead><tr>' + C.DOW.map(function (n) { return '<th scope="col">' + n + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      '<ul class="cal-key" aria-hidden="true"><li class="due">School (due date)</li><li class="hockey">Hockey</li><li class="session">Video session</li></ul><div class="tablewrap cal-wrap" data-tour="calendar" aria-hidden="true"><table class="cal"><thead><tr>' + C.DOW.map(function (n) { return '<th scope="col">' + n + '</th>'; }).join('') + '</tr></thead><tbody>' +
       weeks.map(function (wk) { return '<tr>' + wk.map(function (d) {
         var inMonth = d.getMonth() === m.getMonth(), today = C.daysBetween(C.today, d) === 0;
         return '<td class="' + (inMonth ? 'in' : 'out') + (today ? ' today' : '') + '"><span class="date">' + d.getDate() + '</span>' + eventsOn(d).map(function (e) { return evTag(e, true); }).join('') + '</td>';
       }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
     var monthEvents = C.events(data, m, next);
-    out += '<div class="file"><div class="panel"><h2>Everything in ' + label + '</h2>' + (monthEvents.length ? '<ul class="agenda mixed">' + monthEvents.map(function (e) {
+    out += '<div class="file"><div class="panel" data-tour="calendar"><h2>Everything in ' + label + '</h2>' + (monthEvents.length ? '<ul class="agenda mixed">' + monthEvents.map(function (e) {
       return '<li class="' + e.kind + (e.done ? ' done' : '') + '"><span class="when"><time datetime="' + C.iso(e.day) + '">' + dateLong(e.day) + '</time>' + (e.at ? '<span class="at">' + h(e.at) + '</span>' : '') + '<span class="kind">' + {due: 'School', hockey: 'Hockey', session: 'Video session'}[e.kind] + '</span></span><span><b>' + h(e.title) + '</b><em>' + h(e.detail || '') + '</em></span><span class="item-extras">' + (e.kind === 'due' && e.done ? '<span class="chip ok">Marked</span>' : '') + extras(e) + '</span></li>';
     }).join('') + '</ul>' : '<p class="note">Nothing entered for this month.</p>') + '</div></div></section>';
     out += '<p class="fineprint wide">Core16 tracks and flags. Only the NCAA Eligibility Center certifies eligibility. Figures are the latest the program has worked out from what the phone sent. Every view of a student’s record is logged, yours included.</p>';
@@ -334,7 +337,7 @@ main.wrap > :first-child { margin-top: 22px; }
   /* ---------- render and wire ---------- */
   function render() {
     main.innerHTML = !signedIn ? signedOutPage() : form ? formPage() : view === 'agreement' ? agreementPage() : view === 'documents' ? documentsPage() : homePage();
-    document.getElementById('me-name').hidden = !signedIn; document.getElementById('signout').hidden = !signedIn;
+    document.getElementById('me-name').hidden = !signedIn; document.getElementById('signout').hidden = !signedIn; document.getElementById('tour-start').hidden = !signedIn;
     notice = null;
     window.scrollTo({top: 0, behavior: 'instant'});
     wire();
@@ -369,6 +372,26 @@ main.wrap > :first-child { margin-top: 22px; }
     var df = document.getElementById('docs-form'); if (df) df.addEventListener('submit', function (e) { e.preventDefault(); documentsSent++; notice = 'Sent. Your advisor enters the marks and lets you know when they’re in.'; view = 'home'; render(); });
   }
   start();
+
+  /* The portal's cards (tours.py), for this record and saying it's sample data. */
+  function card(key, title, message) { return {key: key, title: title, message: message, view: 'home'}; }
+  C16Tour({
+    name: 'parent',
+    now: function () { return form ? 'form' : view; },
+    open: function (v) { form = null; view = v; render(); },
+    steps: [
+      card('welcome', 'Welcome to Core16', 'Core16 tracks the 16 core courses and the core GPA NCAA asks of Division I and II players. This page is where a parent follows their player. Everything on it is sample data: Maya Chen is made up, and nothing you enter is saved. Here’s a quick look round.'),
+      card('agreements', 'Documents to sign', 'Anything Core16 needs you to read and sign is here, in yellow until it’s done.'),
+      card('standing', 'The 16 core courses', 'Each box is one of the 16 core courses NCAA asks for. They fill in as courses are complete, in progress or planned, in the colours the key shows.'),
+      card('figures', 'GPA and pace', 'Core GPA against the minimum, and the core pace: four courses a year keeps up with 16, though that isn’t an NCAA rule. The five-year clock is when NCAA’s five years to play start. A course that needs review can’t count until it’s settled.'),
+      card('week', 'This week', 'School, hockey and video sessions, a day to a tile. It holds what Maya entered in the app, so work that was never entered isn’t here. Click a due date or a practice to change it.'),
+      card('due', 'What’s due', 'Unmarked work due in the next 14 days. Use Add mark when one comes back, or Edit to change the date.'),
+      card('calls', 'Video sessions', 'Every session needs a second adult on the call. Nobody can join until someone is down for it, and that can be you: use I’ll be on this call.'),
+      card('add', 'Add to the record', 'Here you can add a due date, a practice or a game, enter a report-card mark or send report cards to your Core16 advisor. A change shows here at once, marked as waiting. On the real page it reaches Maya’s phone the next time the app syncs.'),
+      card('calendar', 'The whole month', 'The same school and hockey for the month. Use Earlier and Later to move between months.'),
+      card('yours', 'That’s the page', 'Show me around up here runs this again, and Start over puts the sample record back. On the real page, every view of a student’s record is logged, yours included. Core16 tracks and flags. Only the NCAA Eligibility Center certifies.')
+    ]
+  });
 })();
 </script>
 </body>

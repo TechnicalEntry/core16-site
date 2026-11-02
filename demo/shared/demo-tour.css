@@ -1,0 +1,44 @@
+/* The walkthrough on the parent and Today demos, copied from the portal's portal.css.
+   It sits apart from portal-demo.css because that file is a trimmed copy made in one go,
+   and this is the only part of it the demo's own script needs before the next copy. */
+:root { --tourdim: rgba(6, 16, 30, .55); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --tourdim: rgba(0, 0, 0, .68); }
+}
+:root[data-theme="dark"] { --tourdim: rgba(0, 0, 0, .68); }
+
+/* Show me around makes one more thing in the top bar, which a phone can't fit on a line. */
+@media (max-width: 520px) {
+  .me { flex-wrap: wrap; justify-content: flex-end; }
+  .me > .linkbtn, .me > span { white-space: nowrap; }
+}
+
+.tour {
+  position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 0; border: 0; overflow: hidden; background: transparent; color: var(--ink);
+}
+.tour::backdrop { background: transparent; }
+.tour-dim { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tour-dim .shade { fill: var(--tourdim); }
+.tour-dim .ring { fill: none; stroke: var(--blue); stroke-width: 2; }
+.tour-card {
+  position: absolute; left: 0; right: 0; bottom: 16px; box-sizing: border-box;
+  width: min(520px, calc(100% - 32px)); max-height: calc(100% - 32px); margin-inline: auto; padding: 16px;
+  overflow-y: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 18px;
+  box-shadow: 0 8px 28px var(--backdrop);
+}
+.tour-card.top { top: 16px; bottom: auto; }
+.tour-skip[hidden], .tour-back[hidden] { display: none; }
+.tour-title { display: flex; align-items: center; gap: 10px; min-height: 34px; padding-right: 48px; }
+.tour-title h2 { margin: 0; font: 600 20px var(--display); }
+.tour-step p { margin: 10px 0 0; color: var(--ink2); font-size: 14px; line-height: 1.5; }
+.tour-skip { position: absolute; top: 22px; right: 16px; color: var(--ink3); }
+.tour-foot { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.tour-dots { display: flex; align-items: center; gap: 4px; flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.tour-dots li { width: 6px; height: 6px; border-radius: 3px; background: var(--rule2); }
+.tour-dots li.on { width: 16px; background: var(--ink); }
+.tour-next { flex: none; min-width: 74px; height: 38px; padding: 0 16px; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) {
+  .tour-card.nudge { animation: tour-nudge .22s ease-out; }
+}
+@keyframes tour-nudge { 50% { transform: scale(1.03); } }

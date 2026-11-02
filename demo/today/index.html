@@ -12,6 +12,7 @@
 </script>
 <link rel="stylesheet" href="../shared/demo.css?v=7">
 <link rel="stylesheet" href="../shared/portal-demo.css?v=8">
+<link rel="stylesheet" href="../shared/demo-tour.css?v=1">
 <style>
 /* Demo-only additions. The portal's own rules are in portal-demo.css, untouched. */
 /* The homepage's width and gutters, so the strip, the top bar and the page line up with core16.ca */
@@ -51,8 +52,9 @@
     <svg viewBox="0 0 608 608" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="16.0" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="325.3" y="16.0" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="464.0" y="0.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="170.7" y="170.7" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="309.3" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="154.7" width="144" height="144" rx="30" fill="currentColor"/><rect x="16.0" y="325.3" width="112" height="112" rx="22" fill="none" stroke="#A6BED6" stroke-width="14"/><rect x="154.7" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="309.3" width="144" height="144" rx="30" fill="currentColor"/><rect x="0.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="154.7" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="309.3" y="464.0" width="144" height="144" rx="30" fill="currentColor"/><rect x="464.0" y="464.0" width="144" height="144" rx="30" fill="currentColor"/></svg>
     <div>Core16 <span>today</span></div>
   </div>
-  <div class="me">
+  <div class="me" data-tour="yours">
     <span id="me-name">Maya Chen</span>
+    <button type="button" class="linkbtn" id="tour-start" data-tour-start>Show me around</button>
     <button type="button" class="linkbtn" id="signout">Sign out</button>
     <div class="theme" role="group" aria-label="Appearance">
       <button type="button" data-theme-choice="system">Auto</button>
@@ -76,6 +78,7 @@
 
 <script src="../shared/bc-courses.js"></script>
 <script src="../shared/core16-demo.js"></script>
+<script src="../shared/demo-tour.js?v=1"></script>
 <script>
 (function () {
   'use strict';
@@ -203,11 +206,11 @@
     var tomorrow = all.filter(function (e) { return C.daysBetween(C.today, e.day) === 1 && !(e.kind === 'due' && e.done); });
     var ahead = all.filter(function (e) { var n = C.daysBetween(C.today, e.day); return e.kind === 'due' && !e.done && n > 1 && n <= 7; });
     var summary = (overdue.length ? overdue.length + ' overdue. ' : '') + (todays.length ? todays.length + ' on today.' : overdue.length ? '' : 'Nothing entered for today.');
-    var hero = '<section class="st-hero"><div class="st-hello"><p class="st-date">' + C.fmt(C.today, '%A, %B %-d') + '</p><h1>' + greeting + ', Maya.</h1><p>' + summary + '</p>' +
+    var hero = '<section class="st-hero" data-tour="standing"><div class="st-hello"><p class="st-date">' + C.fmt(C.today, '%A, %B %-d') + '</p><h1>' + greeting + ', Maya.</h1><p>' + summary + '</p>' +
       (fig.clock ? '<p class="st-clock">Five-year clock: ' + h(C.clockSummary(fig.clock)) + '</p>' : '') + '</div>' +
       '<a class="st-dial" href="#" data-tab="courses">' + coreRing() + '</a><a class="st-dial" href="#" data-tab="gpa">' + gpaGauge() + '</a></section>';
     var review = fig.review.length ? '<p class="st-waiting"><b>' + fig.review.length + ' core ' + (fig.review.length === 1 ? 'course needs' : 'courses need') + ' review.</b> <a href="#" data-tab="courses">See which</a>. Nothing here can say you’re on track until that’s settled.</p>' : '';
-    var week = '<ol class="st-week" aria-label="The next seven days">';
+    var week = '<ol class="st-week" data-tour="week" aria-label="The next seven days">';
     for (var i = 0; i < 7; i++) {
       var d = C.day(i), evs = all.filter(function (e) { return C.daysBetween(d, e.day) === 0 && !(e.kind === 'due' && e.done); });
       if (i === 0) evs = evs.concat(overdue);
@@ -224,7 +227,7 @@
 
   function coursesPage() {
     var pace = fig.pace;
-    var top = '<h1 class="st-head">Courses</h1><section class="panel"><h2>Your 16 core courses</h2>' + coreSlots('st') +
+    var top = '<h1 class="st-head">Courses</h1><section class="panel" data-tour="courses"><h2>Your 16 core courses</h2>' + coreSlots('st') +
       (pace ? '<p class="st-pace"><b>' + unitsText(pace.units) + ' of ' + pace.target + '</b> core courses through Grade ' + pace.grade + '. <span class="chip ' + (pace.behind ? 'warn' : 'ok') + '">' + (pace.behind ? 'Light' : 'On pace') + '</span> <span class="quiet">Four a year is arithmetic, not an NCAA rule.</span></p>' : '') + '</section>';
     var grades = [12, 11, 10, 9].filter(function (g) { return data.courses.some(function (c) { return c.grade === g; }); });
     var sections = grades.map(function (g) {
@@ -255,7 +258,7 @@
     var late = all.filter(function (e) { return !e.done && e.day < C.today; });
     var coming = all.filter(function (e) { return !e.done && e.day >= C.today; });
     var done = C.marked(data);
-    var head = '<div class="st-headrow"><h1 class="st-head">Marks and due dates</h1><a class="primary" href="#" data-form="due_date" data-id="new">Add a due date</a></div>';
+    var head = '<div class="st-headrow" data-tour="marks"><h1 class="st-head">Marks and due dates</h1><a class="primary" href="#" data-form="due_date" data-id="new">Add a due date</a></div>';
     var out = head + (late.length ? '<section class="panel st-late"><h2>Overdue</h2><ul class="st-list">' + late.map(function (e) { return eventRow(e, true); }).join('') + '</ul></section>' : '') +
       '<section class="panel"><h2>Coming up</h2>' + (coming.length ? '<ul class="st-list">' + coming.map(function (e) { return eventRow(e, true); }).join('') + '</ul>' : '<p>Nothing due that’s been entered.</p>') + '</section>' +
       '<section class="panel"><h2>Marked</h2>' + (done.length ? '<ul class="st-list">' + done.map(function (a) {
@@ -269,7 +272,7 @@
 
   function gpaPage() {
     var g = fig.gpa, why = fig.review.length ? (fig.review.length === 1 ? fig.review[0].title + ' isn’t' : fig.review.map(function (c) { return c.title; }).join(' and ') + ' aren’t') + ' on NCAA’s approved list as entered, so this GPA can’t be relied on until that’s settled.' : '';
-    var out = '<h1 class="st-head">GPA</h1><section class="panel st-gpa">' + gpaGauge() + '<div>' +
+    var out = '<h1 class="st-head">GPA</h1><section class="panel st-gpa" data-tour="gpa">' + gpaGauge() + '<div>' +
       (fig.review.length ? '<span class="chip warn">Needs review</span><p>' + h(why) + '</p>' : fig.above ? '<span class="chip ok">Above the minimum</span>' : '<span class="chip alarm">Below the minimum</span>') +
       '<p class="quiet">Over ' + unitsText(g.units) + ' core ' + (g.units === 1 ? 'unit' : 'units') + ' with a mark.</p></div></section>';
     if (fig.cliffs.length) out += '<section class="panel"><h2>Where a few points would move it</h2><ul class="st-cliffs">' + fig.cliffs.map(function (cl) {
@@ -294,7 +297,7 @@
       return '<rect class="bar' + (w.current ? ' current' : '') + '" x="' + x + '" y="' + (100 - hgt) + '" width="28" height="' + hgt + '" rx="4"><title>Week of ' + label + ': ' + (w.logged + w.planned) + ' min</title></rect><text x="' + (x + 14) + '" y="116">' + label + '</text>';
     }).join('');
     var out = '<div class="st-headrow"><h1 class="st-head">Hockey</h1><a class="primary" href="#" data-form="ice_session" data-id="new">Add a session</a></div>' +
-      '<section class="panel st-rink"><div class="st-stats"><p><b>' + C.hours(ice.season) + '</b> hours logged</p><p><b>' + ice.gamesPlayed + '</b> ' + (ice.gamesPlayed === 1 ? 'game' : 'games') + ' played</p></div>' +
+      '<section class="panel st-rink" data-tour="hockey"><div class="st-stats"><p><b>' + C.hours(ice.season) + '</b> hours logged</p><p><b>' + ice.gamesPlayed + '</b> ' + (ice.gamesPlayed === 1 ? 'game' : 'games') + ' played</p></div>' +
       '<svg viewBox="0 0 320 124" role="img" aria-label="Minutes at the rink each week for the last eight weeks">' + bars + '<line x1="0" x2="320" y1="100" y2="100"/></svg></section>';
     var up = live.upcoming.map(function (s) { return C.events(data, s.date, C.addDays(s.date, 1)).filter(function (e) { return e.item === s; })[0]; });
     var logged = live.logged.map(function (s) { return C.events(data, s.date, C.addDays(s.date, 1)).filter(function (e) { return e.item === s; })[0]; });
@@ -307,7 +310,7 @@
     var booked = data.bookings.filter(function (b) { return b.booked; }), open = data.bookings.filter(function (b) { return !b.booked; });
     var left = {}; Object.keys(C.CREDITS).forEach(function (k) { left[k] = C.CREDITS[k] - booked.filter(function (b) { return b.mentor.specialty === k; }).length; });
     function when(b) { return '<span class="st-when"><b>' + C.fmt(b.date, '%a') + '</b> ' + dayText(b.date) + '<br>' + C.clock(b.start) + '</span>'; }
-    var out = '<h1 class="st-head">Video sessions</h1><section class="panel"><h2>Sessions left</h2><ul class="st-balances">' + Object.keys(left).map(function (k) { return '<li><b>' + left[k] + '</b>' + SPECIALTY[k] + '</li>'; }).join('') + '</ul></section>' +
+    var out = '<h1 class="st-head">Video sessions</h1><section class="panel" data-tour="sessions"><h2>Sessions left</h2><ul class="st-balances">' + Object.keys(left).map(function (k) { return '<li><b>' + left[k] + '</b>' + SPECIALTY[k] + '</li>'; }).join('') + '</ul></section>' +
       '<section class="panel"><h2>Booked</h2>' + (booked.length ? '<ul class="st-list">' + booked.map(function (b) {
         return '<li class="st-item session">' + when(b) + '<span class="st-what"><b>' + SPECIALTY[b.mentor.specialty] + '</b><em>With ' + h(b.mentor.name) + ', ' + b.minutes + ' min</em><em>Join from the Core16 app on your phone.</em></span><span class="st-actions"><button type="button" class="linkbtn danger" data-cancel="' + b.id + '">Cancel</button></span></li>';
       }).join('') + '</ul>' : '<p>Nothing booked.</p>') + '</section>' +
@@ -461,6 +464,24 @@
     }); });
   }
   start();
+
+  /* The portal's cards (tours.py), for this record and saying it's sample data. */
+  C16Tour({
+    name: 'today',
+    now: function () { return form ? 'form' : view; },
+    open: function (v) { form = null; view = v; render(); },
+    steps: [
+      {key: 'welcome', view: 'today', title: 'Welcome to Core16', message: 'This is what a player opens at school: the same record as the app on their phone. You’re seeing it as Maya Chen, who is made up. Everything here is sample data, and nothing you enter is saved. Here’s a quick look at each tab.'},
+      {key: 'standing', view: 'today', title: 'Where you stand', message: 'The ring counts core courses toward 16, with this year’s in amber. Beside it is your core GPA against the minimum. Click either one for more.'},
+      {key: 'week', view: 'today', title: 'Your week', message: 'The next seven days, with a dot for each thing on a day. What’s overdue, today’s work and tomorrow’s are listed under it, with a link to add a mark or change a time.'},
+      {key: 'courses', view: 'courses', title: 'Your 16 core courses', message: 'Your courses by grade, and whether each counts. You can add one from NCAA’s list for British Columbia further down this page. A course NCAA doesn’t list, or a change to one you have, is done in the app.'},
+      {key: 'marks', view: 'marks', title: 'Marks and due dates', message: 'Add assignments and tests with their due dates, then the mark when it comes back. When a report card arrives, put that mark on the course itself, under Courses: it counts ahead of the average.'},
+      {key: 'gpa', view: 'gpa', title: 'Your core GPA', message: 'NCAA turns each mark into points, and your province sets the cut-offs. In British Columbia, 86% and up is a 4. When a course is a few points from the next band, this page says what reaching it would do to your GPA.'},
+      {key: 'hockey', view: 'hockey', title: 'Hockey', message: 'Add practices and games, and see your hours add up week by week. Your Core16 advisor sees them too. NCAA has no rule about it.'},
+      {key: 'sessions', view: 'sessions', title: 'Video sessions', message: 'See how many sessions you have left, and book or cancel a time. Joining the call happens in the app on your phone.'},
+      {key: 'yours', view: 'today', title: 'Your phone keeps the record', message: 'On the real page, a change you make here waits for your phone, and your GPA and core count update once the app has synced. Show me around, up here, runs this again, and Start over puts the sample record back. Core16 tracks and flags. Only the NCAA Eligibility Center certifies.'}
+    ]
+  });
 })();
 </script>
 </body>
