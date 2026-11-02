@@ -748,8 +748,8 @@ a.ev:hover { text-decoration: underline; }
 .st-pace { margin: 12px 0 0; }
 .st-gpa { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
 .st-gpa p { margin: 8px 0 0; }
-.st-cliffs li { padding: 8px 0; border-top: 1px solid var(--rule); }
-.st-cliffs li:first-child { border-top: 0; }
+.st-cliffs { display: grid; gap: 8px; justify-items: start; }
+.st-cliffs li { padding: 10px 16px; border: 1px solid var(--inforule); border-radius: 20px; background: var(--infobg); color: var(--blue); font-weight: 500; }
 .st-bars li { display: grid; grid-template-columns: minmax(120px, 240px) 1fr; align-items: center; gap: 14px; padding: 6px 0; }
 .st-bar-label em { margin-left: 8px; color: var(--ink2); font: 500 13px var(--mono); }
 .st-bars svg { display: block; width: 100%; height: 12px; }
