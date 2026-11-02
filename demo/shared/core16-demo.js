@@ -147,6 +147,7 @@ window.C16 = (function () {
       a('Explorations in Social Studies 11', 'Case study presentation', 'Presentation', 7, 10, null, 25),
       a('Literary Studies 11', 'Novel study proposal', 'Assignment', 14, 5, null, 20)
     ];
+    laterWork(a).forEach(function (w) { assignments.push(w); });
     return {
       profile: {name: 'Maya Chen', first: 'Maya', initials: 'MC', province: 'BC', provinceName: 'British Columbia', grade: 11,
                 school: 'Southridge Secondary', gradYear: 2028, division: 'd1', birthYear: 2010, birthMonth: 10, attendsUSSchool: false,
@@ -159,7 +160,28 @@ window.C16 = (function () {
     };
   }
 
-  /* The hockey log the app seeds for every demo student: six weeks behind, two ahead.
+  /* The rest of the year's school work and hockey run this far ahead, as the app's
+     sample data does (SampleData.daysAhead): the end of June from the start of November. */
+  var DAYS_AHEAD = 238;
+  var LATER_COURSES = [
+    ['Life Sciences 11', ['Lab', 'Quiz', 'Test']], ['Workplace Mathematics 11', ['Test', 'Quiz', 'Assignment']],
+    ['Explorations in Social Studies 11', ['Essay', 'Presentation', 'Test']],
+    ['Core French 11', ['Quiz', 'Presentation', 'Assignment']], ['Literary Studies 11', ['Essay', 'Presentation', 'Test']]
+  ];
+  var LATER_TITLES = {Test: function (n) { return 'Unit ' + n + ' test'; }, Quiz: function (n) { return 'Quiz ' + n; }, Lab: function (n) { return 'Lab report ' + n; },
+                      Essay: function (n) { return 'Essay ' + n; }, Presentation: function (n) { return 'Presentation ' + n; }, Assignment: function (n) { return 'Assignment ' + n; }};
+  function laterWork(a) {
+    var work = [], rounds = {}, numbers = {};
+    for (var off = 17, turn = 0; off <= DAYS_AHEAD; off += turn % 2 ? 4 : 3, turn++) {
+      var c = LATER_COURSES[turn % LATER_COURSES.length], r = rounds[c[0]] || 0, kind = c[1][r % c[1].length], key = c[0] + kind;
+      rounds[c[0]] = r + 1;
+      numbers[key] = (numbers[key] || 1) + 1;
+      work.push(a(c[0], LATER_TITLES[kind](numbers[key]), kind, off, 2, null, 40));
+    }
+    return work;
+  }
+
+  /* The hockey log the app seeds for every demo student: six weeks behind, the rest of the year ahead.
      Practices Tuesday and Thursday, power skating every other Wednesday, a game each
      Saturday and every other one on the road, plus a road game two days out. */
   var OPPONENTS = ['vs Nepean', 'at Cornwall', 'vs Pembroke', 'at Brockville', 'vs Kanata', 'at Smiths Falls', 'vs Carleton Place', 'at Hawkesbury', 'vs Rockland'];
@@ -168,7 +190,7 @@ window.C16 = (function () {
     var out = [];
     var road = day(2);
     out.push({id: 'i' + (nextID++), date: road, kind: 'game', title: 'at Kingston', minutes: 150, travel: 210, start: 19 * 60 + 30, toi: null, series: null, by: null});
-    for (var off = -42; off <= 14; off++) {
+    for (var off = -42; off <= DAYS_AHEAD; off++) {
       var d = day(off);
       if (daysBetween(d, road) === 0) continue;
       var week = Math.floor((off + 42) / 7), wd = d.getDay();

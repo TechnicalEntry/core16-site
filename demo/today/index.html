@@ -298,7 +298,7 @@
       '<svg viewBox="0 0 320 124" role="img" aria-label="Minutes at the rink each week for the last eight weeks">' + bars + '<line x1="0" x2="320" y1="100" y2="100"/></svg></section>';
     var up = live.upcoming.map(function (s) { return C.events(data, s.date, C.addDays(s.date, 1)).filter(function (e) { return e.item === s; })[0]; });
     var logged = live.logged.map(function (s) { return C.events(data, s.date, C.addDays(s.date, 1)).filter(function (e) { return e.item === s; })[0]; });
-    out += '<section class="panel"><h2>Coming up</h2>' + (up.length ? '<ul class="st-list">' + up.map(function (e) { return eventRow(e, true); }).join('') + '</ul>' : '<p>Nothing entered.</p>') + '</section>' +
+    out += '<section class="panel"><h2>Coming up</h2>' + (up.length ? '<ul class="st-list">' + up.slice(0, 8).map(function (e) { return eventRow(e, true); }).join('') + '</ul>' + (up.length > 8 ? '<details class="st-more"><summary>Show all ' + up.length + '</summary><ul class="st-list">' + up.slice(8).map(function (e) { return eventRow(e, true); }).join('') + '</ul></details>' : '') : '<p>Nothing entered.</p>') + '</section>' +
       '<section class="panel"><h2>Logged</h2>' + (logged.length ? '<ul class="st-list">' + logged.map(function (e) { return eventRow(e, true); }).join('') + '</ul>' : '<p>Nothing logged yet.</p>') + '</section>';
     return shell(out);
   }
