@@ -620,6 +620,12 @@ h1, h2, .count b, .req-total b, .gpa-head b, .figures dd, .cliff .jump { font-fa
 .child-main .agenda em { font-size: 13.5px; }
 .agenda .edit-link { padding: 6px 4px; font-size: 14px; font-weight: 600; text-decoration: none; }
 .agenda .edit-link:hover { text-decoration: underline; }
+/* A parent's report-card list: the mark where a date goes elsewhere, so what's
+   missing shows down one column. Words as well as colour say which is which. */
+.marks-count { margin: 10px 0 0; font-size: 14px; font-weight: 600; }
+.agenda.marks .entered { border-left-color: var(--ok); }
+.mark-figure { font: 500 15px var(--mono); overflow-wrap: anywhere; }
+.agenda.marks .missing .mark-figure { font: 400 13px var(--sans); color: var(--ink2); }
 .chip.today { color: var(--onhero); background: var(--hero); border-color: var(--hero); font-weight: 600; }
 /* What a parent can add: the calendar buttons first, stacked, the usual one
    filled. */
