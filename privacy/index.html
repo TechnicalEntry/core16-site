@@ -131,6 +131,7 @@
   <li><strong>Link codes</strong>: a short one-time code our staff give you so the app can connect to the student's record. A code works once and expires after 7 days.</li>
   <li><strong>Device tokens</strong>: once linked, the phone holds a token that lets it sync. We store only a scrambled (hashed) version of it, not the token itself.</li>
   <li><strong>Phone number</strong>, only if you ask us to text you a code. See section 5.</li>
+  <li><strong>Push address</strong>: if you allow notifications on a student's phone, the address Apple gives the app there, so we can update the number on the app's icon when an advisor replies to a question the student sent. That number is all we send this way: no words, and no names.</li>
 </ul>
 
 <h3>What we don't collect</h3>
@@ -266,7 +267,7 @@
     <tr><td>DigitalOcean</td><td>Hosts our servers and database</td><td>All stored records (encrypted in transit)</td><td>Toronto, Canada</td></tr>
     <tr><td>Twilio</td><td>Sends link-code texts</td><td>Phone number, code and link</td><td>United States</td></tr>
     <tr><td>Stripe <mark>[when billing launches]</mark></td><td>Payments, invoices and sales tax</td><td>Parent's name, email and payment details</td><td><mark>[Canada / United States: confirm]</mark></td></tr>
-    <tr><td>Apple</td><td>App distribution; Sign in with Apple for students <mark>[not built yet]</mark></td><td>Apple ID sign-in identifier</td><td>United States</td></tr>
+    <tr><td>Apple</td><td>App distribution; delivering the number on the app's icon; Sign in with Apple for students <mark>[not built yet]</mark></td><td>The phone's push address and that number; Apple ID sign-in identifier</td><td>United States</td></tr>
     <tr><td><mark>[Email provider, not chosen yet]</mark></td><td>Our mailboxes for emails with families</td><td>Email addresses and message content</td><td><mark>[confirm]</mark></td></tr>
     <tr><td><mark>[Sign-in email service, if separate]</mark></td><td>Sends sign-in links and account notices</td><td>Email address and message content</td><td><mark>[confirm]</mark></td></tr>
   </tbody>
@@ -300,6 +301,7 @@
     <tr><td>Staff access log</td><td><mark>5 years (placeholder, needs counsel)</mark></td></tr>
     <tr><td>Advisor contact log</td><td><mark>[Not set yet: needs counsel]</mark></td></tr>
     <tr><td>Link codes</td><td>Stop working after one use or 7 days <mark>[confirm when used and expired codes are deleted]</mark></td></tr>
+    <tr><td>A phone's push address</td><td>No longer used once the phone is unlinked, and removed if Apple tells us the app is gone. Otherwise deleted with the student's information. <mark>[needs counsel]</mark></td></tr>
     <tr><td>Email addresses on an account</td><td>Deleted with the account</td></tr>
     <tr><td>Emails with families</td><td><mark>[Not set yet: needs counsel]</mark></td></tr>
     <tr><td>Phone numbers for texts</td><td>Not stored by us. Twilio's retention applies (section 5).</td></tr>
