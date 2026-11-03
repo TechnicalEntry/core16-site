@@ -268,9 +268,9 @@
 
 <h3>Where email goes, and how long it's kept</h3>
 <ul>
-  <li><strong>Resend</strong> sends the emails Core16 sends automatically, and sees the address and the message. <mark>[Confirm where Resend stores them and for how long.]</mark></li>
-  <li><strong>Our mailbox provider</strong> will store the emails advisors send and receive. <mark>[Name it once chosen.]</mark></li>
-  <li>When an advisor emails your family, a short note of it goes in the student's contact log (section 2). The contact log keeps a summary, not a copy of the email.</li>
+  <li><strong>Resend</strong> sends the emails Core16 sends automatically and the emails an advisor writes to you from the portal, and receives your replies to them, and sees the address and the message of each. <mark>[Confirm where Resend stores them and for how long.]</mark></li>
+  <li><strong>Our mailbox provider</strong> will store emails advisors send and receive from their own mailboxes. <mark>[Name it once chosen. Advisors' own mailboxes aren't set up yet.]</mark></li>
+  <li>When an advisor emails your family from the portal, the email comes from an address that belongs to the student's record. Its subject and message go in the student's contact log (section 2), word for word, and so does your reply, along with the address it came from. Staff who can see the student's file can read it. Attachments to a reply aren't kept, only their file names. When an advisor writes from their own mailbox, a short note of it goes in the log instead.</li>
   <li>We keep emails in our mailboxes <mark>[period: needs counsel; likely the same as the contact log]</mark>. An email address on an account is deleted with the account.</li>
 </ul>
 <p>
@@ -322,6 +322,7 @@
 <h3>What we keep</h3>
 <ul>
   <li><strong>The conversation: nothing.</strong> It stays on the phone's screen until you leave it, or in that browser tab until you close it or sign out. Nobody can read it back later: not you, not your advisor and not Core16, so we hold no record of what Ask Core16 said. <mark>[Needs counsel.]</mark></li>
+  <li><strong>How much it's used.</strong> We count how many questions a student asks, and how many each parent asks about them, on which days, whether on the phone or the web, and how many read the student's own figures, so the student's advisor can see it's being used. We never keep what was asked. Counting began with the wording that says so.</li>
   <li><strong>A question you choose to send to an advisor.</strong> A button under each answer does this, and it asks first. We then keep that question, its answer and anything you add, but not the rest of the conversation. Every Core16 advisor and administrator can read it.</li>
   <li><strong>The advisor's reply</strong> shows on the screens of whoever asked, and goes in the contact log. A student's question and its reply aren't shown on a parent's page, and a parent's aren't shown to the student. <mark>[Needs counsel, and a qualified person: an adult replying in writing to a minor.]</mark></li>
   <li><strong>A follow-up</strong> you write to a reply goes to the advisor and not to Ask Core16, and we keep it the same way.</li>
@@ -432,7 +433,7 @@
     <tr><td>DigitalOcean</td><td>Hosts our servers and database</td><td>All stored records (encrypted in transit)</td><td>Toronto, Canada</td></tr>
     <tr><td>Twilio</td><td>Sends texts, and connects an advisor's phone calls to parents</td><td>Phone numbers; a text's wording and link; when a call happened and how long it lasted, and the call itself as it passes through</td><td>United States</td></tr>
     <tr><td>Daily</td><td>Runs video sessions, if a parent has consented (section 8)</td><td>Live video and sound as they pass through, not stored; each person's display name, a student's first name</td><td>Usually the United States</td></tr>
-    <tr><td>Resend</td><td>Sends the emails Core16 sends automatically (section 6)</td><td>Email address and message, which doesn't name a student</td><td><mark>[United States: confirm]</mark></td></tr>
+    <tr><td>Resend</td><td>Sends the emails Core16 sends automatically and the emails an advisor writes from the portal, and receives replies to those (section 6)</td><td>Email address and message. An automatic email doesn't name a student; an advisor's message or a family's reply can</td><td><mark>[United States: confirm]</mark></td></tr>
     <tr><td>Stripe <mark>[when billing launches]</mark></td><td>Payments, invoices and sales tax</td><td>Parent's name, email and payment details</td><td><mark>[Canada / United States: confirm]</mark></td></tr>
     <tr><td>Anthropic</td><td>Runs Ask Core16, if a parent has consented and the student has agreed (section 7)</td><td>What's typed, the province and today's date; a student's courses, marks and figures if a question is about them. Not their name, school or birth date.</td><td>United States</td></tr>
     <tr><td>Apple</td><td>App distribution; delivering notifications to the Core16 Portal app and the number on the family app's icon; Sign in with Apple for students <mark>[not built yet]</mark></td><td>The device's push address and the notification, which never names a student; Apple ID sign-in identifier</td><td>United States</td></tr>
@@ -471,6 +472,7 @@
     <tr><td>Advisor contact log</td><td><mark>[Not set yet: needs counsel]</mark></td></tr>
     <tr><td>Link codes</td><td>Stop working after one use or 7 days <mark>[confirm when used and expired codes are deleted]</mark></td></tr>
     <tr><td>Ask Core16 conversations</td><td>Not kept by us (section 7). Anthropic's retention applies. <mark>[confirm the period]</mark></td></tr>
+    <tr><td>How many Ask Core16 questions were asked, and on which days</td><td><mark>[Not set yet: needs counsel]</mark> Kept until the student's information is deleted.</td></tr>
     <tr><td>Video session bookings, who joined and for how long, and sessions left</td><td><mark>[Not set yet: needs counsel; five years is the working idea]</mark> Kept until the student's information is deleted.</td></tr>
     <tr><td>Video and sound from a session</td><td>Never kept. Calls aren't recorded.</td></tr>
     <tr><td>Questions sent to an advisor, and the answers they got</td><td><mark>[Not set yet: needs counsel]</mark> Kept until the student's information is deleted.</td></tr>
