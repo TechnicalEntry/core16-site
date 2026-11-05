@@ -73,7 +73,7 @@
 </div>
 
 <h1>Privacy Policy</h1>
-<p class="meta">Version <mark>0.4 (draft)</mark> · Last updated <mark>2 November 2026</mark></p>
+<p class="meta">Version <mark>0.5 (draft)</mark> · Last updated <mark>4 November 2026</mark></p>
 
 <p>
   Core16 helps Canadian high school hockey players and their families keep
@@ -95,7 +95,7 @@
   <li>We store student records in Canada (Toronto).</li>
   <li>We don't sell information, show ads, or use analytics or tracking tools in the app.</li>
   <li><strong>Ask Core16 and video sessions are optional, and stay off without consent.</strong> Neither is needed to use the rest of Core16, and refusing either changes nothing else.</li>
-  <li>Ask Core16, our AI assistant, is off for a student until a parent consents and the student agrees too. It sends what's typed to Anthropic in the United States, and can send a student's courses and marks, but not their name, school or birth date. See section 7.</li>
+  <li>Ask Core16, our AI assistant, is off for a student until a parent consents and the student agrees too. It sends what's typed to Anthropic in the United States, and can send a student's courses and marks, but not their name, school or birth date. Once a parent consents, our advisors can ask it about that student too. See section 7.</li>
   <li>A video session with a professional can't be booked until a parent consents. Calls run through Daily, usually in the United States, and are never recorded. See section 8.</li>
   <li>If we text you a link code, the text contains only the code and a link, and we don't keep your phone number.</li>
   <li>We use email addresses to sign you in and to work with your family, never to send marketing you haven't agreed to.</li>
@@ -337,11 +337,25 @@
 
 <h3>Our staff</h3>
 <p>
-  Our advisors and administrators can use Ask Core16 too, for questions about the
-  rules. No student's record goes with their questions, and we tell them not to
-  type a student's name or details. That is our instruction to them, not
-  something the system prevents. <mark>[Needs counsel before real families'
-  records are in the advisor portal.]</mark>
+  Our advisors and administrators can use Ask Core16 too. Asked from anywhere in
+  the advisor portal, it answers questions about the rules, and no student's
+  record goes with them.
+</p>
+<p>
+  <strong>Asked from a student's file, it can read that student's figures</strong>,
+  so an advisor can prepare for a conversation with the family. This needs a
+  parent's signed consent, which says so, and stops when the parent withdraws it.
+  It doesn't need the student's own agreement. <mark>[Needs counsel: whether the
+  student should agree to this as well.]</mark> A question that needs the figures
+  sends the same list as above and nothing else on the file, such as notes of our
+  conversations with the family. We record each time a staff member's question
+  reads a student's figures, but not the words, and these questions aren't counted
+  with the family's.
+</p>
+<p>
+  We tell staff not to type a student's name or details. That is our instruction
+  to them, not something the system prevents. <mark>[Needs counsel before real
+  families' records are in the advisor portal.]</mark>
 </p>
 
 <h3>On a school laptop</h3>
@@ -435,7 +449,7 @@
     <tr><td>Daily</td><td>Runs video sessions, if a parent has consented (section 8)</td><td>Live video and sound as they pass through, not stored; each person's display name, a student's first name</td><td>Usually the United States</td></tr>
     <tr><td>Resend</td><td>Sends the emails Core16 sends automatically and the emails an advisor writes from the portal, and receives replies to those (section 6)</td><td>Email address and message. An automatic email doesn't name a student; an advisor's message or a family's reply can</td><td><mark>[United States: confirm]</mark></td></tr>
     <tr><td>Stripe <mark>[when billing launches]</mark></td><td>Payments, invoices and sales tax</td><td>Parent's name, email and payment details</td><td><mark>[Canada / United States: confirm]</mark></td></tr>
-    <tr><td>Anthropic</td><td>Runs Ask Core16, if a parent has consented and the student has agreed (section 7)</td><td>What's typed, the province and today's date; a student's courses, marks and figures if a question is about them. Not their name, school or birth date.</td><td>United States</td></tr>
+    <tr><td>Anthropic</td><td>Runs Ask Core16, if a parent has consented and the student has agreed, or for our staff asking about a student whose parent has consented (section 7)</td><td>What's typed, the province and today's date; a student's courses, marks and figures if a question is about them. Not their name, school or birth date.</td><td>United States</td></tr>
     <tr><td>Apple</td><td>App distribution; delivering notifications to the Core16 Portal app and the number on the family app's icon; Sign in with Apple for students <mark>[not built yet]</mark></td><td>The device's push address and the notification, which never names a student; Apple ID sign-in identifier</td><td>United States</td></tr>
     <tr><td><mark>[Mailbox provider, not chosen yet]</mark></td><td>Our mailboxes for emails with families</td><td>Email addresses and message content</td><td><mark>[confirm]</mark></td></tr>
   </tbody>

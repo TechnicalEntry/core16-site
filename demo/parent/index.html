@@ -25,19 +25,8 @@ main.wrap > :first-child { margin-top: 22px; }
 .staff-form { gap: 16px; }
 .field-note { margin: 0; align-self: end; font-size: 12px; color: var(--ink3); line-height: 1.4; }
 @media (max-width: 520px) { .edit-fields { grid-template-columns: 1fr; } }
-.to-sign.pending { background: var(--warnbg); border-color: var(--warnrule); }
-.sign-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.sign-list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
-.sign-list a { color: var(--ink); }
-.sign-list a.primary { color: var(--onink); }
 .sec.child { margin-top: 24px; }
 .sechead h2 { font-family: var(--display); }
-.agreement { max-width: 720px; }
-.agreement h1 { font-family: var(--display); font-size: 28px; margin: 0 0 8px; }
-.agreement .text { display: grid; gap: 10px; margin: 16px 0; color: var(--ink2); max-width: 65ch; }
-.agreement .sign { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; margin-top: 18px; }
-.agreement .sign .edit-field { flex: 1 1 240px; }
-.agreement .sign .primary, .agreement .sign .secondary { height: 38px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 16px; text-decoration: none; }
 .call-actions button { cursor: pointer; }
 .docs-form { display: grid; gap: 12px; max-width: 520px; }
 .docs-form .drop { border: 2px dashed var(--rule2); border-radius: var(--radius); padding: 28px; text-align: center; color: var(--ink3); }
@@ -88,9 +77,9 @@ main.wrap > :first-child { margin-top: 22px; }
 (function () {
   'use strict';
   var C = window.C16, h = C.escapeHTML, main = document.getElementById('main');
-  var data, fig, signedIn, view, form, notice, monthOffset, agreementSigned, documentsSent;
+  var data, fig, signedIn, view, form, notice, monthOffset, documentsSent;
   function start() {
-    data = C.makeStudent(); fig = C.figures(data); signedIn = true; view = 'home'; form = null; notice = null; monthOffset = 0; agreementSigned = null; documentsSent = 0; render();
+    data = C.makeStudent(); fig = C.figures(data); signedIn = true; view = 'home'; form = null; notice = null; monthOffset = 0; documentsSent = 0; render();
   }
 
   /* theme switch, as the portal's */
@@ -193,8 +182,6 @@ main.wrap > :first-child { margin-top: 22px; }
   function homePage() {
     var out = '';
     if (notice) out += '<p class="notice" role="status">' + h(notice) + '</p>';
-    out += '<section data-tour="agreements" class="panel to-sign' + (agreementSigned ? '' : ' pending') + '"><h2>Documents from Core16</h2><ul class="sign-list"><li><span><a href="#" data-view="agreement">Video sessions consent</a> · for ' + FIRST + '</span>' +
-      (agreementSigned ? '<span class="chip ok">Signed ' + C.fmt(agreementSigned, '%-d %b %Y') + '</span>' : '<a class="primary" href="#" data-view="agreement">Read and sign</a>') + '</li></ul></section>';
     var t = fig.alloc.totals, g = fig.gpa, pace = fig.pace, clockText = fig.clock ? C.clockSummary(fig.clock) : null;
     out += '<section class="sec child" id="student-1"><div class="sechead"><h2>Maya Chen</h2><p>Grade 11 · Southridge Secondary · last updated from ' + FIRST + '’s phone 2 hours ago</p></div><div class="file">';
     out += '<div class="status-row"><div class="panel status" data-tour="standing">' + heroGrid() +
@@ -245,13 +232,6 @@ main.wrap > :first-child { margin-top: 22px; }
     return out;
   }
 
-  function agreementPage() {
-    return '<section class="card wide agreement"><h1>Video sessions consent</h1><p class="quiet">For Maya Chen · sent by your Core16 advisor</p><div class="text">' +
-      '<p>This is the demo’s stand-in for a document a parent reads and signs in the portal. The real wording is counsel’s, and the signed copy is kept as a PDF with the date, your name and the device it was signed on.</p>' +
-      '<p>In outline: one-to-one video sessions with a Core16 professional are never recorded, always have a second adult on the call, and can be cancelled by you at any time. The professional sees Maya’s first name, grade and the topic booked, nothing else.</p></div>' +
-      (agreementSigned ? '<p class="notice">Signed ' + C.fmt(agreementSigned, '%-d %B %Y') + '.</p>' : '<form class="sign" id="sign-form"><label class="edit-field"><span>Type your name to sign</span><input type="text" name="name" placeholder="Claire Chen" required></label><button type="submit" class="primary">Sign</button><a class="secondary" href="#" data-view="home">Back</a></form>') +
-      (agreementSigned ? '<p class="add-links"><a class="secondary" href="#" data-view="home">Back to your family</a></p>' : '') + '</section>';
-  }
   function documentsPage() {
     return '<section class="card wide"><h1>Send documents for Maya</h1><p>Photos of earlier report cards, and the IEP if Maya has one. Your advisor enters the marks and tells you when they’re in. Files go to Core16 only, never to the school or NCAA.</p>' +
       '<form class="docs-form" id="docs-form"><div class="drop">In the demo nothing is uploaded. Pressing Send counts one document as sent.</div><div class="edit-actions"><button type="submit" class="primary">Send</button><a class="secondary" href="#" data-view="home">Cancel</a></div></form></section>';
@@ -336,7 +316,7 @@ main.wrap > :first-child { margin-top: 22px; }
 
   /* ---------- render and wire ---------- */
   function render() {
-    main.innerHTML = !signedIn ? signedOutPage() : form ? formPage() : view === 'agreement' ? agreementPage() : view === 'documents' ? documentsPage() : homePage();
+    main.innerHTML = !signedIn ? signedOutPage() : form ? formPage() : view === 'documents' ? documentsPage() : homePage();
     document.getElementById('me-name').hidden = !signedIn; document.getElementById('signout').hidden = !signedIn; document.getElementById('tour-start').hidden = !signedIn;
     notice = null;
     window.scrollTo({top: 0, behavior: 'instant'});
@@ -368,7 +348,6 @@ main.wrap > :first-child { margin-top: 22px; }
         data.ice = data.ice.filter(function (s) { return s !== form.item; }); data.edits.push({kind: 'remove'}); notice = 'Removed. It comes off ' + FIRST + '’s phone the next time the app syncs.'; form = null; render();
       }); });
     }
-    var sf = document.getElementById('sign-form'); if (sf) sf.addEventListener('submit', function (e) { e.preventDefault(); if (!sf.name.value.trim()) return; agreementSigned = C.today; notice = 'Signed. A copy is kept with the date and your name.'; view = 'home'; render(); });
     var df = document.getElementById('docs-form'); if (df) df.addEventListener('submit', function (e) { e.preventDefault(); documentsSent++; notice = 'Sent. Your advisor enters the marks and lets you know when they’re in.'; view = 'home'; render(); });
   }
   start();
@@ -381,7 +360,6 @@ main.wrap > :first-child { margin-top: 22px; }
     open: function (v) { form = null; view = v; render(); },
     steps: [
       card('welcome', 'Welcome to Core16', 'Core16 tracks the 16 core courses and the core GPA NCAA asks of Division I and II players. This page is where a parent follows their player. Everything on it is sample data: Maya Chen is made up, and nothing you enter is saved. Here’s a quick look around.'),
-      card('agreements', 'Documents to sign', 'Anything Core16 needs you to read and sign is here, in yellow until it’s done.'),
       card('standing', 'The 16 core courses', 'Each box is one of the 16 core courses NCAA asks for. They fill in as courses are complete, in progress or planned, in the colours the key shows.'),
       card('figures', 'GPA and pace', 'Core GPA against the minimum, and the core pace: four courses a year keeps up with 16, though that isn’t an NCAA rule. The five-year clock is when NCAA’s five years to play start. A course that needs review can’t count until it’s settled.'),
       card('week', 'This week', 'School, hockey and video sessions, a day to a tile. It holds what Maya entered in the app, so work that was never entered isn’t here. Click a due date or a practice to change it.'),
